@@ -1,0 +1,15 @@
+#labelIncludingWE{
+ float:right;
+ padding:7px;!important;
+}
+
+#includingWE{
+    padding-left:4px;!important;
+}
+
+#time-range p{
+    font-size:12px;
+}
+#time-range{
+    overflow-x: hidden;
+}

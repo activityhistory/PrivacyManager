@@ -1,3 +1,53 @@
 //
    Created by maxime on 12/07/15.
+#formAddApp
+    button#addAppButton Add
+    #inputNameDiv
+        input(type='text', list='allAppsList')#appName
+        datalist#allAppsList
 
+#appList
+    ul
+script.
+
+    //List of apps to autocomplete add form
+    $.get("/all_apps_list", function(data){
+        var names = data.names;
+        $.each(names, function(i, item){
+            $("#allAppsList").append("<option value='"+item.name+ "'/>");
+        });
+    });
+
+    //List of unauthorized apps
+    $.get("/un_apps_list", function(data){
+        populateUnList(data);
+    });
+
+    function populateUnList(data)
+    {
+        var names = data.names;
+        $("#appList ul").html('');
+        $.each(names, function (i, item) {
+            $("#appList ul").append("<li>" + item.name + "<a href='#' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteButton' data-appName='"+item.name+"'/></a></li>");
+        });
+
+        bindDleteButtons();
+    }
+
+    //add form
+    $("#addAppButton").click(function(){
+        var name = $("#appName").val();
+       $.get("/upadteApp", {"action" : "unauthorize", "appName" : name}, function(data){
+           populateUnList(data);
+       });
+    });
+
+    //remove
+    function bindDleteButtons() {
+        $(".deleteButton").on("click", function (event) {
+            var name =  event.target.attributes[2].value;
+             $.get("/upadteApp", {"action": "authorize", "appName": name}, function (data) {
+                 populateUnList(data);
+             });
+        });
+    }

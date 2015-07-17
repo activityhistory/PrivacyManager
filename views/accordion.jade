@@ -1,3 +1,25 @@
 //
    Created by maxime on 11/07/15.
 
+block accordion
+   script.
+      $(function () {
+         $("#accordion").accordion({
+            autoHeight: false,
+            navigation: true
+         });
+      });
+   #accordion
+      h3
+         a(href='#') Unauthorized applications
+      div
+         include accordion_content/apps
+      h3
+         a(href='#') Authorized times
+      div
+         include accordion_content/times
+      h3
+         a(href='#') Authorized locations
+      div
+         include accordion_content/location
+

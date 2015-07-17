@@ -1,27 +1,27 @@
-#appName
+#locName
 {
     width:100%;
 }
-#addAppButton
+#addLocButton
 {
     float: right;
 }
-#inputNameDiv
+#inputNameDivLoc
 {
     overflow:hidden;
 }
-#appList
+#locList
 {
     height:100px;
     overflow-y : auto;
     width:100%;
 }
 
-#appList ul{
+#locList ul{
     width:100%;
 }
 
-.deleteButton{
+.deleteLocButton{
     float:right;
     width : 19px;
     height: 14px;

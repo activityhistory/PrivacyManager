@@ -1,0 +1,16 @@
+{
+  "name": "PrivacyToolOnNW",
+  "version": "0.0.0",
+  "authors": [
+    "Maxime-Guyaux <nomail@noone.fr>"
+  ],
+  "main": "app.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

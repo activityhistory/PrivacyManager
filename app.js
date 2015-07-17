@@ -8,7 +8,6 @@ var http = require('http')
   , express = require('express')
   , routes = require(path.join(process.cwd(), 'routes', 'index.js'))
   , app = express()
-  , sqlite3 = require('sqlite3').verbose()
 ;
 
 
@@ -21,7 +20,8 @@ var options = {
 http.get(options, function(res) {
   console.log('server is running, redirecting to localhost');
   if (window.location.href.indexOf('localhost') < 0) { 
-    window.location = 'http://localhost:' + app.get('port');
+    window.location = 'http://localhost:' + app.get('port');meteo
+
   }
 }).on('error', function(e) {
   //server is not yet running
@@ -34,7 +34,15 @@ http.get(options, function(res) {
   app.use(express.static(path.join(process.cwd(), 'public')));
 
   app.get('/', routes.index);
-  app.get('/test', routes.test);
+  //app.get('/test', routes.test);
+  app.get('/all_apps_list', routes.all_apps_list); // apps list
+  app.get('/un_apps_list', routes.un_apps_list); //Unauthorized apps list
+  app.get('/upadteApp', routes.upadteApp); //Chage the reccords status of a process
+  app.get('/getAllowedTimes', routes.get_allowed_times); //return the allowed range time in JSON
+  app.get('/setAllowedTimes', routes.update_allowed_times);
+  app.get('/addUnLocation', routes.addUnLocation); // Add an unauthorized location
+  app.get('/getUnLocation', routes.getUnLocations); // get all unauthorized locations
+
 
   http.createServer(app).listen(app.get('port'), function(err){
     console.log('server created');

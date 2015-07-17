@@ -1,0 +1,29 @@
+#appName
+{
+    width:100%;
+}
+#addAppButton
+{
+    float: right;
+}
+#inputNameDiv
+{
+    overflow:hidden;
+}
+#appList
+{
+    height:100px;
+    overflow-y : auto;
+    width:100%;
+}
+
+#appList ul{
+    width:100%;
+}
+
+.deleteButton{
+    float:right;
+    width : 19px;
+    height: 14px;
+
+}
