@@ -45,6 +45,10 @@
     display:inline-block;
 }
 
+.miniscreenshots img {
+    border: solid 3px teal;
+}
+
 
 .miniscreenshots img{
     width:100%;

@@ -94,9 +94,14 @@ function printTimeSwimlane() {
         .attr("y1", 0)
         .attr("y2", 0)
         .attr("stroke", timeFilterColor)
-        .attr("stroke-width", 3);
+        .attr("stroke-width", 3)
+        .attr("title", "Unauthorized time");
 
 
+
+
+
+    $( document ).tooltip();
 }
 
 

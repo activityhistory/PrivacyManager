@@ -5,7 +5,7 @@
 var brushSmallSlider;
 function initializeSmallSlider() {
 
-    var margin = {top: 5, right: 10, bottom: 10, left: 10},
+    var margin = {top: 5, right: 10, bottom: 10, left: 150},
         width = 950 - margin.left - margin.right,
         height = 50 - margin.bottom - margin.top,
         moving,
@@ -41,6 +41,13 @@ function initializeSmallSlider() {
         })
         .attr("class", "halo");
 
+
+    d3.select("#smallSlider svg").append("text")
+        .attr("x", 0)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text("Time range activity");
+
     var slider = svg.append("g")
         .attr("class", "slider")
         .call(brushSmallSlider);
@@ -51,10 +58,13 @@ function initializeSmallSlider() {
     slider.select(".background")
         .attr("height", height);
 
-    var handle = slider.append("circle")
+    var handle = slider.append("rect")
         .attr("class", "handle")
-        .attr("transform", "translate(0," + height / 2 + ")")
-        .attr("r", 9);
+        .attr("transform", "translate(0,-"+height+")")
+        .attr("x", width/2)
+    .attr("y", height/2)
+        .attr("width", 3)
+        .attr("height", height);
 
     slider
         .call(brushSmallSlider.event)
@@ -70,7 +80,7 @@ function initializeSmallSlider() {
             printScreenshot(targetValue);
         } else {
             currentValue = brushSmallSlider.extent()[0];
-            handle.attr("cx", xSmallSlider(currentValue));
+            handle.attr("x", xSmallSlider(currentValue));
         }
     }
 

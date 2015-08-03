@@ -22,7 +22,7 @@ function printAppsSwimlanes(){
 
     var svg = d3.select("#appsSwimlanes").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", 20);
+        .attr("height", 30);
 
     var nump = 0;
     FiltredApps.forEach(function(one){
@@ -39,6 +39,8 @@ function printAppsSwimlanes(){
             printOneAppSwimlane(name, color, thisAppData, nump);
             nump++;
         }
+
+        $( document ).tooltip();
     })
 }
 
@@ -64,10 +66,12 @@ function printOneAppSwimlane(name, color, data, bottom){
         .attr("x2", function (d) {
             return xSmallSlider(new Date(d.stop));
         })
-        .attr("y1", bottom*4)
-        .attr("y2", bottom*4)
+        .attr("y1", bottom*6)
+        .attr("y2", bottom*6)
         .attr("stroke", color)
-        .attr("stroke-width", 3);
+        .attr("stroke-width", 5)
+        .attr("title", name);
+
 
 }
 

@@ -4,7 +4,7 @@
 
 
 
-var margin = {top: 10, right: 10, bottom: 20, left: 10},
+var margin = {top: 10, right: 10, bottom: 20, left: 150},
     width = 950 - margin.right - margin.left,
     height = 75 - margin.top - margin.bottom,
     miniHeight = 50;
@@ -102,6 +102,12 @@ function initBigSlider(daysList) {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.svg.axis().scale(x).orient("bottom"));
+
+    mainSVG.append("text")
+        .attr("x", 0)
+        .attr("y", 30)
+        .attr("dy", ".35em")
+        .text("Last months activity");
 
     return x;
 }
