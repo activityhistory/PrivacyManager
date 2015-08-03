@@ -14,7 +14,7 @@ function initialize() {
 
 function codeAddress() {
     var address = document.getElementById('locName').value;
-    geocoder.geocode( { 'address': address}, function(results, status) {
+    geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             var lat = results[0].geometry.location.lat();
             var long = results[0].geometry.location.lng();
@@ -25,24 +25,51 @@ function codeAddress() {
     });
 }
 
-function ajaxAddUnLocation(address, lat, long)
-{
-    $.get("/addUnLocation", {"address" : address, "lat" : lat, "long" : long});
-
-    //TODO MAJ
+function ajaxAddUnLocation(address, lat, long) {
+    $.get("/addUnLocation", {"address": address, "lat": lat, "long": long}, function (data) {
+        populateUnLocationsList(data);
+        $('#locName').val('');
+    });
 }
 
+//Authorized or not ? that is the question.
+function populateUnLocationsList(data) {
 
-function populateUnList(data)
-{
-    var names = data.names;
-    $("#appList ul").html('');
-    $.each(names, function (i, item) {
-        $("#appList ul").append("<li>" + item.name + "<a href='#' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteButton' data-appName='"+item.name+"'/></a></li>");
+
+    knownLocations = data.locations;
+    populateLocationFilter();
+
+    privacyFilter_RAZAuthorizedLocations(); //Delete all old locations ion the object used by the visualization
+
+    var locs = data.locations;
+    $("#locList ul").html('');
+    $.each(locs, function (i, item) {
+        $("#locList ul").append("<li>" + item.address.split(",")[0] + "<a href='#' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteLocButton' data-lat='" + item.lat + "'  data-long='" + item.lng + "'/></a></li>");
+        privacyFilter_addAutorizedLocation(item.address, item.lat, item.lng); //add news locations to the visualiztion privacy object
     });
 
-    bindDleteButtons();
+    bindDleteLocButtons();
+}
+
+var knownLocations; // lat lng name
+
+function ajaxGetUnLocations(){
+    $.get("/getUnLocation", function(data){
+        populateUnLocationsList(data);
+    })
+}
+
+//remove
+function bindDleteLocButtons() {
+    $(".deleteLocButton").on("click", function (event) {
+        var lat =  event.target.attributes[2].value;
+        var lng =  event.target.attributes[3].value;
+        $.get("/removeLoc", {"lat":lat, "lng":lng}, function (data) {
+            populateUnLocationsList(data);
+        });
+    });
 }
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addDomListener(window, 'load', ajaxGetUnLocations);

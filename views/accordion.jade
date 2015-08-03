@@ -11,6 +11,20 @@ block accordion
       });
    #accordion
       h3
+         a(href='#') Applications Filter
+      div
+         ul#appsFilter
+      h3
+         a(href='#') Locations Filter
+      div
+         ul#locationFilter
+      h3
+         a(href='#') Time Filter
+      div
+         label
+            input.filter.time(type='checkbox')
+            | &nbsp; Print unauthorized times
+      h3
          a(href='#') Unauthorized applications
       div
          include accordion_content/apps

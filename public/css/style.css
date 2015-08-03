@@ -21,6 +21,10 @@ a {
 #accordion {
 	width: 250px;
 	margin: 0px auto;
+	position:fixed;
+	top:0;
+	left:0;
+
 }
 #accordion .ui-accordion-header {
 	background-color: #ccc;
@@ -90,7 +94,7 @@ a {
 	background-color: #a8b700;
 	background-image: -moz-linear-gradient(top,  #a8b700 0%, #82922a 100%);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a8b700), color-stop(100%,#82922a));
-	background-image: -webkit-linear-gradient(top,  #a8b700 0%,#82922a 100%); 
+	background-image: -webkit-linear-gradient(top,  #a8b700 0%,#82922a 100%);
 	background-image: -o-linear-gradient(top,  #a8b700 0%,#82922a 100%);
 	background-image: -ms-linear-gradient(top,  #a8b700 0%,#82922a 100%);
 	background-image: linear-gradient(to bottom,  #a8b700 0%,#82922a 100%);
@@ -112,4 +116,27 @@ a {
 #accordion .ui-accordion-content:last-of-type {
 	box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, .2),
 				inset 0px 0 0px 0px rgba(0, 0, 0, .5);
+}
+
+
+#leftPanel {
+	position: fixed;
+	bottom:0;
+	left:0;
+	width:251px;
+	height:100%;
+}
+
+#rightPanel {
+	position : fixed;
+	top:0;
+	left:251px;
+	width:949px;
+	height:100%;
+	padding: 7px;
+}
+
+#accordionFilter{
+	font-size: 12px;
+	height: 33%;
 }

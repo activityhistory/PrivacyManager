@@ -98,9 +98,13 @@ function ajaxGetRange()
         var minuteStart = normalTimeToMinutesSum(startTime);
         var minuteStop = normalTimeToMinutesSum(endTime);
 
-        console.log("modif en :"+minuteStart + "   " +minuteStop);
         $("#slider-range").slider({values:[minuteStart,minuteStop]});
         upadteTetManual();
+
+        $("#includingWE").prop('checked', WE == "1");
+
+        privacyFilter_setAuthorizedTimes(startTime, endTime, WE == "1");
+        notifyTimeFilterChanged();
 
     })
 }
@@ -108,7 +112,6 @@ function ajaxGetRange()
 function ajaxSetRange()
 {
     var val = $("#slider-range").slider("values");
-    console.log("Val dyu slider : " + val[0] + "   " + val[1]);
     var startTime = miutesSumToNormalTime(val[0]);
     var stopTime = miutesSumToNormalTime(val[1]);
 
@@ -119,9 +122,12 @@ function ajaxSetRange()
     var WE = $("#includingWE").is(':checked') ? 1 : 0;
 
 
-    console.log("Envoi de :" + fromHour + " " + fromMinute + " "+ toHour + " " + toMinute);
     //TODO callback to verify if it's OK (also on the sever-side)
     $.get("setAllowedTimes", {fromHour: fromHour, fromMinute: fromMinute, toHour : toHour, toMinute : toMinute, WE : WE});
+
+
+    privacyFilter_setAuthorizedTimes(fromHour + ":" + fromMinute, toHour + ":" + toMinute, WE == "1");
+    notifyTimeFilterChanged();
 
 }
 

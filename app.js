@@ -42,6 +42,13 @@ http.get(options, function(res) {
   app.get('/setAllowedTimes', routes.update_allowed_times);
   app.get('/addUnLocation', routes.addUnLocation); // Add an unauthorized location
   app.get('/getUnLocation', routes.getUnLocations); // get all unauthorized locations
+  app.get('/removeLoc', routes.removeLoc); // get all unauthorized locations
+  app.get('/getAllRecordedDays', routes.getAllRecordedDays); // return an array with all the screenshots names
+  app.get('/allRange', routes.getAllScreenshotsRange); // return an array with all the screenshots names
+  app.get('/allScreenshotsDateAndTime', routes.getAllScreenshotsDateAndTime); // return an array with all the screenshots names
+  app.get('/getScreenshotsListBetween', routes.getScreenshotsListBetween);
+  app.get('/getAppsData', routes.getAppsData);
+  app.get('/getGeoloc', routes.getGeoloc);
 
 
   http.createServer(app).listen(app.get('port'), function(err){

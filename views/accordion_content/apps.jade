@@ -25,11 +25,18 @@ script.
 
     function populateUnList(data)
     {
+        privacyFilter_RAZunApps(); // Delete all unauthorized apps in the privacy filter object, used to print the "will be delete" swimlane
+
+
+
         var names = data.names;
         $("#appList ul").html('');
         $.each(names, function (i, item) {
             $("#appList ul").append("<li>" + item.name + "<a href='#' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteButton' data-appName='"+item.name+"'/></a></li>");
+            privacyFilter_addUnApp(item.name); //add the new list to the privacyFilter object, to visualize
         });
+
+
 
         bindDleteButtons();
     }
@@ -39,7 +46,11 @@ script.
         var name = $("#appName").val();
        $.get("/upadteApp", {"action" : "unauthorize", "appName" : name}, function(data){
            populateUnList(data);
+
+           //privacy filter
+           privacyFilter_checkDeletedApps();
        });
+        $("#appName").val('');
     });
 
     //remove
@@ -48,6 +59,9 @@ script.
             var name =  event.target.attributes[2].value;
              $.get("/upadteApp", {"action": "authorize", "appName": name}, function (data) {
                  populateUnList(data);
+
+                 //privacy filter
+                 privacyFilter_checkDeletedApps();
              });
         });
     }
