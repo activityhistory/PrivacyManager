@@ -68,12 +68,12 @@ function printTimeSwimlane() {
 
 
     var svg = d3.select("#timeSwimlane").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", 5);
+        .attr("width", width)
+        .attr("height", 10);
 
 
     var mini = d3.select("#timeSwimlane svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ',1)')
+        .attr('transform', 'translate(' + margin.left + ',4)')
         .attr('width', width)
         .attr('height', 5)
         .attr('class', 'timeSwimlane');
@@ -97,6 +97,11 @@ function printTimeSwimlane() {
         .attr("stroke-width", 3)
         .attr("title", "Unauthorized time");
 
+    d3.select("#timeSwimlane svg").append("text")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("dy", ".35em")
+        .text("Time");
 
 
 

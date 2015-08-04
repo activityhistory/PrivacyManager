@@ -23,11 +23,9 @@ function initializeSmallSlider() {
         .extent([0, 0])
         .on("brush", brushedSmallSlider);
 
-    var svg = d3.select("#smallSlider").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+    var svg = d3.select("#sliderSVG svg")
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + 100 + ")");
 
     svg.append("g")
         .attr("class", "x axis")
@@ -42,11 +40,21 @@ function initializeSmallSlider() {
         .attr("class", "halo");
 
 
-    d3.select("#smallSlider svg").append("text")
+    d3.select("#sliderSVG svg").append("text")
         .attr("x", 0)
-        .attr("y", 10)
+        .attr("y", 105)
         .attr("dy", ".35em")
         .text("Time range activity");
+
+    //hr
+    d3.select("#sliderSVG svg").append("line")
+        .attr("x1", margin.left - 30)
+        .attr("x2", width+margin.left +30)
+        .attr("y1", 95)
+        .attr("y2", 95)
+        .attr("stroke-width", 2)
+        .attr("stroke", "grey");
+
 
     var slider = svg.append("g")
         .attr("class", "slider")
@@ -60,11 +68,12 @@ function initializeSmallSlider() {
 
     var handle = slider.append("rect")
         .attr("class", "handle")
-        .attr("transform", "translate(0,-"+height+")")
-        .attr("x", width/2)
-    .attr("y", height/2)
-        .attr("width", 3)
-        .attr("height", height);
+        .attr("transform", "translate(0,-100)")
+        .attr("x", width/2+margin.left )
+        .attr("y", 0)
+        .attr("width", 2)
+        .attr("height", 120)
+        .style("fill", "DarkOrchid");
 
     slider
         .call(brushSmallSlider.event)
@@ -196,11 +205,11 @@ function printScreenShotSwimlane() {
 
     var data = interVal.data;
 
-    d3.select("#smallSlider svg .screenshotSwimlane").remove();
+    d3.select("#sliderSVG svg  g.screenshotSwimlane").remove();
 
 
-    var mini = d3.select("#smallSlider svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ', 0)')
+    var mini = d3.select("#sliderSVG svg").append('g')
+        .attr('transform', 'translate(' + margin.left + ', 100)')
         .attr('width', width)
         .attr('height', 30)
         .attr('class', 'screenshotSwimlane');

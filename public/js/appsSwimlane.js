@@ -17,12 +17,28 @@ function getAndPrintAppSwimlane()
 
 function printAppsSwimlanes(){
 
-    d3.select("#appsSwimlanes svg").remove();
+    var p = d3.selectAll("#sliderSVG svg  g.appSwimlane");
 
+        p.remove();
 
-    var svg = d3.select("#appsSwimlanes").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", 30);
+    d3.select(".appText").remove();
+
+    d3.select("#sliderSVG svg").append("text")
+        .attr("x", 0)
+        .attr("y", 75)
+        .attr("dy", ".35em")
+        .text("Applications")
+        .attr("class", "appText");
+    //hr
+    d3.select("#sliderSVG svg").append("line")
+        .attr("x1", margin.left - 30)
+        .attr("x2", width+margin.left +30)
+        .attr("y1", 55)
+        .attr("y2", 55)
+        .attr("stroke-width", 2)
+        .attr("stroke", "grey");
+
+    var svg = d3.select("#sliderSVG svg");
 
     var nump = 0;
     FiltredApps.forEach(function(one){
@@ -47,8 +63,8 @@ function printAppsSwimlanes(){
 function printOneAppSwimlane(name, color, data, bottom){
 
 
-    var mini = d3.select("#appsSwimlanes svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ',3)')
+    var mini = d3.select("#sliderSVG svg").append('g')
+        .attr('transform', 'translate(' + margin.left + ','+(100 - height + 10)+')')
         .attr('width', width)
         .attr('height', 15)
         .attr('class', 'appSwimlane');
