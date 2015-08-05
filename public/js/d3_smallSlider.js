@@ -5,6 +5,8 @@
 var brushSmallSlider;
 var zoomBrush;
 
+var manualMoveSmallSlder;
+
 function initializeSmallSlider() {
 
     var margin = {top: 5, right: 10, bottom: 10, left: 150},
@@ -13,7 +15,7 @@ function initializeSmallSlider() {
         moving,
         currentValue = 0,
         targetValue = 70,
-        alpha = .2;
+        alpha = .9;
 
     var xSmallSlider = d3.time.scale()
         .domain([interVal.start, d3.time.hour.offset(interVal.stop, 1)])
@@ -71,12 +73,12 @@ function initializeSmallSlider() {
         .attr("height", 120)
         .style("fill", "DarkOrchid");
 
-    slider
-        .call(brushSmallSlider.event)
-        .transition() // gratuitous intro!
-        .duration(750)
-        .call(brushSmallSlider.extent([targetValue, targetValue]))
-        .call(brushSmallSlider.event);
+    //slider
+    //    .call(brushSmallSlider.event)
+    //    .transition() // gratuitous intro!
+    //    .duration(750)
+    //    .call(brushSmallSlider.extent([targetValue, targetValue]))
+    //    .call(brushSmallSlider.event);
 
     function brushedSmallSlider() {
         if (d3.event.sourceEvent) { // not a programmatic event
@@ -105,13 +107,28 @@ function initializeSmallSlider() {
         });
     }
 
-    $( document ).keypress(function(e) {
-        var ch = String.fromCharCode(e.charCode);
-        if(ch == "+"){
+    manualMoveSmallSlder = function(to) {
+        slider.call(brushSmallSlider.extent([to, to]))
+            .call(brushSmallSlider.event);
+        printScreenshot(to);
+    };
+
+    $( document ).keydown(function(e) {
+        e = e || window.event;
+        if(e.keyCode == 107){//+
             zoom();
-        }if(ch == "-"){
+        }
+        if(e.keyCode == 109){ //-
             unzoom();
         }
+        if(e.keyCode == 39){// ->
+            goToOneScreenshotNext("right");
+        }
+        if(e.keyCode == 37){ // <-
+            goToOneScreenshotNext("left");
+        }
+
+        e.preventDefault();
     });
 
 
@@ -148,7 +165,43 @@ function initializeSmallSlider() {
 }
 
 
+function goToOneScreenshotNext(direction)
+{
+    var currentScreenshot = $("#bigScreenShot").attr("src").split("/");
+    currentScreenshot = currentScreenshot[currentScreenshot.length -1];
+    if(currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png")
+    {
+        alert("You have to be somewhere to go elsewhere ...");
+        return;
+    }
 
+    var res = NaN;
+    for(var i = 0 ; i != interVal.data.length; i++ ){
+        var one = interVal.data[i];
+        if(one.screenshot == currentScreenshot)
+            res = i;
+    }
+
+    if(
+                    isNaN(res)
+            ||      (direction == "right" && res +1 >= interVal.data.length)
+            ||      (direction == "left" && res -1 < 0)
+        )
+    {
+        alert("Invalid operation : out of limit or unrecognized screenshot");
+        return;
+    }
+    if(direction == "right")
+        res ++;
+    else
+        res--;
+
+    var exactDate = interVal.data[res].date;
+    console.log(interVal.data[res].date);
+    manualMoveSmallSlder(exactDate);
+
+
+}
 
 function zoom()
 {
