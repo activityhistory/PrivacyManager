@@ -15,7 +15,7 @@ function setTimeFilterColor(c) {
 
 function printTimeSwimlane() {
 
-    d3.select("#timeSwimlane svg").remove();
+    d3.select("#timeSwimlane svg g .timeSwimlane").remove();
 
 
 
@@ -67,15 +67,13 @@ function printTimeSwimlane() {
         return;
 
 
-    var svg = d3.select("#timeSwimlane").append("svg")
-        .attr("width", width)
-        .attr("height", 10);
+    var svg = d3.select("#sliderSVG svg");
 
 
-    var mini = d3.select("#timeSwimlane svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ',4)')
+    var mini = svg.append('g')
+        .attr('transform', 'translate(' + margin.left + ',45)')
         .attr('width', width)
-        .attr('height', 5)
+        .attr('height', 10)
         .attr('class', 'timeSwimlane');
 
     var rectangles = mini.selectAll("line")
@@ -97,13 +95,13 @@ function printTimeSwimlane() {
         .attr("stroke-width", 3)
         .attr("title", "Unauthorized time");
 
-    d3.select("#timeSwimlane svg").append("text")
-        .attr("x", 0)
-        .attr("y", 0)
+    d3.select("#sliderSVG svg").append("text")
+        .attr("x", 10)
+        .attr("y", 45)
         .attr("dy", ".35em")
         .text("Time");
 
-
+//todo line
 
 
     $( document ).tooltip();
@@ -146,5 +144,5 @@ function notifyTimeFilterChanged() {
 }
 
 function removeTimeFilter() {
-    d3.select("#timeSwimlane svg").remove();
+    d3.select("#timeSwimlane svg g.timeSwimlnae").remove();
 }

@@ -35,11 +35,19 @@ function removeLegend(name){
 
 function printLegend(){
     $("#legend").html('');
+
+
+    var toAdd = [];
+    legendData.forEach(function(one){
+        if(one.name != "Will be deleted" && one.name != "Activity intensity")
+            toAdd.push(one);
+    });
+
     var legendSVG = d3.select("#legend").append('svg')
         .attr("width", '250px')
         .attr("height", '700px');
     var circles = legendSVG.selectAll("circle")
-        .data(legendData)
+        .data(toAdd)
         .enter()
         .append("circle");
     var currentY = -10;
@@ -54,7 +62,7 @@ function printLegend(){
         });
     currentY = -5;
     var texts = legendSVG.selectAll("text")
-        .data(legendData)
+        .data(toAdd)
         .enter()
         .append("text");
     texts.attr("x", 35)

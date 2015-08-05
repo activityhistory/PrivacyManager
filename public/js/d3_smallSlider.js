@@ -3,6 +3,8 @@
  */
 
 var brushSmallSlider;
+var zoomBrush;
+
 function initializeSmallSlider() {
 
     var margin = {top: 5, right: 10, bottom: 10, left: 150},
@@ -39,12 +41,6 @@ function initializeSmallSlider() {
         })
         .attr("class", "halo");
 
-
-    d3.select("#sliderSVG svg").append("text")
-        .attr("x", 0)
-        .attr("y", 105)
-        .attr("dy", ".35em")
-        .text("Time range activity");
 
     //hr
     d3.select("#sliderSVG svg").append("line")
@@ -117,6 +113,36 @@ function initializeSmallSlider() {
             unzoom();
         }
     });
+
+
+    zoomBrush = d3.svg.brush()
+        .x(xSmallSlider)
+        .on("brushend", brushedZoom);
+
+    d3.select("#sliderSVG svg").append("g")
+        .attr('transform', 'translate(' + margin.left + ', 0)')
+        .attr("class", "zoomBrush")
+        .call(zoomBrush)
+        .selectAll("rect")
+        .attr("y", 0)
+        .attr("height", 115);
+
+
+
+    function brushedZoom(){
+        var ext = zoomBrush.extent();
+        interVal.start = new Date(ext[0]);
+        interVal.stop = new Date(ext[1]);
+        ajaxMAJSlider(ext[0], ext[1]);
+        zoomBrush.clear();
+        d3.select("#sliderSVG svg g.zoomBrush")
+            .call(zoomBrush)
+            .selectAll("rect")
+            .attr("y", 0)
+            .attr("height", 115);
+
+    }
+
 
     return xSmallSlider;
 }
@@ -201,7 +227,7 @@ function printScreenShotSwimlane() {
 
 
 
-    var color = legend_getAColor("Activiy intensity");
+    var color = legend_getAColor("Activity intensity");
 
     var data = interVal.data;
 

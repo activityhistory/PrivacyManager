@@ -8,6 +8,12 @@
     shape-rendering: crispEdges;
 }
 
+
+.zoomBrush .extent {
+    stroke: #fff;
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
 #smallSlider {
     width:100%;
 }

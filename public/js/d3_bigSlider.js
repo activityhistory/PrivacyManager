@@ -54,7 +54,7 @@ function brushed() {
 function printMiniItems(data) {
 
 
-    var color = legend_getAColor("Activiy intensity");
+    var color = legend_getAColor("Activity intensity");
 
     var scsDates = JSONToDate(data);
 
@@ -104,10 +104,10 @@ function initBigSlider(daysList) {
         .call(d3.svg.axis().scale(x).orient("bottom"));
 
     mainSVG.append("text")
-        .attr("x", 0)
-        .attr("y", 30)
+        .attr("x", 10)
+        .attr("y", 5)
         .attr("dy", ".35em")
-        .text("Last months activity");
+        .text("Activity");
 
     return x;
 }

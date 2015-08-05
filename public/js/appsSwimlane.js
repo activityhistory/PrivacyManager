@@ -22,9 +22,10 @@ function printAppsSwimlanes(){
         p.remove();
 
     d3.select(".appText").remove();
+    d3.select(".appLine").remove();
 
     d3.select("#sliderSVG svg").append("text")
-        .attr("x", 0)
+        .attr("x", 10)
         .attr("y", 75)
         .attr("dy", ".35em")
         .text("Applications")
@@ -36,7 +37,8 @@ function printAppsSwimlanes(){
         .attr("y1", 55)
         .attr("y2", 55)
         .attr("stroke-width", 2)
-        .attr("stroke", "grey");
+        .attr("stroke", "grey")
+        .attr("class", "appLine");
 
     var svg = d3.select("#sliderSVG svg");
 
