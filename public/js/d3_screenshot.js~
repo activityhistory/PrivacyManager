@@ -28,18 +28,10 @@ $(document).ready(function () {
         }
     });
 
-   // document.addEventListener('appIDfound');
 });
 
-function printScreenshotContext(){
 
-}
-
-
-//TODO
 function printScreenshot(date) {
-
-    //Get main screenshot
     if (interVal.currentDate.valueOf() == date.valueOf) {
         return false; //because this function could be call many times for the same datetime
     }
@@ -47,13 +39,14 @@ function printScreenshot(date) {
 
     var betterImg;
     var betterDiff;
-    //var imagePosition;
+    var imagePosition;
     for (var i = 0; i != interVal.data.length; i++) {
         var one = interVal.data[i];
         var diff = Math.abs(one.date - date);
         if (isNaN(betterDiff) || diff < betterDiff) {
             betterImg = one.screenshot;
             betterDiff = diff;
+            imagePosition = i;
         }
     }
 
@@ -64,66 +57,6 @@ function printScreenshot(date) {
         $("#image img").attr("src", '/images/no-image.jpg');
 
 
-    //Get informations about current screenshot
-    $.get('/getScreenshotInfos', {date : ''+date},  function (data) {
-
-        $('#mainScreenshotInfos').html('App : '+data.informations.process_name+'<br/>' +
-            'Time : ' +  date.toTimeString()+ '<br/>');
-
-        if(data.informations.window_title !== ''){
-            $('#mainScreenshotInfos').append('Window title : ' + data.informations.window_title) ;
-        }
-
-        //Find previous app screenshot
-
-        var betterPreviousImg;
-        var betterPreviousDiff;
-
-        var previousContextDate = new Date(data.context.previousContext.created_at);
-
-        for (var i = 0; i != interVal.data.length; i++) {
-            var one = interVal.data[i];
-            var diff = Math.abs(one.date - previousContextDate);
-            if (isNaN(betterPreviousDiff) || diff < betterPreviousDiff) {
-                betterPreviousImg = one.screenshot;
-                betterPreviousDiff = diff;
-            }
-        }
-
-
-        $("#previousContext .smallSCS").attr("src", '/images/screenshots/' + betterPreviousImg);
-
-        $("#previousContext .appName").html('App name : ' + data.context.previousContext.process_name);
-
-
-        //Find next app screenshot
-
-        var betterNextImg;
-        var betterNextDiff;
-
-        var nextContextDate = new Date(data.context.nextContext.created_at);
-
-        for (var i = 0; i != interVal.data.length; i++) {
-            var one = interVal.data[i];
-            var diff = Math.abs(one.date - nextContextDate);
-            if (isNaN(betterNextDiff) || diff < betterNextDiff) {
-                betterNextImg = one.screenshot;
-                betterNextDiff = diff;
-            }
-        }
-
-        $("#nextContext .smallSCS").attr("src", '/images/screenshots/' + betterNextImg);
-
-        $("#nextContext .appName").html('App name : ' + data.context.nextContext.process_name);
-
-
-
-    });
-
-
-
-
-/*
     var currentMiniScreenPosition = -3;
     $(".miniscreenshots img").each(function () {
         if((imagePosition + currentMiniScreenPosition) < 0 || (imagePosition + currentMiniScreenPosition)  > ( interVal.data.length -1))
@@ -134,6 +67,6 @@ function printScreenshot(date) {
         currentMiniScreenPosition = currentMiniScreenPosition == 0 ? currentMiniScreenPosition+1 : currentMiniScreenPosition;
 
     })
-*/
+
 
 }

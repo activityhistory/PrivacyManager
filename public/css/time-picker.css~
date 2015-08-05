@@ -96,7 +96,3 @@
 .ui-slider a:focus {
     outline:none;
 }
-
-svg.mainSVG {
-    width: 100%;
-}

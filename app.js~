@@ -50,8 +50,6 @@ http.get(options, function(res) {
   app.get('/getAppsData', routes.getAppsData);
   app.get('/getGeoloc', routes.getGeoloc);
 
-  app.get('/getScreenshotInfos', routes.getScreenshotInformations); //return informations about current screenshot and its context
-
 
   http.createServer(app).listen(app.get('port'), function(err){
     console.log('server created');

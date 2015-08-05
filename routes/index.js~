@@ -3,7 +3,6 @@
  */
 
 var sqlite3 = require('sqlite3').verbose();
-var Promise = require('promise');
 //var db = new sqlite3.Database('selfspy.sqlite');
 var db = new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite');
 var fs = require('fs');
@@ -11,6 +10,7 @@ var pathToScreenShots = "public/images/screenshots/";
 //var pathToScreenShots = process.env.HOME + "/.selfspy/screenshots/";
 
 var distMinBetweenTwoLocations = 2000; // in meters
+
 
 exports.index = function (req, res) {
     res.render('index', {title: 'ActivityHistory PrivacyTool'});
@@ -54,9 +54,9 @@ exports.all_apps_list = function (req, res) {
 };
 
 //To sort the app list array
-function compare(_a, _b) {
+function compare(_a,_b) {
     a = _a.name.toLowerCase();
-    b = _b.name.toLowerCase();
+    b= _b.name.toLowerCase();
     if (a < b)
         return -1;
     if (a > b)
@@ -206,23 +206,25 @@ exports.getAppsData = function (req, res) {
     var result = [];
 
 
+
     var start = new Date(req.query.start);
     var end = new Date(req.query.stop);
 
 
-    db.all("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
+
+    db.all("SELECT process.name, processevent.created_at, event_type from processevent join process " +
         "WHERE processevent.process_id = process.id " +
-        "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +
+        "AND processevent.created_at between '"+ formatJSToSQLITE(start) + "' " +
         "AND '" + formatJSToSQLITE(end) + "'", function (err, rows) {
         var last = {};
         rows.forEach(function (one) {
-            if ('date' in last) {
-                result.push({start: last.date, stop: one.created_at, name: last.name})
+            if('date' in last){
+                result.push({start: last.date, stop:one.created_at, name: last.name})
             }
-            if (one.event_type == "Active" || one.event_type == "Open") {
+            if(one.event_type == "Active" || one.event_type == "Open"){
                 last.date = one.created_at;
                 last.name = one.name;
-            } else {
+            }else{
                 last = {};
             }
         });
@@ -231,7 +233,7 @@ exports.getAppsData = function (req, res) {
 
 };
 
-exports.getGeoloc = function (req, res) {
+exports.getGeoloc = function(req, res){
 
     var start = new Date(req.query.start);
     var end = new Date(req.query.stop);
@@ -244,43 +246,40 @@ exports.getGeoloc = function (req, res) {
     start.setMinutes(start.getMinutes() - 12);
 
     db.all("SELECT created_at, lat, lon FROM location " +
-        "WHERE created_at between '" + formatJSToSQLITE(start) + "' " +
-        "AND '" + formatJSToSQLITE(end) + "'", function (err, rows) {
-        if (err) {
-            res.send({ok: false, error: err});
-            return;
-        }
+        "WHERE created_at between '"+ formatJSToSQLITE(start) + "' " +
+        "AND '" + formatJSToSQLITE(end) + "'", function(err, rows){
+       if(err){
+           res.send({ok : false, error: err});
+           return;
+       }
         var key = {lat: "undefined", lon: "undefined"};
-        for (var i = 0; i != rows.length; i++) {
-            var row = rows[i];
-            var keystart;
-            if (key.lat == "undefined") {
-                key.lat = row.lat;
-                key.lon = row.lon;
-                keystart = row.created_at;
-                continue;
-            }
-            if (haversine({latitude: row.lat, longitude: row.lon}, {
-                    latitude: key.lat,
-                    longitude: key.lon
-                }, {unit: 'meter'}) > distMinBetweenTwoLocations) {
-                result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
-                keystart = row.created_at;
-                key.lat = row.lat;
-                key.lon = row.lon;
-            }
-            if (i == (rows.length - 1)) //last row
-                result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
-        }
-        res.send({ok: true, result: result});
+       for(var i = 0 ; i != rows.length; i++){
+           var row = rows[i];
+           var keystart;
+           if(key.lat == "undefined"){
+               key.lat = row.lat;
+               key.lon = row.lon;
+               keystart = row.created_at;
+               continue;
+           }
+           if(haversine({latitude : row.lat, longitude : row.lon},{latitude :  key.lat, longitude : key.lon}, {unit : 'meter'}) > distMinBetweenTwoLocations){
+               result.push({from: keystart, to : row.created_at, lat: key.lat, lon : key.lon});
+               keystart = row.created_at;
+               key.lat = row.lat;
+               key.lon = row.lon;
+           }
+           if(i == (rows.length-1)) //last row
+               result.push({from: keystart, to : row.created_at, lat: key.lat, lon : key.lon});
+       }
+        res.send({ok : true, result : result});
     });
 };
 
 
-var haversine = (function () {
+var haversine = (function() {
 
     // convert to radians
-    var toRad = function (num) {
+    var toRad = function(num) {
         return num * Math.PI / 180
     };
 
@@ -290,10 +289,10 @@ var haversine = (function () {
             'meter': 6371000,
             'mile': 3960
         };
-        options = options || {};
+        options   = options || {};
 
         var R = earth_radius['km'];
-        if (options.unit in earth_radius)
+        if(options.unit in earth_radius)
             R = earth_radius[options.unit];
 
         var dLat = toRad(end.latitude - start.latitude);
@@ -301,9 +300,9 @@ var haversine = (function () {
         var lat1 = toRad(start.latitude);
         var lat2 = toRad(end.latitude);
 
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
         if (options.threshold) {
             return options.threshold > (R * c)
@@ -315,16 +314,17 @@ var haversine = (function () {
 })();
 
 
-function formatJSToSQLITE(jsDate) {
+function formatJSToSQLITE(jsDate){
     return 'Y-m-d h:k:s.p'
         .replace('Y', jsDate.getFullYear())//i'v got 85 years to add the 0 ... YOU, CODER OF 2100, do you still eat pancakes ? The climate still allow me to eat ice cream,  you ? mouhahaha
-        .replace('m', jsDate.getMonth() + 1 < 10 ? '0' + (jsDate.getMonth() + 1) : jsDate.getMonth() + 1)
+        .replace('m', jsDate.getMonth()+1 < 10 ? '0' + (jsDate.getMonth()+1) : jsDate.getMonth()+1 )
         .replace('d', jsDate.getDate() < 10 ? '0' + jsDate.getDate() : jsDate.getDate())
-        .replace('h', jsDate.getHours() < 10 ? '0' + jsDate.getHours() : jsDate.getHours())
+        .replace('h', jsDate.getHours() < 10 ? '0' + jsDate.getHours(): jsDate.getHours())
         .replace('k', jsDate.getMinutes() < 10 ? '0' + jsDate.getMinutes() : jsDate.getMinutes())
         .replace('s', jsDate.getSeconds() < 10 ? '0' + jsDate.getSeconds() : jsDate.getSeconds())
         .replace('p', jsDate.getMilliseconds());
 }
+
 
 
 function getDateByScreenshotName(screenshotName) {
@@ -385,158 +385,6 @@ function getJSDateAndTime(screenshotName) {
     return new Date('20' + year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + ":" + nanSec);
 
 }
-
-
-// Audréa
-
-/**
- * Get context before date
- * @param date
- * @param appID -- to prevent same app selection //perhaps diff if app is a browser
- * @return -1 if an error occurred
- *          else an object which contains window id, window's activation date,
- *          window's title, process id and process name
- */
-function getPreviousContext (date, appID) {
-    return new Promise(function(resolve, reject){
-        var query = "SELECT window.id  window_id," +
-            " windowevent.created_at  created_at," +
-            " window.title window_title," +
-            "  process.id  process_id," +
-            " process.name  process_name " +
-            "FROM windowevent, window, processevent, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            "  AND window.process_id=process.id" +
-            " AND process.id=processevent.process_id" +
-            " AND  windowevent.created_at < '" + date + "'" +
-            " AND windowevent.event_type='Active' " +
-            " AND process.id != " + appID +
-            " ORDER BY created_at desc LIMIT 1 ;";
-
-        db.all(query, function (err, row) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                //Find best screenshot
-                var dateStart = new Date(row.created_at);
-                //Error marge : ~50ms
-                var dateEnd =  dateStart + 
-
-
-                resolve(row);
-            }
-        });
-    });
-}
-
-/**
- * Get context after date
- * @param date
- * @param appID -- to prevent same app selection //perhaps diff if app is a browser
- * @return -1 if an error occurred
- *          else an object which contains window id, window's activation date,
- *          window's title, process id and process name
- */
-
-function getNextContext(date, appID) {
-
-    return new Promise(function(resolve, reject){
-        var query  = "SELECT window.id  window_id," +
-            " windowevent.created_at  created_at," +
-            " window.title window_title," +
-            "  process.id  process_id," +
-            " process.name  process_name " +
-            "FROM windowevent, window, processevent, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            "  AND window.process_id=process.id" +
-            " AND process.id=processevent.process_id" +
-            " AND  windowevent.created_at >'"+date+ "'" +
-            "AND windowevent.event_type='Active' " +
-            " AND process.id != " + appID +
-            " ORDER BY created_at LIMIT 1 ;";
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(row);
-            }
-        });
-    });
-}
-
-/**
- * Get informations about date
- *
- * @param date
- * @return processId, processName, windowID, windowTitle
- */
-function getInformations(date){
-    return new Promise(function(resolve, reject){
-        var query  = "SELECT window.id  window_id," +
-            " window.title window_title," +
-            " process.id  process_id," +
-            " process.name  process_name " +
-            " FROM windowevent, window, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            " AND window.process_id=process.id" +
-            " AND  windowevent.created_at <= '"+ date+ "'" +
-            " AND windowevent.event_type='Active' ORDER BY windowevent.created_at desc LIMIT 1 ;";
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(row);
-            }
-        });
-
-    });
-}
-
-function getContextAboutMainScreenshot(date, appID){
-    var nextPromise = getNextContext(date, appID);
-    var previousPromise = getPreviousContext(date, appID);
-    return Promise.all([previousPromise,nextPromise]);
-}
-
-
-
-
-function getAllInformationAboutMainScreenshot (date, processID){
-    return new Promise(function(resolve,reject){
-            var test  = getContextAboutMainScreenshot(date, processID);
-            test.then(function(context){
-                resolve({previousContext: context[0][0], nextContext: context[1][0]});
-            }, function(err){
-                reject(err);
-            });
-    });
-}
-
-
-exports.getScreenshotInformations =  function(req,res){
-    var date = new Date(req.query.date);
-    var formattedDate = formatJSToSQLITE(date);
-    var informationsPromise = getInformations(formattedDate);
-
-    informationsPromise.then(function(data){
-        var t = getAllInformationAboutMainScreenshot(formattedDate, data[0].process_id);
-        t.then(function(context){
-            res.send({informations: data[0], context: context});
-        }, function(err){
-            res.send({error: 'Erreur erreur'+err});
-        });
-    });
-
-};
-
-
-
-
 
 
 
