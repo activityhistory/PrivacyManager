@@ -33,15 +33,23 @@ function initializeSmallSlider() {
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height / 2 + ")")
+        .attr("transform", "translate(0, 30)")
         .call(d3.svg.axis()
             .scale(xSmallSlider)
+            .innerTickSize(4) //espace entre le légende de l'axis et celui-ci
+
     )
         .select(".domain")
         .select(function () {
             return this.parentNode.appendChild(this.cloneNode(true));
         })
         .attr("class", "halo");
+
+    //change the font size fo all the tick, and the size of the smallslider axis line
+    svg.selectAll('.axis line, .axis path')
+        .style({'stroke': 'Black', 'fill': 'none', 'stroke-width': '2px'});
+    d3.selectAll(".tick > text")
+        .style("font-size", 10);
 
 
     //hr
@@ -62,7 +70,8 @@ function initializeSmallSlider() {
         .remove();
 
     slider.select(".background")
-        .attr("height", height);
+        .attr("height", height/2)
+        .attr("transform", "translate(0, 30)");
 
     var handle = slider.append("rect")
         .attr("class", "handle")
@@ -70,8 +79,8 @@ function initializeSmallSlider() {
         .attr("x", width/2+margin.left )
         .attr("y", 0)
         .attr("width", 2)
-        .attr("height", 120)
-        .style("fill", "DarkOrchid");
+        .attr("height", 130)
+        .style("fill", "white");
 
     //slider
     //    .call(brushSmallSlider.event)
@@ -115,12 +124,13 @@ function initializeSmallSlider() {
 
     $( document ).keydown(function(e) {
         e = e || window.event;
-        if(e.keyCode == 107){//+
-            zoom();
-        }
-        if(e.keyCode == 109){ //-
-            unzoom();
-        }
+        // RIP Zoom +/-
+        //if(e.keyCode == 107){//+
+        //    zoom();
+        //}
+        //if(e.keyCode == 109){ //-
+        //    unzoom();
+        //}
         if(e.keyCode == 39){// ->
             goToOneScreenshotNext("right");
         }
@@ -137,12 +147,12 @@ function initializeSmallSlider() {
         .on("brushend", brushedZoom);
 
     d3.select("#sliderSVG svg").append("g")
-        .attr('transform', 'translate(' + margin.left + ', 0)')
+        .attr('transform', 'translate(' + margin.left + ', 95)')
         .attr("class", "zoomBrush")
         .call(zoomBrush)
         .selectAll("rect")
         .attr("y", 0)
-        .attr("height", 115);
+        .attr("height", 34);
 
 
 
@@ -156,8 +166,7 @@ function initializeSmallSlider() {
             .call(zoomBrush)
             .selectAll("rect")
             .attr("y", 0)
-            .attr("height", 115);
-
+            .attr("height", 34);
     }
 
 
@@ -203,7 +212,7 @@ function goToOneScreenshotNext(direction)
 
 }
 
-function zoom()
+/*function zoom()
 {
 
     var currentPostion = new Date(brushSmallSlider.extent()[0]);
@@ -242,7 +251,7 @@ function unzoom()
     ajaxMAJSlider(newStart, newStop);
     bigsSlider_manuelBrushMove(newStart, newStop);
 
-}
+}*/
 
 function MAJSlider(data) {
     if ((!data[0]) || (!data[1])) {
@@ -290,7 +299,7 @@ function printScreenShotSwimlane() {
     var mini = d3.select("#sliderSVG svg").append('g')
         .attr('transform', 'translate(' + margin.left + ', 100)')
         .attr('width', width)
-        .attr('height', 30)
+        .attr('height', 40)
         .attr('class', 'screenshotSwimlane');
 
     var rectangles = mini.selectAll("circle")
@@ -303,10 +312,10 @@ function printScreenShotSwimlane() {
         .attr("cx", function (d) {
             return xSmallSlider(d.date);
         })
-        .attr("cy", 5)
-        .attr("r", 5)
+        .attr("cy", 12)
+        .attr("r", 10)
         .style("fill", color)
-        .style("fill-opacity", 0.05);
+        .style("fill-opacity", 0.03);
 
 
 }

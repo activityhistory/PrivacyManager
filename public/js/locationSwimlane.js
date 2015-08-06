@@ -3,9 +3,20 @@
  */
 
 
+$( document).ready(function(){
+
+    d3.select("#sliderSVG svg").append("text")
+        .attr("x", 10)
+        .attr("y", 20)
+        .attr("dy", ".35em")
+        .text("Location");
+
+});
+
+
 function printLocationsSwimlanes(){
 
-    d3.select("#locationSwimlanes svg").remove();
+    d3.select("#locationSwimlanes svg g.locationSwimlane").remove();
 
 
     if(!locationData){
@@ -24,13 +35,11 @@ function printLocationsSwimlanes(){
     }
 
 
-    var svg = d3.select("#locationSwimlanes").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", 5);
+    var svg = d3.select("#sliderSVG svg");
 
 
-    var mini = d3.select("#locationSwimlanes svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ',1)')
+    var mini = svg.append('g')
+        .attr('transform', 'translate(' + margin.left + ',23)')
         .attr('width', width)
         .attr('height', 5)
         .attr('class', 'locationSwimlane');

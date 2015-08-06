@@ -68,17 +68,15 @@ function privacyFilter_checkDeletedApps() {
 function MAJWillBeDeletedSwimlane(){
 
 
-    d3.select("#willBeDeleted svg").remove();
+    d3.select("#sliderSVG svg g.willBeDeleted").remove();
 
 
-    var svg = d3.select("#willBeDeleted").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
+    var svg = d3.select("#sliderSVG svg");
 
-    var mini = d3.select("#willBeDeleted svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + (height + 15) + ')')
+    var mini = d3.select("#sliderSVG svg").append('g')
+        .attr('transform', 'translate(' + margin.left + ', 15 )')
         .attr('width', width)
-        .attr('height', 30)
+        .attr('height', 100)
         .attr('class', 'willBeDeleted');
 
     var rectangles = mini.selectAll("line")
@@ -94,11 +92,11 @@ function MAJWillBeDeletedSwimlane(){
         .attr("x2", function (d) {
             return xSmallSlider(new Date(d.stop));
         })
-        .attr("y1", 5)
-        .attr("y2", 5)
+        .attr("y1", 40)
+        .attr("y2", 40)
         .attr("stroke", willBeDeletedColor)
-        .attr("stroke-width", 8);
-
+        .attr("stroke-width", 80)
+        .style("stroke-opacity", 0.15);
 
 
 }
