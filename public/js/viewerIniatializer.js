@@ -2,7 +2,7 @@
  * Created by Maxime on 20/07/2015.
  */
 
-    //d3_smallSLider
+//d3_smallSlider
 
 
 var interVal = {start: new Date(), stop: new Date(), data: "", currentDate: new Date()};
@@ -21,6 +21,7 @@ var brush;
 
 //main time scale
 var x;
+
 
 $.get("/getAllRecordedDays", function (data) {
     x = initBigSlider(data.allRecordedDays);

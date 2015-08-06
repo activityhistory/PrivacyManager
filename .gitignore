@@ -6,3 +6,4 @@ selfspy.sqlite
 public/images/AT_screenshots
 public/images/screenshots
 .DS_Store
+.idea

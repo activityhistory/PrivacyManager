@@ -20,8 +20,7 @@ var options = {
 http.get(options, function(res) {
   console.log('server is running, redirecting to localhost');
   if (window.location.href.indexOf('localhost') < 0) { 
-    window.location = 'http://localhost:' + app.get('port');meteo
-
+    window.location = 'http://localhost:' + app.get('port');
   }
 }).on('error', function(e) {
   //server is not yet running
