@@ -59,7 +59,7 @@ function printScreenshot(date) {
 
     //CHANGE HERE IF YOU WANT TO ALWAYS SEE A Screenshot ( also when you'r far away)
     if (betterDiff / 1000 < 60)
-        $("#image img").attr("src", '/images/screenshots/' + betterImg); //file:///Users/Maxime/.selfspy/screenshots/
+        $("#image img").attr("src", '/images/screenshots/' + betterImg); //  file:///Users/Maxime/.selfspy/screenshots/
     else
         $("#image img").attr("src", '/images/no-image.jpg');
 
@@ -115,7 +115,6 @@ function printScreenshot(date) {
         $("#nextContext .smallSCS").attr("src", '/images/screenshots/' + betterNextImg);
 
         $("#nextContext .appName").html('App name : ' + data.context.nextContext.process_name);
-
 
 
     });

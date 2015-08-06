@@ -12,6 +12,25 @@ function setTimeFilterColor(c) {
 }
 
 
+$( document).ready(function(){
+
+    d3.select("#sliderSVG svg").append("text")
+        .attr("x", 10)
+        .attr("y", 43)
+        .attr("dy", ".35em")
+        .text("Time");
+
+    //hr
+    d3.select("#sliderSVG svg").append("line")
+        .attr("x1", margin.left - 30)
+        .attr("x2", width+margin.left +30)
+        .attr("y1", 35)
+        .attr("y2", 35)
+        .attr("stroke-width", 2)
+        .attr("stroke", "grey")
+        .attr("class", "timeLine");
+});
+
 
 function printTimeSwimlane() {
 
@@ -95,14 +114,6 @@ function printTimeSwimlane() {
         .attr("stroke-width", 3)
         .attr("title", "Unauthorized time");
 
-    d3.select("#sliderSVG svg").append("text")
-        .attr("x", 10)
-        .attr("y", 45)
-        .attr("dy", ".35em")
-        .text("Time");
-
-//todo line
-
 
     $( document ).tooltip();
 }
@@ -144,5 +155,5 @@ function notifyTimeFilterChanged() {
 }
 
 function removeTimeFilter() {
-    d3.select("#timeSwimlane svg g.timeSwimlnae").remove();
+    d3.select("#sliderSVG svg g.timeSwimlane").remove();
 }
