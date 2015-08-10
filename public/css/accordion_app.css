@@ -1,29 +1,21 @@
-#appName
-{
-    width:100%;
+/* Apps filter */
+#accordion [type="checkbox"] + label:before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    margin-top: 7px;
 }
-#addAppButton
-{
+
+#accordion [type="checkbox"]:checked + label:before {
+    width: 10px;
+    height: 15px;
+}
+
+/* Unauthorized app */
+
+button#addAppButton {
+    margin-top: 21px;
     float: right;
-}
-#inputNameDiv
-{
-    overflow:hidden;
-}
-#appList
-{
-    height:100px;
-    overflow-y : auto;
-    width:100%;
-}
-
-#appList ul{
-    width:100%;
-}
-
-.deleteButton{
-    float:right;
-    width : 19px;
-    height: 14px;
-
+    height: 25px;
+    line-height: 25px;
 }

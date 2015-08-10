@@ -1,11 +1,8 @@
-#legend
-{
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding:10px;
-    position:fixed;
-    height:135px;
-    width:250px;
-    bottom:0;
-    left:0;
+#legend {
+    height: 20%;
+    margin-bottom: 5px;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-y: scroll;
 }

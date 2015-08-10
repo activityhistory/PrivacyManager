@@ -1,13 +1,13 @@
 //
    Created by maxime on 12/07/15.
 #formAddApp
-    button#addAppButton Add
     #inputNameDiv
-        input(type='text', list='allAppsList')#appName
+        input(type='text', list='allAppsList')#appName.input-field.col.s8
         datalist#allAppsList
+    button#addAppButton.btn.waves-effect.waves-light.col.s3 Add
 
-#appList
-    ul
+#appList.row
+    ul.row
 script.
 
     //List of apps to autocomplete add form
@@ -32,7 +32,7 @@ script.
         var names = data.names;
         $("#appList ul").html('');
         $.each(names, function (i, item) {
-            $("#appList ul").append("<li>" + item.name + "<a href='#' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteButton' data-appName='"+item.name+"'/></a></li>");
+            $("#appList ul").append("<li><span class='col s10'>" + item.name + "</span><a href='#' class='col s2'><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteButton' data-appName='" + item.name + "'/></a></li>");
             privacyFilter_addUnApp(item.name); //add the new list to the privacyFilter object, to visualize
         });
 

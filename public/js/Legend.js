@@ -44,8 +44,8 @@ function printLegend(){
     });
 
     var legendSVG = d3.select("#legend").append('svg')
-        .attr("width", '250px')
-        .attr("height", '700px');
+        .attr("width", '100%')
+        .attr("height", '90%');
     var circles = legendSVG.selectAll("circle")
         .data(toAdd)
         .enter()

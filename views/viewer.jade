@@ -1,29 +1,35 @@
 //Created by Maxime on 20/07/2015.
 
 
-#screenshotsView
-    #mainInfosScreenshot
-        #mainApp
-        #winTitle
-        #date
+#screenshotsView.row
+    #date.row
             span
-    #previousContext
-        img.smallSCS(src="")
+    #previousContext.col.s3
+        img.smallSCS(src="").row
         div.appName
             span
-    #imageContainer
-       #image
-          a#fullScreen
-             img#bigScreenShot(src="images/tuto.png")
 
-    #nextContext
+    div.card.col.s6
+        div.card-image.waves-effect.waves-block.waves-light
+            img.materialboxed#bigScreenShot(src="images/tuto.png")
+        div.card-content(style="display : none;")
+            span.card-title.activator.grey-text.text-darken-4
+                i.material-icons.right more_vert
+                p#mainAppName
+        div.card-reveal
+            span.card-title.grey-text.text-darken-4
+                i.material-icons.right close
+            #screenshotInfos
+            #runningApps
+
+    #nextContext.col.s3
         img.smallSCS(src="")
         div.appName
-        #runningApps
+        #runningApps(style="display: none")
 
-#sliders
-    #sliderSVG
+#sliders.row
+    #sliderSVG.row
         svg.mainSVG
-    #bigSlider
+    #bigSlider.row
 
 

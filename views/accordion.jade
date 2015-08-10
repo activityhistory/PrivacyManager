@@ -2,38 +2,38 @@
    Created by maxime on 11/07/15.
 
 block accordion
-   script.
-      $(function () {
-         $("#accordion").accordion({
-            autoHeight: false,
-            navigation: true
-         });
-      });
-   #accordion
-      h3
-         a(href='#') Applications Filter
-      div
-         ul#appsFilter
-      h3
-         a(href='#') Locations Filter
-      div
-         ul#locationFilter
-      h3
-         a(href='#') Time Filter
-      div
-         label
-            input.filter.time(type='checkbox')
-            | &nbsp; Print unauthorized times
-      h3
-         a(href='#') Unauthorized applications
-      div
-         include accordion_content/apps
-      h3
-         a(href='#') Authorized times
-      div
-         include accordion_content/times
-      h3
-         a(href='#') Authorized locations
-      div
-         include accordion_content/location
-
+    #accordion.row
+        ul.collapsible.popout(data-collapsible="accordion")
+            li
+                div.collapsible-header Applications Filter
+                    i.material-icons.tiny view_list
+                div.collapsible-body
+                    ul#appsFilter
+            li
+                div.collapsible-header Locations Filter
+                    i.material-icons.tiny location_on
+                div.collapsible-body
+                    ul#locationFilter
+            li
+                div.collapsible-header Time Filter
+                    i.material-icons.tiny av_timer
+                div.collapsible-body
+                    label
+                        input.filter.time(type='checkbox')
+                        | &nbsp; Print unauthorized times
+            li.divider
+            li
+                div.collapsible-header Unauthorized applications
+                    i.material-icons.tiny not_interested
+                div.collapsible-body
+                    include accordion_content/apps
+            li
+                div.collapsible-header Authorized times
+                    i.material-icons.tiny query_builder
+                div.collapsible-body
+                    include accordion_content/times
+            li
+                div.collapsible-header Authorized locations
+                    i.material-icons.tiny my_location
+                div.collapsible-body
+                    include accordion_content/location

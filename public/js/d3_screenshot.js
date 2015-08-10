@@ -2,35 +2,6 @@
  * Created by Maxime on 23/07/2015.
  */
 
-
-$(document).ready(function () {
-    $("#fullScreen").click(function (event) {
-
-
-        if ($('#bigScreenShot').css("position") == 'fixed') {
-            $('#bigScreenShot').css({
-                position: 'relative',
-                width: '530px',
-                height: '365px'
-            });
-        }
-        else {
-            $('#bigScreenShot').css({
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                zIndex: 999,
-                width: '100%',
-                height: '100%'
-            });
-        }
-    });
-
-});
-
-
 //TODO
 function printScreenshot(date) {
 
@@ -60,7 +31,9 @@ function printScreenshot(date) {
 
     //CHANGE HERE IF YOU WANT TO ALWAYS SEE A Screenshot ( also when you'r far away)
     if (betterDiff / 1000 < 60){
+        $("#bigScreenShot").attr("src", '/images/screenshots/' + betterImg); //file:///Users/Maxime/.selfspy/screenshots/
         $("#image img").attr("src", '/images/screenshots/' + betterImg); //file:///Users/Maxime/.selfspy/screenshots/
+
 
 
         var tmp_app = betterImg.split('app');
@@ -126,20 +99,32 @@ function printScreenshot(date) {
 
                        $('#date').html(date.toDateString() + ' <span>' + date.getHours() + ':' + min + '</span>');
 
-                       $('#mainApp').html('App : ' + data.informations.app_name + '<br/>');
-                       $('#runningApps').html('Other running apps : <br/> ');
+                       $('.card-content').show();
 
-                       $('#runningApps').append('<ul class="contextAppsList"></ul>');
+                       $('#mainAppName').html(data.informations.app_name);
 
                        var appsOpen = data.appsOpen;
 
-                       for (var j = 0; j < appsOpen.length; j++) {
-                           $('#runningApps ul').append('<li>' + appsOpen[j] + '</li>');
+
+                       if (appsOpen.length > 0) {
+                           $('#runningApps').show();
+                           $('#runningApps').html('Other running apps : <br/> ');
+
+                           $('#runningApps').append('<ul class="contextAppsList"></ul>');
+
+                           for (var j = 0; j < appsOpen.length; j++) {
+                               $('#runningApps ul').append('<li>' + appsOpen[j] + '</li>');
+                           }
                        }
 
-                       if (data.informations.window_title !== '') {
-                           $('#winTitle').html('Window title : ' + data.informations.window_title);
+                       else {
+                           $('#runningApps').hide();
                        }
+
+
+                       //if (data.informations.window_title !== '') {
+                       //    $('#screenInfos').append('Window title : ' + data.informations.window_title);
+                       //}
 
 
                        if(data.context){
@@ -174,21 +159,7 @@ function printScreenshot(date) {
         $("#nextContext .appName").html( '');
         $("#previousContext .appName").html( '');
 
-
+        $('#runningApps').hide();
     }
-
-
-/*
-    var currentMiniScreenPosition = -3;
-    $(".miniscreenshots img").each(function () {
-        if((imagePosition + currentMiniScreenPosition) < 0 || (imagePosition + currentMiniScreenPosition)  > ( interVal.data.length -1))
-            $(this).attr("src", '/images/no-image.jpg');
-        else
-        $(this).attr("src", '/images/screenshots/' + interVal.data[imagePosition + currentMiniScreenPosition].screenshot);
-        currentMiniScreenPosition++;
-        currentMiniScreenPosition = currentMiniScreenPosition == 0 ? currentMiniScreenPosition+1 : currentMiniScreenPosition;
-
-    })
-*/
 
 }

@@ -1,9 +1,9 @@
 extends layout
 
 block content
-    #leftPanel
-        include accordion
-        include legend
-    #rightPanel
-        include viewer
-
+    div#content.row
+        #leftPanel.col.s3
+            include accordion
+            include legend
+        #rightPanel.col.s9
+            include viewer
