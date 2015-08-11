@@ -24,7 +24,7 @@ exports.test = function (req, res) {
 exports.un_apps_list = sendUnAppsList;
 
 function sendUnAppsList(req, res) {
-    db.all('SELECT * FROM process WHERE authorized_record == 0', [], function (err, rows) {
+    db.all('SELECT * FROM process WHERE authorized_recording == 0', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
             console.log('fetch error', err);
@@ -69,14 +69,14 @@ exports.upadteApp = function (req, res) {
     var action = req.query.action;
     var aut_value = action === "unauthorize" ? 0 : 1;
 
-    db.run("UPDATE process SET authorized_record = ? WHERE name = ?", [aut_value, name]);
+    db.run("UPDATE process SET authorized_recording = ? WHERE name = ?", [aut_value, name]);
 
     //return the new list of unauthorized apps
     sendUnAppsList(req, res);
 };
 
 exports.get_allowed_times = function (req, res) {
-    db.get('SELECT * FROM privacy_time', [], function (err, row) {
+    db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
             console.log('fetch error', err);
@@ -94,8 +94,8 @@ exports.update_allowed_times = function (req, res) {
     var toMinute = req.query.toMinute;
     var WE = parseInt(req.query.WE);
 
-    db.run("UPDATE privacy_time SET fromHour = ?, toHour = ?, fromMinute = ?, toMinute = ?, WE = ?",
-        fromHour, toHour, fromMinute, toMinute, WE);
+    db.run("DELETE FROM privacytimeinterval");
+    db.run("INSERT INTO privacytimeinterval (fromHour, toHour, fromMinute, toMinute, weekend) VALUES ( ?,  ?,  ?, ?, ?)", fromHour, toHour, fromMinute, toMinute, WE);
 
     res.send({ok: true}); //TODO : callback if OK or not
 };
@@ -105,7 +105,7 @@ exports.addUnLocation = function (req, res) {
     var long = req.query.long;
     var address = req.query.address;
 
-    db.run("INSERT INTO privacy_location(address, lat, lng) VALUES (?, ?, ?)", address, lat, long);
+    db.run("INSERT INTO privacylocation(address, lat, lon) VALUES (?, ?, ?)", address, lat, long);
 
     getUnLocations(req, res);
 
@@ -114,7 +114,7 @@ exports.addUnLocation = function (req, res) {
 exports.getUnLocations = getUnLocations;
 
 function getUnLocations(req, res) {
-    db.all('SELECT * FROM privacy_location', [], function (err, rows) {
+    db.all('SELECT * FROM privacylocation', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
             console.log('fetch error', err);
@@ -124,7 +124,7 @@ function getUnLocations(req, res) {
     });
 }
 exports.removeLoc = function (req, res) {
-    db.run("DELETE FROM privacy_location WHERE lat = ? AND lng = ?", req.query.lat, req.query.lng);
+    db.run("DELETE FROM privacylocation WHERE lat = ? AND lon = ?", req.query.lat, req.query.lon);
     getUnLocations(req, res);
 };
 
@@ -139,7 +139,7 @@ exports.getAllScreenshotsDateAndTime = function (req, res) {
     all.sort();
     var result = [];
     all.forEach(function (one) {
-        if (one != ".DS_Store") {
+        if (one != ".DS_Store") { //TODO : reove all files started by .
             var date = getJSDateAndTime(one);
             result.push(date);
         }
@@ -151,7 +151,7 @@ exports.getAllScreenshotsDateAndTime = function (req, res) {
 exports.getAllScreenshotsRange = function (req, res) {
     var all = fs.readdirSync(pathToScreenShots);
     all.sort();
-    if (all[0] === ".DS_Store")//TODO
+    if (all[0] === ".DS_Store")//TODO : reemove all files started with .
         var start = getDateByScreenshotName(all[1]);
     else
         var start = getDateByScreenshotName(all[0]);
@@ -189,7 +189,7 @@ exports.getScreenshotsListBetween = function (req, res) {
     all.sort();
     var result = [];
     all.forEach(function (one) {
-        if (one != ".DS_Store") {
+        if (one != ".DS_Store") { //TODO
             var d = getJSDateAndTime(one);
             if (d > start && d < end) {
                 result.push({screenshot: one, date: d});
@@ -207,29 +207,45 @@ exports.getAppsData = function (req, res) {
 
 
     var start = new Date(req.query.start);
+    start.setHours(start.getHours() - 3);
     var end = new Date(req.query.stop);
 
 
     db.all("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
-        "WHERE processevent.process_id = process.id " +
+        "WHERE processevent.process_id = process.id AND (processevent.event_type = 'Active' OR processevent.event_type = 'Inactive' ) " +
         "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +
-        "AND '" + formatJSToSQLITE(end) + "'", function (err, rows) {
+        "AND '" + formatJSToSQLITE(end) + "' ORDER BY processevent.created_at ASC ; ", function (err, rows) {
         var last = {};
-        rows.forEach(function (one) {
-            if ('date' in last) {
-                result.push({start: last.date, stop: one.created_at, name: last.name})
-            }
-            if (one.event_type == "Active" || one.event_type == "Open") {
-                last.date = one.created_at;
-                last.name = one.name;
-            } else {
-                last = {};
-            }
-        });
-        res.send({result: result});
-    })
+        for(var i = 0 ; i != rows.length; i++){
 
+            if(rows[i].name != "selfspy" && rows[i].event_type == 'Active'){ //TODO : check if we keep selfspy
+                for(var k = i; k != rows.length; k++){
+                    if(rows[k].event_type == 'Inactive' && rows[k].name == rows[i].name){
+                        result.push({name : rows[i].name, start: rows[i].created_at, stop : rows[k].created_at});
+                        break;
+                    }
+                }
+            }
+        }
+        res.send({result: result});
+        });
 };
+
+//function addEndOfAnActiveAppRange(appList, appName, date){
+//    var i;
+//    var done = false;
+//    for(i = appList.length -1 ; i >= 0; i-- ){
+//        if(appList[i].name == appName && appList[i].stop == "undefined")
+//        {
+//            appList[i].stop = date;
+//            done = true;
+//            break;
+//        }
+//    }
+//    if(done == false)
+//        window.console.log("WARNING : Can't put the end of an active app range : the start of the range for the app "+ appName + " not found, sould stop at " + date );
+//
+//}
 
 exports.getGeoloc = function (req, res) {
 
@@ -240,8 +256,11 @@ exports.getGeoloc = function (req, res) {
     var result = [];
 
 
-    //remove 12min of the start : that allow  location period to start befor the effective start time
+    //remove 12min of the start : that allow  location period to start before the effective start time
     start.setMinutes(start.getMinutes() - 12);
+
+     //add 12min of the start : that allow  location period to start before the effective start time
+    end.setMinutes(end.getMinutes() + 12);
 
     db.all("SELECT created_at, lat, lon FROM location " +
         "WHERE created_at between '" + formatJSToSQLITE(start) + "' " +
@@ -251,19 +270,35 @@ exports.getGeoloc = function (req, res) {
             return;
         }
         var key = {lat: "undefined", lon: "undefined"};
+        var justPreviousTime;
+        var keystart;
         for (var i = 0; i != rows.length; i++) {
             var row = rows[i];
-            var keystart;
-            if (key.lat == "undefined") {
+
+
+            if (key.lat == "undefined") { //first iteration case
                 key.lat = row.lat;
                 key.lon = row.lon;
                 keystart = row.created_at;
+                justPreviousTime = row.created_at;
                 continue;
             }
+
+
+            if(new Date(row.created_at) - new Date(justPreviousTime) > 900000 ){
+                result.push({from: keystart, to: justPreviousTime, lat: key.lat, lon: key.lon});
+                keystart = row.created_at;
+                key.lat = row.lat;
+                key.lon = row.lon;
+                justPreviousTime = row.created_at;
+                continue;
+
+            }
+
             if (haversine({latitude: row.lat, longitude: row.lon}, {
                     latitude: key.lat,
                     longitude: key.lon
-                }, {unit: 'meter'}) > distMinBetweenTwoLocations) {
+                }, {unit: 'meter'}) > distMinBetweenTwoLocations) { //New location, push the previous, start watching the new //OR time too much different (10 min)
                 result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
                 keystart = row.created_at;
                 key.lat = row.lat;
@@ -271,8 +306,35 @@ exports.getGeoloc = function (req, res) {
             }
             if (i == (rows.length - 1)) //last row
                 result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
+
+
+            justPreviousTime = row.created_at;
+
         }
-        res.send({ok: true, result: result});
+
+        //If there is juste one range, send it
+        if(result.length == 1){
+            res.send({ok: true, result: result});
+            return;
+
+        }
+        //fill times holes with "unknow" location
+        var trueResult = [];
+        for(var i = 0 ; i != result.length - 1 ; i ++)
+        {
+            var first = result[i];
+            var second = result [i+1];
+
+            if(i == 0)
+                trueResult.push(first);
+            if(first.to != second.from)
+            {
+                trueResult.push({from: first.to, to: second.from, lat:"unknow", lon:"unknow"})
+            }
+            trueResult.push(second);
+        }
+
+        res.send({ok: true, result: trueResult});
     });
 };
 

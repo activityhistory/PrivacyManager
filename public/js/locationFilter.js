@@ -3,44 +3,191 @@
  */
 
 
-var distMinBetweenTwoLocations = 2000; // meters
-var locationData = [];
 
-function ajaxGetLocations() {
-    $.get("/getGeoloc", {start: interVal.start, stop: interVal.stop}, function (data) {
-        if (data.error == true) {
-            console.log("WARNING : NO LOCATION DATA FOUND. Error : " + data.error);
+
+
+var distMinBetweenTwoLocations = 2000; // meters
+
+var LocationFilter = {
+
+    locationData: [],
+
+
+
+    ajaxGetLocations: function () {
+
+
+        var self = this;
+
+        return new Promise(function(ok, ko){
+            $.get("/getGeoloc", {start: interVal.start, stop: interVal.stop}, function (data) {
+                if (data.error == true) {
+                    console.log("WARNING : NO LOCATION DATA FOUND. Error : " + data.error);
+                    ko();
+                }
+                ok(data.result);
+            });
+        })
+
+
+    },
+
+
+    decorateLocationDataWithLocationNames: function () {
+        if (!this.locationData) {
+            console.log("WARNING: NO LOCATION DATA FOUND");
             return;
         }
-        locationData = data.result;
-        decorateLocationDataWithLocationNames();
-    });
-}
-
-function decorateLocationDataWithLocationNames() {
-    if(!locationData){
-        console.log("WARNING: NO LOCATION DATA FOUND");
-        return;
-    }
-    for(var i = 0; i!= locationData.length ; i++)
-    {
-            var one = locationData[i];
-            for(var k = 0 ; k != knownLocations.length ; k++){
+        if(!knownLocations){
+            console.log("NOTICE: No known location found.");
+            return;
+        }
+        for (var i = 0; i != this.locationData.length; i++) {
+            //todo soonest
+            var one = this.locationData[i];
+            for (var k = 0; k != knownLocations.length; k++) {
                 var onek = knownLocations[k];
-                if (haversine({latitude :onek.lat, longitude : onek.lng}, {latitude : one.lat, longitude : one.lon}, {unit : 'meter'}) <= distMinBetweenTwoLocations)
+                var dist = haversine({latitude: onek.lat, longitude: onek.lon}, {
+                    latitude: one.lat,
+                    longitude: one.lon
+                }, {unit: 'meter'});
+                if ((!isNaN(dist)) && dist <= distMinBetweenTwoLocations)
                     one.name = onek.address;
                 else
                     one.name = "unknow";
             }
 
+        }
+    },
+
+    initLocationFilter: function () {
+        var self = this;
+        return new Promise(function (ok, ko) {
+            self.ajaxGetLocations().then(function (res) {
+                self.locationData = res;
+                self.decorateLocationDataWithLocationNames();
+                self.filterLocations();
+                ok();
+            });
+
+        })
+
+    },
+
+    initAndPrint: function(){
+        var self = this;
+        if(!knownLocations){
+            document.addEventListener('knownLocationOk', function(e){
+                self.initAndPrint();
+            });
+            return;
+        }
+      this.initLocationFilter().then(function(){
+
+          printLocationsSwimlanes();
+      })
+    },
+
+
+
+
+    removeFilteredAndColorForAllLocations : function(){
+        for (i = 0; i != this.locationData.length; i++) {
+            var one = this.locationData[i];
+                this.locationData[i].color = NaN;
+                this.locationData[i].filtered = false;
+        }
+    },
+
+    filterLocations: function () {
+        this.removeFilteredAndColorForAllLocations();
+        var self = this;
+        $("input:checked").each(function(){
+            var ceLieux = $(this);
+
+            var lat = ceLieux.attr("data-lat");
+            var long = ceLieux.attr("data-lon");
+            var addr = ceLieux.attr("data-name");
+
+            var c = legend_getAColor(addr.split(',')[0]);
+
+            for (i = 0; i != self.locationData.length; i++) {
+                var one = self.locationData[i];
+                if (one.name == addr || (addr == 'unknow address' && one.name == "unknow")) {
+                    self.locationData[i].color = c;
+                    self.locationData[i].filtered = true;
+                }
+            }
+            
+        })
+    },
+
+    unBindLocationFilterChange: function () {
+        $(".filter.location").unbind("change");
+    },
+
+
+    bindLocationFilterChange: function () {
+        var self = this;
+        this.unBindLocationFilterChange();
+        $(".filter.location").change(function (e) {
+            var lat = $(e.target).attr("data-lat");
+            var long = $(e.target).attr("data-lon");
+            var addr = $(e.target).attr("data-name");
+            if ($(e.target).is(':checked')) {
+                if (!self.locationData) {
+                    alert("Sorry, no location data found. Are you sure you used the good version of SelfSpy ?");
+                    return;
+                }
+                var c = legend_getAColor(addr.split(',')[0]);
+                //add color and 'filtred' attribute
+                for (i = 0; i != self.locationData.length; i++) {
+                    var one = self.locationData[i];
+                    if (one.name == addr || (addr == 'unknow address' && one.name == "unknow")) {
+                        self.locationData[i].color = c;
+                        self.locationData[i].filtered = true;
+                    }
+                }
+                printLocationsSwimlanes();
+            }
+            else {
+                if (!self.locationData) {
+                    return;
+                }
+                removeLegend(addr.split(',')[0]);
+                //remove color and 'filtred' attribute
+                for (i = 0; i != self.locationData.length; i++) {
+                    var one = self.locationData[i];
+                    if (one.name == addr || (addr == 'unknow address' && one.name == "unknow")) {
+                        one.color = '';
+                        one.filtered = false;
+                    }
+                }
+                printLocationsSwimlanes();
+            }
+        });
+
+    },
+
+
+    populateLocationFilter: function () {
+        this.unBindLocationFilterChange();
+        $('#locationFilter').html('');
+        knownLocations.forEach(function (one) {
+            $("#locationFilter").append("<li><label><input type='checkbox' data-lat='" + one.lat + "' data-lon='" + one.lon + "' data-name='" + one.address + "' class='filter location'>" + one.address.split(',')[0] + "</label></li>");
+        });
+        $("#locationFilter").append("<li><label><input type='checkbox' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'>Unknow Address</label></li>");
+        this.bindLocationFilterChange();
     }
-}
 
 
-var haversine = (function() {
+};
+
+
+var haversine = (function () {
 
     // convert to radians
-    var toRad = function(num) {
+    var toRad = function (num) {
         return num * Math.PI / 180
     };
 
@@ -50,10 +197,10 @@ var haversine = (function() {
             'meter': 6371000,
             'mile': 3960
         };
-        options   = options || {};
+        options = options || {};
 
         var R = earth_radius['km'];
-        if(options.unit in earth_radius)
+        if (options.unit in earth_radius)
             R = earth_radius[options.unit];
 
         var dLat = toRad(end.latitude - start.latitude);
@@ -61,9 +208,9 @@ var haversine = (function() {
         var lat1 = toRad(start.latitude);
         var lat2 = toRad(end.latitude);
 
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         if (options.threshold) {
             return options.threshold > (R * c)
@@ -73,53 +220,3 @@ var haversine = (function() {
     }
 
 })();
-
-
-function populateLocationFilter(){
-
-    decorateLocationDataWithLocationNames();
-
-    $('#locationFilter').html('');
-    knownLocations.forEach(function(one){
-        $("#locationFilter").append("<li><label><input type='checkbox' data-lat='" + one.lat + "' data-lon='" + one.lng + "' data-name='"+one.address+"' class='filter location'>" + one.address.split(',')[0] + "</label></li>");
-    });
-    $("#locationFilter").append("<li><label><input type='checkbox' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'>Unknow Address</label></li>");
-    $(".filter.location").change(function (e) {
-        var lat = $(e.target).attr("data-lat");
-        var long = $(e.target).attr("data-lon");
-        var addr = $(e.target).attr("data-name");
-        if($(e.target).is(':checked')) {
-            if(!locationData){
-                alert("Sorry, no location data found. Are you sure you used the good version of SelfSpy ?");
-                return;
-            }
-            var c = addLegend(addr.split(',')[0]);
-            //add color and 'filtred' attribute
-            for(i=0; i!= locationData.length; i++){
-                var one = locationData[i];
-                if(one.name == addr || (addr == 'unknow address' && one.name == "unknow")) {
-                    console.log("11");
-                    locationData[i].color = c;
-                    locationData[i].filtered = true;
-                }
-            }
-            notifylocationFilterChanged();
-        }
-        else
-        {
-            if(!locationData){
-            return;
-        }
-            removeLegend(addr.split(',')[0]);
-            //remove color and 'filtred' attribute
-            for(i=0; i!= locationData.length; i++){
-                var one = locationData[i];
-                if(one.name == addr || (addr == 'unknow address' && one.name == "unknow")) {
-                    one.color = '';
-                    one.filtered = false;
-                }
-            }
-            notifylocationFilterChanged();
-        }
-    });
-}

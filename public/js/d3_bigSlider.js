@@ -103,6 +103,10 @@ function initBigSlider(daysList) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.svg.axis().scale(x).orient("bottom"));
 
+
+    svg.selectAll('.axis line, .axis path')
+        .style({'stroke': 'Black', 'fill': 'none', 'stroke-width': '2px'});
+
     mainSVG.append("text")
         .attr("x", 10)
         .attr("y", 5)

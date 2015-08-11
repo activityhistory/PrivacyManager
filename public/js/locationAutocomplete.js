@@ -37,7 +37,8 @@ function populateUnLocationsList(data) {
 
 
     knownLocations = data.locations;
-    populateLocationFilter();
+    LocationFilter.populateLocationFilter();
+    document.dispatchEvent(new Event('knownLocationOk'));
 
     privacyFilter_RAZAuthorizedLocations(); //Delete all old locations ion the object used by the visualization
 
@@ -63,8 +64,8 @@ function ajaxGetUnLocations(){
 function bindDleteLocButtons() {
     $(".deleteLocButton").on("click", function (event) {
         var lat =  event.target.attributes[2].value;
-        var lng =  event.target.attributes[3].value;
-        $.get("/removeLoc", {"lat":lat, "lng":lng}, function (data) {
+        var lon =  event.target.attributes[3].value;
+        $.get("/removeLoc", {"lat":lat, "lon":lon}, function (data) {
             populateUnLocationsList(data);
         });
     });

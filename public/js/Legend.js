@@ -39,7 +39,7 @@ function printLegend(){
 
     var toAdd = [];
     legendData.forEach(function(one){
-        if(one.name != "Will be deleted" && one.name != "Activity intensity")
+        if(one.name != "Activity intensity")
             toAdd.push(one);
     });
 
@@ -59,7 +59,13 @@ function printLegend(){
         .attr("r", 7)
         .style("fill", function (d) {
             return d.color;
+        })
+        .style("fill-opacity", function(d){
+            if(d.name == "Will be deleted")
+                return 0.15;
+            return 1.0;
         });
+    ;
     currentY = -5;
     var texts = legendSVG.selectAll("text")
         .data(toAdd)

@@ -16,23 +16,31 @@ $( document).ready(function(){
 
 function printLocationsSwimlanes(){
 
-    d3.select("#locationSwimlanes svg g.locationSwimlane").remove();
 
 
-    if(!locationData){
+    d3.select("#sliderSVG svg g.locationSwimlane").remove();
+
+
+    if(!LocationFilter.locationData){
         console.log("WARNING: NO LOCATION DATA FOUND");
         return;
     }
 
     var locationToprint = [];
-    for(var i = 0 ; i!= locationData.length ; i++)
+    for(var i = 0 ; i!= LocationFilter.locationData.length ; i++)
     {
-        var one = locationData[i];
+        var one = LocationFilter.locationData[i];
         if(one.filtered == true)
         {
             locationToprint.push(one);
         }
     }
+
+
+
+    console.log("to print");
+    console.log(locationToprint);
+
 
 
     var svg = d3.select("#sliderSVG svg");
@@ -60,11 +68,7 @@ function printLocationsSwimlanes(){
         .attr( "y1" , 0 )
         .attr( "y2" , 0 )
         .attr("stroke", function(d){return d.color})
-        .attr("stroke-width", 3);
+        .attr("stroke-width", 3)
+        .attr("title", function(d){return d.name});
 
-}
-
-function notifylocationFilterChanged()
-{
-    printLocationsSwimlanes();
 }

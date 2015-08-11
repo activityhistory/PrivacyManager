@@ -4,7 +4,7 @@
 
 var brushSmallSlider;
 var zoomBrush;
-
+var xAxisSmallSlider;
 var manualMoveSmallSlder;
 
 function initializeSmallSlider() {
@@ -18,7 +18,8 @@ function initializeSmallSlider() {
         alpha = .9;
 
     var xSmallSlider = d3.time.scale()
-        .domain([interVal.start, d3.time.hour.offset(interVal.stop, 1)])
+        //.domain([interVal.start, d3.time.hour.offset(interVal.stop, 1)])
+        .domain([interVal.start, interVal.stop])
         .range([0, width])
         .clamp(true);
 
@@ -31,14 +32,14 @@ function initializeSmallSlider() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + 100 + ")");
 
+    xAxisSmallSlider = d3.svg.axis()
+        .scale(xSmallSlider)
+        .innerTickSize(4);//espace entre le légende de l'axis et celui-ci
+
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, 30)")
-        .call(d3.svg.axis()
-            .scale(xSmallSlider)
-            .innerTickSize(4) //espace entre le légende de l'axis et celui-ci
-
-    )
+        .call(xAxisSmallSlider)
         .select(".domain")
         .select(function () {
             return this.parentNode.appendChild(this.cloneNode(true));
@@ -133,12 +134,13 @@ function initializeSmallSlider() {
         //}
         if(e.keyCode == 39){// ->
             goToOneScreenshotNext("right");
+            e.preventDefault();
         }
         if(e.keyCode == 37){ // <-
             goToOneScreenshotNext("left");
+            e.preventDefault();
         }
 
-        e.preventDefault();
     });
 
 
@@ -258,15 +260,17 @@ function MAJSlider(data) {
         alert("No screenshot found in the selected range");
         return;
     }
-    xSmallSlider.domain([data[0].date, d3.time.hour.offset(data[data.length - 1].date, 1)]);
-    d3.select("#smallSlider svg").selectAll(".x.axis").call(d3.svg.axis().scale(xSmallSlider));
+    xSmallSlider.domain([data[0].date, data[data.length - 1].date]);
+
+    d3.select("#sliderSVG svg .x.axis")
+        .call(xAxisSmallSlider);
+
     interVal.start = data[0].date;
     interVal.stop = data[data.length -1].date;
     interVal.data = data;
     printScreenShotSwimlane();
     getAndPrintAppSwimlane();
-    ajaxGetLocations();
-    printLocationsSwimlanes();
+    LocationFilter.initAndPrint();
     notifyTimeFilterChanged();
 }
 
@@ -279,7 +283,8 @@ function ajaxMAJSlider(dateStart, dateStop) {
             r.push({date: new Date(one.date), screenshot: one.screenshot});
         });
         MAJSlider(r);
-        bigsSlider_manuelBrushMove(r[0].date, r[r.length-1].date); //To put the brush on the screenshot/activity area only
+        if(r)
+            bigsSlider_manuelBrushMove(r[0].date, r[r.length-1].date); //To put the brush on the screenshot/activity area only
     });
 
 }
