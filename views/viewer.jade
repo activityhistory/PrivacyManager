@@ -7,11 +7,10 @@
     #previousContext.col.s3
         img.smallSCS(src="").row
         div.appName
-            span
 
-    div.card.col.s6
+    div#mainContext.card.col.s6
         div.card-image.waves-effect.waves-block.waves-light
-            img.materialboxed#bigScreenShot(src="images/tuto.png")
+            img#bigScreenShot(src="images/tuto.png").materialboxed
         div.card-content(style="display : none;")
             span.card-title.activator.grey-text.text-darken-4
                 i.material-icons.right more_vert
@@ -25,7 +24,6 @@
     #nextContext.col.s3
         img.smallSCS(src="")
         div.appName
-        #runningApps(style="display: none")
 
 #sliders.row
     #sliderSVG.row

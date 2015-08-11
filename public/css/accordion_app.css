@@ -14,8 +14,15 @@
 /* Unauthorized app */
 
 button#addAppButton {
-    margin-top: 21px;
     float: right;
     height: 25px;
     line-height: 25px;
+}
+
+div#formAddApp {
+    height: 20px;
+}
+
+input#appName {
+    height: 100%;
 }

@@ -1,6 +1,8 @@
 #locName
 {
     width:100%;
+    margin: 0;
+    height: 100%;
 }
 #addLocButton
 {
@@ -9,6 +11,7 @@
 #inputNameDivLoc
 {
     overflow:hidden;
+    margin-top: 3px;
 }
 #locList
 {
@@ -31,7 +34,6 @@
 /* Authorized location */
 
 #addLocButton {
-    margin-top: 21px;
     float: right;
     height: 25px;
     line-height: 25px;

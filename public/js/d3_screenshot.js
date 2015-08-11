@@ -31,13 +31,53 @@ function printScreenshot(date) {
 
     //CHANGE HERE IF YOU WANT TO ALWAYS SEE A Screenshot ( also when you'r far away)
     if (betterDiff / 1000 < 60){
-        $("#bigScreenShot").attr("src", '/images/screenshots/' + betterImg); //file:///Users/Maxime/.selfspy/screenshots/
-        $("#image img").attr("src", '/images/screenshots/' + betterImg); //file:///Users/Maxime/.selfspy/screenshots/
+        var img_width;
+        var img_height;
 
+        $("#bigScreenShot")
+            .attr("src", '/images/screenshots/' + betterImg)
+            .load(function () {
+                img_width = this.width;
+                img_height = this.height;
+
+                var ratioImg = Math.round(img_width / img_height);
+
+                //Change visualisation disposition if 2 screens
+                if (ratioImg >= 3) {
+                    //Move previous context side:
+                    $('#previousContext').css({'float': 'right', 'height': '50%'});
+                    $('#previousContext img.smallSCS').css({'margin-top': '0', 'height': 'auto'});
+
+                    //Change next context height
+                    $('#nextContext').css({'height': '50%'});
+                    $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto'});
+
+
+                    //Change main screenshot col
+                    $('#mainContext').removeClass('s6');
+                    $('#mainContext').addClass('s9');
+
+                }
+                else {
+                    //Move previous context side:
+                    $('#previousContext').css({'float': 'left', 'height': '100%'});
+                    $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
+
+                    //Change next context height
+                    $('#nextContext').css({'height': '100%'});
+                    $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
+
+
+                    //Change main screenshot col
+                    $('#mainContext').removeClass('s9');
+                    $('#mainContext').addClass('s6');
+                }
+            });
 
 
         var tmp_app = betterImg.split('app');
         var tmp_win = betterImg.split('win');
+
         if(tmp_app[0] === betterImg || tmp_win[0] === betterImg){
             return;
         }
@@ -95,18 +135,22 @@ function printScreenshot(date) {
                        console.log('Erreur');
                    }
                    else {
-                       var min = (date.getUTCMinutes() < 10) ? '0' + date.getUTCMinutes() : date.getUTCMinutes();
+                       var min = (date.getUTCMinutes < 10) ? '0' + date.getUTCMinutes() : date.getUTCMinutes();
+                       var month = (date.getUTCMonth() < 10) ? '0' + date.getUTCMonth() : date.getUTCMonth();
+                       var day = (date.getUTCDay() < 10) ? '0' + date.getUTCDay() : date.getUTCDay();
 
-                       $('#date').html(date.toDateString() + ' <span>' + date.getHours() + ':' + min + '</span>');
+                       $('#date').html(date.getUTCFullYear() + '/' + month + '/' + day + ' <span>' + date.getHours() + ':' + min + '</span>');
 
                        $('.card-content').show();
 
                        $('#mainAppName').html(data.informations.app_name);
 
                        var appsOpen = data.appsOpen;
-
+                       var appsOpenString = '';
 
                        if (appsOpen.length > 0) {
+                           appsOpenString += 'Other running apps : ';
+
                            $('#runningApps').show();
                            $('#runningApps').html('Other running apps : <br/> ');
 
@@ -114,12 +158,26 @@ function printScreenshot(date) {
 
                            for (var j = 0; j < appsOpen.length; j++) {
                                $('#runningApps ul').append('<li>' + appsOpen[j] + '</li>');
+                               if (j < 10) {
+                                   if (j === 0)
+                                       appsOpenString += appsOpen[j];
+                                   else
+                                       appsOpenString += ', ' + appsOpen[j];
+                               }
+                               else if (j === 10) {
+                                   appsOpenString += '...';
+
+                               }
                            }
+
                        }
 
                        else {
                            $('#runningApps').hide();
                        }
+
+                       $("#bigScreenShot")
+                           .attr("data-caption", appsOpenString);
 
 
                        //if (data.informations.window_title !== '') {
