@@ -43,20 +43,18 @@ var LocationFilter = {
             return;
         }
         for (var i = 0; i != this.locationData.length; i++) {
-            //todo soonest
-            var one = this.locationData[i];
+            this.locationData[i].name = "";
             for (var k = 0; k != knownLocations.length; k++) {
                 var onek = knownLocations[k];
                 var dist = haversine({latitude: onek.lat, longitude: onek.lon}, {
-                    latitude: one.lat,
-                    longitude: one.lon
+                    latitude: this.locationData[i].lat,
+                    longitude: this.locationData[i].lon
                 }, {unit: 'meter'});
                 if ((!isNaN(dist)) && dist <= distMinBetweenTwoLocations)
-                    one.name = onek.address;
-                else
-                    one.name = "unknow";
+                    this.locationData[i].name = onek.address;
             }
-
+            if( this.locationData[i].name == "")
+                this.locationData[i].name = "unknow";
         }
     },
 
@@ -101,15 +99,23 @@ var LocationFilter = {
 
     filterLocations: function () {
         this.removeFilteredAndColorForAllLocations();
+
         var self = this;
-        $("input:checked").each(function(){
+        $(".filter.location").each(function(){
             var ceLieux = $(this);
+
+            if(!ceLieux.is(':checked')){ //ugly workly
+                return;
+            }
 
             var lat = ceLieux.attr("data-lat");
             var long = ceLieux.attr("data-lon");
             var addr = ceLieux.attr("data-name");
 
+
+
             var c = legend_getAColor(addr.split(',')[0]);
+
 
             for (i = 0; i != self.locationData.length; i++) {
                 var one = self.locationData[i];
@@ -171,12 +177,11 @@ var LocationFilter = {
 
 
     populateLocationFilter: function () {
-        this.unBindLocationFilterChange();
         $('#locationFilter').html('');
         knownLocations.forEach(function (one) {
-            $("#locationFilter").append("<li><label><input type='checkbox' data-lat='" + one.lat + "' data-lon='" + one.lon + "' data-name='" + one.address + "' class='filter location'>" + one.address.split(',')[0] + "</label></li>");
+            $("#locationFilter").append("<li><input type='checkbox' id='" + one.lat + "_" + one.lon + "'  data-lat='" + one.lat + "' data-lon='" + one.lon + "' data-name='" + one.address + "' class='filter location'/><label for='" + one.lat + "_" + one.lon + "'>" + one.address.split(',')[0] + "</label></li>");
         });
-        $("#locationFilter").append("<li><label><input type='checkbox' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'>Unknow Address</label></li>");
+        $("#locationFilter").append("<li><input type='checkbox' id='unknow' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'><label for='unknow'>Unknow Address</label></li>");
         this.bindLocationFilterChange();
     }
 

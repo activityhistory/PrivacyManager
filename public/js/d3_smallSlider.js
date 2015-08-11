@@ -158,23 +158,38 @@ function initializeSmallSlider() {
 
 
 
-    function brushedZoom(){
-        var ext = zoomBrush.extent();
-        interVal.start = new Date(ext[0]);
-        interVal.stop = new Date(ext[1]);
-        ajaxMAJSlider(ext[0], ext[1]);
-        zoomBrush.clear();
-        d3.select("#sliderSVG svg g.zoomBrush")
-            .call(zoomBrush)
-            .selectAll("rect")
-            .attr("y", 0)
-            .attr("height", 34);
-    }
 
 
     return xSmallSlider;
 }
 
+function brushedZoom(){
+    var ext = zoomBrush.extent();
+    interVal.start = new Date(ext[0]);
+    interVal.stop = new Date(ext[1]);
+    ajaxMAJSlider(ext[0], ext[1]);
+    zoomBrush.clear();
+    d3.select("#sliderSVG svg g.zoomBrush")
+        .call(zoomBrush)
+        .selectAll("rect")
+        .attr("y", 0)
+        .attr("height", 34);
+}
+
+
+
+function majZoomBrush(){
+
+    d3.select("#sliderSVG svg .zoomBrush").remove();
+
+    d3.select("#sliderSVG svg").append("g")
+        .attr('transform', 'translate(' + margin.left + ', 95)')
+        .attr("class", "zoomBrush")
+        .call(zoomBrush)
+        .selectAll("rect")
+        .attr("y", 0)
+        .attr("height", 34);
+}
 
 function goToOneScreenshotNext(direction)
 {
@@ -208,7 +223,6 @@ function goToOneScreenshotNext(direction)
         res--;
 
     var exactDate = interVal.data[res].date;
-    console.log(interVal.data[res].date);
     manualMoveSmallSlder(exactDate);
 
 
@@ -269,6 +283,7 @@ function MAJSlider(data) {
     interVal.stop = data[data.length -1].date;
     interVal.data = data;
     printScreenShotSwimlane();
+    majZoomBrush();
     getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
     notifyTimeFilterChanged();
@@ -320,7 +335,11 @@ function printScreenShotSwimlane() {
         .attr("cy", 12)
         .attr("r", 10)
         .style("fill", color)
-        .style("fill-opacity", 0.03);
+        //.style("fill-opacity", 0.03)
+        .attr("class", "bobobop");
+
+    var b = $(".bobobop").length;
+    $(".bobobop").css({'fill-opacity' : 5/b});
 
 
 }

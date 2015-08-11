@@ -42,7 +42,6 @@ function printScreenshot(date) {
 
                 var ratioImg = Math.round(img_width / img_height);
 
-                console.log(ratioImg);
                 //Change visualisation disposition if 2 screens
                 if (ratioImg >= 3) {
                     //Move previous context side:
