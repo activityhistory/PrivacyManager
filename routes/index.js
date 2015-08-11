@@ -388,130 +388,6 @@ function getJSDateAndTime(screenshotName) {
 
 
 // Audréa
-
-/**
- * Get context before date
- * @param date
- * @param appID -- to prevent same app selection
- * @return -1 if an error occurred
- *          else an object which contains window id, window's activation date,
- *          window's title, process id and process name
- */
-//TODO
-function getPreviousContext (date, appID) {
-    return new Promise(function(resolve, reject){
-        var query = "SELECT window.id  window_id," +
-            " windowevent.created_at  created_at," +
-            " window.title window_title," +
-            "  process.id  process_id," +
-            " process.name  process_name " +
-            "FROM windowevent, window, processevent, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            "  AND window.process_id=process.id" +
-            " AND process.id=processevent.process_id" +
-            " AND  windowevent.created_at < '" + date + "'" +
-            " AND windowevent.event_type='Active' " +
-            " AND process.id != " + appID +
-            " ORDER BY created_at desc LIMIT 1 ;";
-
-        db.all(query, function (err, row) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(row);
-            }
-        });
-    });
-}
-
-/**
- * Get context after date
- * @param date
- * @param appID -- to prevent same app selection //perhaps diff if app is a browser
- * @return -1 if an error occurred
- *          else an object which contains window id, window's activation date,
- *          window's title, process id and process name
- */
-//TODO
-function getNextContext(date, appID) {
-
-    return new Promise(function(resolve, reject){
-        var query  = "SELECT window.id  window_id," +
-            " windowevent.created_at  created_at," +
-            " window.title window_title," +
-            " process.id  process_id," +
-            " process.name  process_name " +
-            " FROM windowevent, window, processevent, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            " AND window.process_id=process.id" +
-            " AND process.id=processevent.process_id" +
-            " AND  windowevent.created_at >'"+date+ "'" +
-            " AND windowevent.event_type='Active' " +
-            " AND process.id != " + appID +
-            " ORDER BY created_at LIMIT 1 ;";
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(row);
-            }
-        });
-    });
-}
-
-
-/**
- * Get informations about date
- *
- * @param date
- * @return processId, processName, windowID, windowTitle
- */
-function getInformations(date){
-    return new Promise(function(resolve, reject){
-        var query  = "SELECT window.id  window_id," +
-            " window.title window_title," +
-            " process.id  process_id," +
-            " process.name  process_name " +
-            " FROM windowevent, window, process" +
-            " WHERE window.id  = windowevent.window_id" +
-            " AND window.process_id=process.id" +
-            " AND windowevent.created_at <= '"+ date+ "'" +
-            " AND windowevent.event_type='Active' ORDER BY windowevent.created_at desc LIMIT 1 ;";
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(row);
-            }
-        });
-
-    });
-}
-
-function getContextAboutMainScreenshot(date, appID){
-    var nextPromise = getNextContext(date, appID);
-    var previousPromise = getPreviousContext(date, appID);
-    return Promise.all([previousPromise,nextPromise]);
-}
-
-
-function getAllInformationAboutMainScreenshot (date, processID){
-    return new Promise(function(resolve,reject){
-            var test  = getContextAboutMainScreenshot(date, processID);
-            test.then(function(context){
-                resolve({previousContext: context[0][0], nextContext: context[1][0]});
-            }, function(err){
-                reject(err);
-            });
-    });
-}
-
-
 exports.getScreenshotInformations =  function(req,res){
     var date = new Date(req.query.date);
     var formattedDate = formatJSToSQLITE(date);
@@ -544,16 +420,9 @@ exports.getScreenshotInformations =  function(req,res){
 };
 
 
+function findInformations(mainAppID, mainWindowID, _date, previousAppID, nextAppID) {
 
-
-
-
-
-//NEW VERSION : Context without checking DB
-
-function findInformations(mainAppID, mainWindowID, date, previousAppID, nextAppID){
-
-    var date = formatJSToSQLITE(new Date(date));
+    var date = formatJSToSQLITE(new Date(_date));
 
     //Check in DB current app name and window title
     var promiseWindowTitle = getWindowTitle(mainWindowID);
@@ -566,8 +435,8 @@ function findInformations(mainAppID, mainWindowID, date, previousAppID, nextAppI
     var promiseNextAppName = getAppName(nextAppID);
 
     return Promise.all([promiseWindowTitle, promiseAppName, promiseRunningApps, promisePreviousAppName, promiseNextAppName]);
-
 }
+
 
 function getWindowTitle(id){
     return new Promise(function(resolve, reject){
@@ -606,14 +475,12 @@ function getRunningApps(date, appID){
             " WHERE processevent.created_at <= '"+ date+ "'" +
             " AND process_id !="+ appID +
             " AND process_id = process.id" +
-            " ORDER BY processevent.created_at ASC;";
+            " ORDER BY processevent.created_at DESC;";
         db.all(query, function(err, rows){
             if(err){
                 reject(err);
             }
             else{
-                //resolve(rows);
-
                 //Remove from result all process that have been closed in the meantime
                 var results = [];
                 for(var i  = 0; i < rows.length; i++){

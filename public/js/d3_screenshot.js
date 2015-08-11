@@ -42,6 +42,7 @@ function printScreenshot(date) {
 
                 var ratioImg = Math.round(img_width / img_height);
 
+                console.log(ratioImg);
                 //Change visualisation disposition if 2 screens
                 if (ratioImg >= 3) {
                     //Move previous context side:
@@ -57,18 +58,19 @@ function printScreenshot(date) {
                     $('#mainContext').removeClass('s6');
                     $('#mainContext').addClass('s9');
 
+                    //$('.material-placeholder').css({'width': 'auto','height': 'auto'});
+
+
                 }
                 else {
-                    //Move previous context side:
                     $('#previousContext').css({'float': 'left', 'height': '100%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
-                    //Change next context height
                     $('#nextContext').css({'height': '100%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
+                    //$('.material-placeholder').css({'width': '100%','height': '100%'});
 
-                    //Change main screenshot col
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
                 }
@@ -85,7 +87,7 @@ function printScreenshot(date) {
             mainAppID = parseInt(tmp_app[1].split('_')[0]);
             mainWindowID = parseInt(tmp_win[1].split('_')[0]);
 
-             var bestPreviousAppId;
+            var bestPreviousAppId;
             var bestPreviousSS = -1;
 
 
@@ -99,6 +101,7 @@ function printScreenshot(date) {
                     var appID = tmp[1].split('_')[0];
                     if(appID !== mainAppID){
                         bestPreviousAppId = appID;
+                        break;
                     }
                 }
             }
@@ -118,6 +121,7 @@ function printScreenshot(date) {
                         if(appID !== mainAppID){
                             bestNextSS = currentScreenshotName;
                             bestNextAppId = appID;
+                            break;
                         }
                     }
                 }

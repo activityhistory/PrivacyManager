@@ -45,7 +45,7 @@ function printLegend(){
 
     var legendSVG = d3.select("#legend").append('svg')
         .attr("width", '100%')
-        .attr("height", '90%');
+        .attr("height", '200%'); //bigger than the div to allow scroll
     var circles = legendSVG.selectAll("circle")
         .data(toAdd)
         .enter()

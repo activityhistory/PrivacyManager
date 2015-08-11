@@ -16,6 +16,12 @@ div#leftPanel {
     background: #424242;
 }
 
+div#content {
+    height: 560px;
+    margin: 0;
+    overflow: hidden;
+}
+
 /* ACCORDION */
 
 #accordion {
