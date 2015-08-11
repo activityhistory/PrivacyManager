@@ -10,7 +10,7 @@ $.get("/all_apps_list", function (data) {
     $("#appsFilter").html('');
     var names = data.names;
     $.each(names, function (i, item) {
-        $("#appsFilter").append("<li><label><input type='checkbox' value='" + item.name + "' class='filter app' id='" + item.name + "'><label for='" + item.name + "'>" + (item.name.length > 30 ? (item.name.substr(0, 27) + "...") : item.name) + "</label></li>");
+        $("#appsFilter").append("<li><input type='checkbox' value='" + item.name + "' class='filter app' id='" + item.name + "'><label for='" + item.name + "'>" + (item.name.length > 30 ? (item.name.substr(0, 27) + "...") : item.name) + "</label></li>");
     });
     $(".filter.app").change(function (e) {
         var appName = $(e.target).attr("value");
