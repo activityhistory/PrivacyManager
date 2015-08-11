@@ -81,9 +81,9 @@ function populateLocationFilter(){
 
     $('#locationFilter').html('');
     knownLocations.forEach(function(one){
-        $("#locationFilter").append("<li><label><input type='checkbox' data-lat='" + one.lat + "' data-lon='" + one.lng + "' data-name='"+one.address+"' class='filter location'>" + one.address.split(',')[0] + "</label></li>");
+        $("#locationFilter").append("<li><input type='checkbox' id='" + one.lat + "_" + one.lng + "'/><label for='" + one.lat + "_" + one.lng + "' data-lat='" + one.lat + "' data-lon='" + one.lng + "' data-name='" + one.address + "' class='filter location'>" + one.address.split(',')[0] + "</label></li>");
     });
-    $("#locationFilter").append("<li><label><input type='checkbox' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'>Unknow Address</label></li>");
+    $("#locationFilter").append("<li><input type='checkbox' id='unknow'><label for='unknow' data-lat='unknow' data-lon='unknow' data-name='unknow address' class='filter location'>Unknow Address</label></li>");
     $(".filter.location").change(function (e) {
         var lat = $(e.target).attr("data-lat");
         var long = $(e.target).attr("data-lon");

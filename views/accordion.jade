@@ -18,9 +18,10 @@ block accordion
                 div.collapsible-header Time Filter
                     i.material-icons.tiny av_timer
                 div.collapsible-body
-                    label
-                        input.filter.time(type='checkbox')
-                        | &nbsp; Print unauthorized times
+                    div.switch
+                        label Print unauthorized times
+                            input#timeFilter.filter.time(type='checkbox')
+                            span.lever
             li.divider
             li
                 div.collapsible-header Unauthorized applications
