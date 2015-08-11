@@ -7,8 +7,12 @@ Note : This is a pre-version of the readme, made for persons hungry to test this
 - Make sure your selfspy data are in you home folder, in .selfspy.
 - Clone.
 - Move to PrivacyManager folder.
+- Create a symbolic link :<br>
+<code>cd public/images</code><br>
+<code>ln -s ~/.selfspy/screenshots screenshots</code><br>
+<code>cd ../..</code>
 - Install dependencies : <code>npm install</code>.<br/><br/>
- <b>Attention:</b> <br/>Sqlite3 need to be install like this:
+ <b>Warning:</b> <br/>Sqlite3 need to be install like this:
   - First install nw-gyp globally: <br/>
     <code>npm install nw-gyp -g</code> (unless already installed)<br/>
   - Build the module<br/>
