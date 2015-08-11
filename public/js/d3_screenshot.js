@@ -57,9 +57,6 @@ function printScreenshot(date) {
                     $('#mainContext').removeClass('s6');
                     $('#mainContext').addClass('s9');
 
-                    //$('.material-placeholder').css({'width': 'auto','height': 'auto'});
-
-
                 }
                 else {
                     $('#previousContext').css({'float': 'left', 'height': '100%'});
@@ -67,8 +64,6 @@ function printScreenshot(date) {
 
                     $('#nextContext').css({'height': '100%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
-
-                    //$('.material-placeholder').css({'width': '100%','height': '100%'});
 
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
@@ -176,7 +171,7 @@ function printScreenshot(date) {
                        }
 
                        else {
-                           $('#runningApps').hide();
+                           $('.card-content').hide();
                        }
 
                        $("#bigScreenShot")
@@ -212,15 +207,14 @@ function printScreenshot(date) {
 
     }
     else{
-        $("#image img").attr("src", '/images/no-image.jpg');
-        $('#mainScreenshotInfos').html(' ');
+        $("#bigScreenShot").attr("src", '/images/no-image.jpg');
 
         $("#previousContext .smallSCS").attr("src", '/images/no-image.jpg');
         $("#nextContext .smallSCS").attr("src", '/images/no-image.jpg');
         $("#nextContext .appName").html( '');
         $("#previousContext .appName").html( '');
 
-        $('#runningApps').hide();
+        $('.card-content').hide();
     }
 
 }
