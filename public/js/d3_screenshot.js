@@ -58,6 +58,7 @@ function printScreenshot(date) {
                     $('#mainContext').addClass('s9');
 
                 }
+                //Screenshot with only 1 screen
                 else {
                     $('#previousContext').css({'float': 'left', 'height': '100%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
@@ -70,10 +71,11 @@ function printScreenshot(date) {
                 }
             });
 
-
+        //Get app id and window id
         var tmp_app = betterImg.split('app');
         var tmp_win = betterImg.split('win');
 
+        //Error case when the screenshot's name doesn't contain the app ID and the window ID
         if(tmp_app[0] === betterImg || tmp_win[0] === betterImg){
             return;
         }
@@ -90,10 +92,10 @@ function printScreenshot(date) {
                 var currentScreenshotName = interVal.data[j].screenshot;
                 var tmp  = currentScreenshotName.split('app');
                 //If appID found in screenshot name
-                if(tmp[0] !== currentScreenshotName){
+                if (tmp[0] != currentScreenshotName) {
                     bestPreviousSS = currentScreenshotName;
                     var appID = tmp[1].split('_')[0];
-                    if(appID !== mainAppID){
+                    if (appID != mainAppID) {
                         bestPreviousAppId = appID;
                         break;
                     }
@@ -110,9 +112,9 @@ function printScreenshot(date) {
                     var currentScreenshotName = interVal.data[k].screenshot;
                     var tmp  = currentScreenshotName.split('app');
                     //If appID found in screenshot name
-                    if(tmp[0] !== currentScreenshotName){
+                    if (tmp[0] != currentScreenshotName) {
                         var appID = tmp[1].split('_')[0];
-                        if(appID !== mainAppID){
+                        if (appID != mainAppID) {
                             bestNextSS = currentScreenshotName;
                             bestNextAppId = appID;
                             break;
@@ -122,7 +124,7 @@ function printScreenshot(date) {
             }
 
 
-            //Get informations about current screenshot
+            //Get informations about current/main screenshot
             $.get('/getScreenshotInfos',
                 {   mainAppID: mainAppID, mainWindowID: mainWindowID, date: date,
                     previousAppId : bestPreviousAppId, nextAppId: bestNextAppId},
@@ -174,6 +176,7 @@ function printScreenshot(date) {
                            $('.card-content').hide();
                        }
 
+                       //Will print the running apps when main screenshot is in full screen
                        $("#bigScreenShot")
                            .attr("data-caption", appsOpenString);
 
@@ -183,6 +186,7 @@ function printScreenshot(date) {
                        //}
 
 
+                       //Print context data
                        if(data.context){
                            if(data.context.previous){
                                $('#previousContext .smallSCS').attr("src", '/images/screenshots/' + bestPreviousSS);
@@ -206,6 +210,7 @@ function printScreenshot(date) {
             }
 
     }
+    //Error case: no recording for this time-lapse
     else{
         $("#bigScreenShot").attr("src", '/images/no-image.jpg');
 
