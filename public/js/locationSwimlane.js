@@ -4,12 +4,13 @@
 
 
 $( document).ready(function(){
+    //
+    //d3.select("#sliderSVG svg").append("text")
+    //    .attr("x", 10)
+    //    .attr("y", 20)
+    //    .attr("dy", ".35em")
+    //    .text("Location");
 
-    d3.select("#sliderSVG svg").append("text")
-        .attr("x", 10)
-        .attr("y", 20)
-        .attr("dy", ".35em")
-        .text("Location");
 
 });
 
@@ -36,10 +37,6 @@ function printLocationsSwimlanes(){
         }
     }
 
-
-
-    console.log("to print");
-    console.log(locationToprint);
 
 
 

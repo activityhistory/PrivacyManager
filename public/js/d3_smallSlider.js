@@ -9,13 +9,13 @@ var manualMoveSmallSlder;
 
 function initializeSmallSlider() {
 
-    var margin = {top: 5, right: 10, bottom: 10, left: 150},
-        width = 950 - margin.left - margin.right,
+    var margin = {top: 5, right: 10, bottom: 10, left: 20},
+        width = 900 - margin.left - margin.right,
         height = 50 - margin.bottom - margin.top,
         moving,
         currentValue = 0,
         targetValue = 70,
-        alpha = .9;
+        alpha = .6;
 
     var xSmallSlider = d3.time.scale()
         //.domain([interVal.start, d3.time.hour.offset(interVal.stop, 1)])
@@ -61,6 +61,8 @@ function initializeSmallSlider() {
         .attr("y2", 95)
         .attr("stroke-width", 2)
         .attr("stroke", "grey");
+
+
 
 
     var slider = svg.append("g")
@@ -197,7 +199,7 @@ function goToOneScreenshotNext(direction)
     currentScreenshot = currentScreenshot[currentScreenshot.length -1];
     if(currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png")
     {
-        alert("You have to be somewhere to go elsewhere ...");
+        Materialize.toast("You have to be somewhere to go elsewhere ...",4000);
         return;
     }
 
@@ -214,7 +216,7 @@ function goToOneScreenshotNext(direction)
             ||      (direction == "left" && res -1 < 0)
         )
     {
-        alert("Invalid operation : out of limit or unrecognized screenshot");
+        Materialize.toast("Invalid operation : out of limit or unrecognized screenshot", 4000);
         return;
     }
     if(direction == "right")
@@ -271,7 +273,7 @@ function unzoom()
 
 function MAJSlider(data) {
     if ((!data[0]) || (!data[1])) {
-        alert("No screenshot found in the selected range");
+        Materialize.toast("No screenshot found in the selected range",4000);
         return;
     }
     xSmallSlider.domain([data[0].date, data[data.length - 1].date]);
@@ -339,7 +341,7 @@ function printScreenShotSwimlane() {
         .attr("class", "bobobop");
 
     var b = $(".bobobop").length;
-    $(".bobobop").css({'fill-opacity' : 5/b});
+    $(".bobobop").css({'fill-opacity' : ((5/b)+0.005)});
 
 
 }

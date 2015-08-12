@@ -14,11 +14,12 @@ function setTimeFilterColor(c) {
 
 $( document).ready(function(){
 
-    d3.select("#sliderSVG svg").append("text")
-        .attr("x", 10)
-        .attr("y", 43)
-        .attr("dy", ".35em")
-        .text("Time");
+    //d3.select("#sliderSVG svg").append("svg:image")
+    //    .attr("x", 10)
+    //    .attr("y", 30)
+    //    .attr('width', 25)
+    //    .attr('height', 25)
+    //    .attr("xlink:href", "images/ic_av_timer_black_18dp_2x.png");
 
     //hr
     d3.select("#sliderSVG svg").append("line")

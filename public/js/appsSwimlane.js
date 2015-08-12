@@ -24,12 +24,20 @@ function printAppsSwimlanes(){
     d3.select(".appText").remove();
     d3.select(".appLine").remove();
 
-    d3.select("#sliderSVG svg").append("text")
-        .attr("x", 10)
-        .attr("y", 75)
-        .attr("dy", ".35em")
-        .text("Applications")
-        .attr("class", "appText");
+    //d3.select("#sliderSVG svg").append("text")
+    //    .attr("x", 10)
+    //    .attr("y", 75)
+    //    .attr("dy", ".35em")
+    //    .text("Applications")
+    //    .attr("class", "appText");
+    //
+    //d3.select("#sliderSVG svg").append("svg:image")
+    //    .attr("x", 10)
+    //    .attr("y", 60)
+    //    .attr("class", "appText")
+    //    .attr('width', 25)
+    //    .attr('height', 25)
+    //    .attr("xlink:href", "images/ic_view_list_black_18dp_2x.png");
     //hr
     d3.select("#sliderSVG svg").append("line")
         .attr("x1", margin.left - 30)

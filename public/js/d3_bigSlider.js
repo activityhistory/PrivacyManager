@@ -4,8 +4,8 @@
 
 
 
-var margin = {top: 10, right: 10, bottom: 20, left: 150},
-    width = 950 - margin.right - margin.left,
+var margin = {top: 10, right: 10, bottom: 20, left: 20},
+    width = 900 - margin.right - margin.left,
     height = 75 - margin.top - margin.bottom,
     miniHeight = 50;
 
@@ -22,6 +22,9 @@ function initBrush() {
         .selectAll("rect")
         .attr("y", -2)
         .attr("height", miniHeight + 4);
+
+
+
 
 
 
@@ -107,11 +110,19 @@ function initBigSlider(daysList) {
     svg.selectAll('.axis line, .axis path')
         .style({'stroke': 'Black', 'fill': 'none', 'stroke-width': '2px'});
 
-    mainSVG.append("text")
-        .attr("x", 10)
-        .attr("y", 5)
-        .attr("dy", ".35em")
-        .text("Activity");
+    //mainSVG.append("text")
+    //    .attr("x", 10)
+    //    .attr("y", 5)
+    //    .attr("dy", ".35em")
+    //    .text("Activity");
+    //
+    //
+    //mainSVG.append("svg:image")
+    //    .attr("x", 10)
+    //    .attr("y", 0)
+    //    .attr('width', 36)
+    //    .attr('height', 36)
+    //    .attr("xlink:href", "images/ic_history_black_18dp_2x.png");
 
     return x;
 }
