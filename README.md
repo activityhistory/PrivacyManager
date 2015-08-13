@@ -12,7 +12,7 @@ Note : This is a pre-version of the readme, made for persons hungry to test this
 <code>ln -s ~/.selfspy/screenshots screenshots</code><br>
 <code>cd ../..</code>
 - Install dependencies : <code>npm install</code>.<br/><br/>
- <b>Warning:</b> <br/>Sqlite3 need to be installed like this:
+ <b>Warning:</b> <br/>Sqlite3 needs to be installed like this:
   - First install nw-gyp globally: <br/>
     <code>npm install nw-gyp -g</code> (unless already installed)<br/>
   - Build the module<br/>
