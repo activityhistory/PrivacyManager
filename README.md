@@ -19,5 +19,13 @@ Note : This is a pre-version of the readme, made for persons hungry to test this
     <code>npm install sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target="NODE_WEBKIT_VERSION"</code>
     with NODE_WEBKIT_VERSION="0.12.2" at the moment of writing the README # see latest version at https://github.com/nwjs/nw.js#downloads
 <br/><br/>
+<b>Warning:</b> <br/>
+As long as we have not found any other solution, you have to comment a code line, in express-db library :
+ - Go to node_modules/express-db/lib/express-db.js
+ - Replace the line number 53 :
+ - <code>console.log.apply(this, args);</code>
+ - Should be
+ - <code>//console.log.apply(this, args);</code>
+ - This is due to the normal usage of window.console.log instead of console.log on server-side og this node-webkit project.
 - Start it with nwjs : <code>path_to_nwjs_folder/nwjs.app/Contents/MacOS/nwjs . </code>
 - Enjoy !
