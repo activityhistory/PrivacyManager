@@ -2807,7 +2807,7 @@ Vel = $ ? $.Velocity : Velocity, function (a) {
         })
     }
 }(jQuery), function (a) {
-    a.fn.slider = function (b) {
+    a.fn.jeneveuxpasdetoi = function (b) {
         var c = {indicators: !0, height: 400, transition: 500, interval: 6e3};
         return b = a.extend(c, b), this.each(function () {
             function c(a, b) {

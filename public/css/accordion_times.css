@@ -1,13 +1,16 @@
 #labelIncludingWE {
     float: right;
-    font-size: 12px;
+    font-size: 10px;
     color: #4F4F4F;
     padding-left: 15px;
 }
 
 #time-range p{
-    font-size:12px;
+    font-size: 11px;
+    padding: 0;
+    text-align: center;
 }
 #time-range{
     overflow-x: hidden;
+    margin-right: 10px;
 }

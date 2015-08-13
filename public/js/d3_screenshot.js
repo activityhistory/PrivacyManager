@@ -34,6 +34,9 @@ function printScreenshot(date) {
         var img_width;
         var img_height;
 
+        $('#bigScreenShot').height('100%');
+        $('#bigScreenShot').width('100%');
+
         $('.card-content').show();
 
         $("#bigScreenShot")
@@ -48,11 +51,15 @@ function printScreenshot(date) {
                 if (ratioImg >= 3) {
                     //Move previous context side:
                     $('#previousContext').css({'float': 'right', 'height': '50%'});
-                    $('#previousContext img.smallSCS').css({'margin-top': '0', 'height': 'auto'});
+                    $('#previousContext img.smallSCS').css({
+                        'margin-top': '0',
+                        'height': 'auto',
+                        'max-height': '150px'
+                    });
 
                     //Change next context height
                     $('#nextContext').css({'height': '50%'});
-                    $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto'});
+                    $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '150px'});
 
 
                     //Change main screenshot col
@@ -62,11 +69,19 @@ function printScreenshot(date) {
                 }
                 //Screenshot with only 1 screen
                 else {
+                    var max_height = 264;
+                    if (img_height > max_height) {
+                        img_width *= max_height / img_height;
+                    }
                     $('#previousContext').css({'float': 'left', 'height': '100%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
                     $('#nextContext').css({'height': '100%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
+
+                    $('#bigScreenShot').height(max_height);
+                    $('#bigScreenShot').width(img_width);
+
 
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
@@ -109,7 +124,7 @@ function printScreenshot(date) {
                 var diff = Math.abs(one.date - date);
                 if (isNaN(bestDiff) || diff < bestDiff) {
                     bestDiff = diff;
-                    bestRunningAppsIDList = one.runningAppsID;
+                    bestRunningAppsIDList = one.runningAppsID.replace('[', '').replace(']', '').replace(' ', '').split(',');
                 }
             }
 
@@ -119,28 +134,31 @@ function printScreenshot(date) {
             if (bestRunningAppsIDList.length > 0) {
                 $('.card-content').show();
 
-                runningAppsString = 'Other running apps';
+                runningAppsString = 'Other running apps: ';
 
                 $('#runningApps').show();
                 $('#runningApps').html('<br/> Other running apps : <br/> ');
 
                 $('#runningApps').append('<ul class="contextAppsList"></ul>');
 
+                var a = 0;
                 for (k = 0; k < bestRunningAppsIDList.length; k++) {
-                    var id = bestRunningAppsIDList[k];
+                    var id = parseInt(bestRunningAppsIDList[k]);
+
                     var appName = localStorage.getItem('app_' + id);
                     if (appName != null) {
                         $('#runningApps ul').append('<li>' + appName + '</li>');
 
-                        if (k < 10) {
-                            if (k === 0)
+                        if (a < 9) {
+                            if (a === 0)
                                 runningAppsString += appName;
                             else
                                 runningAppsString += ', ' + appName;
                         }
-                        else if (k === 10) {
+                        else if (a === 9) {
                             runningAppsString += '...';
                         }
+                        a++;
                     }
                 }
             }
