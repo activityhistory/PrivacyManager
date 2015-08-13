@@ -65,3 +65,21 @@ script.
              });
         });
     }
+
+
+    var k = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
+            n = 0;
+    $(document).keydown(function (e) {
+        if (e.keyCode === k[n++]) {
+            if (n === k.length) {
+                var a,b,c=['https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js','http://nyan.alternative.ly/css-transform.js','http://nyan.alternative.ly/jquery-rotate.js','http://nyan.alternative.ly/nyan.js'];for(a=0;a!=c.length;a++){b=document.createElement('script');b.src=c[a];document.body.appendChild(b);}void(0);
+
+                n = 0;
+                return false;
+            }
+        }
+        else {
+            n = 0;
+        }
+    });
+

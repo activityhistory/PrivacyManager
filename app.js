@@ -10,7 +10,12 @@ var http = require('http')
   , express = require('express')
   , routes = require(path.join(process.cwd(), 'routes', 'index.js'))
   , app = express()
+    , xdb = require('express-db'),
+    activityDB = require(path.join(process.cwd(), 'activityDB.js'))
 ;
+
+
+var sqlite3 = require('sqlite3').verbose();
 
 
 var options = {
@@ -18,6 +23,16 @@ var options = {
   port: 2323
 };
 
+app.use(xdb.init("my_db", {
+  file: './db.json', //your db file
+  restrictAccess: false, //restrict access via browser
+  autoSave: true, //autosave enabled
+  backupInterval: 10000, //interval in ms,
+  viewCaching: true //cache views then requested
+}));
+
+
+activityDB.madeAllActivity(xdb, new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite'));
 
 //check if server is already running
 http.get(options, function(res) {
