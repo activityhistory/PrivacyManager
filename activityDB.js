@@ -11,11 +11,14 @@ module.exports = {
 
     },
 
-
     madeAllActivity: function(xdb, db){
+
 
         var res = [];
         db.all("SELECT * FROM snapshot ; ", function (err, rows) {
+
+
+
             var encours = {start:"undefined", stop:"undefined", apps:"undefined"};
             var theVeryLastTime = NaN;
             for(var i = 0 ; i != rows.length; i++){

@@ -9,6 +9,7 @@ var db = new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite');
 var fs = require('fs');
 var pathToScreenShots = "public/images/screenshots/";
 //var pathToScreenShots = process.env.HOME + "/.selfspy/screenshots/";
+var xdb = require('express-db');
 
 var distMinBetweenTwoLocations = 2000; // in meters
 
@@ -251,6 +252,8 @@ exports.getAppsData = function (req, res) {
         "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +
         "AND '" + formatJSToSQLITE(end) + "' ORDER BY processevent.created_at ASC ; ", function (err, rows) {
         var last = {};
+
+
         for(var i = 0 ; i != rows.length; i++){
 
             if(rows[i].name != "selfspy" && rows[i].event_type == 'Active'){ //TODO : check if we keep selfspy
@@ -262,7 +265,45 @@ exports.getAppsData = function (req, res) {
                 }
             }
         }
-        res.send({result: result});
+
+
+        var allActivity = xdb.get("backgroundActivity");
+        var currentActivityPosition = 0;
+        var trueResult = [];
+        for (var i = 0; i != result.length; i++) {
+
+            var resultRow = result[i];
+            var rowStart = new Date(resultRow.start);
+            var rowStop = new Date(resultRow.stop);
+
+            while(
+                    (currentActivityPosition < allActivity.length)
+                    &&
+                    (rowStart > new Date(allActivity[currentActivityPosition].stop))
+                )
+                currentActivityPosition++;
+
+            if(currentActivityPosition >= (allActivity.length-1))
+                break;
+
+
+            //TODO remove and add minutes
+            var activityStart = new Date(allActivity[currentActivityPosition].start);
+            var activityStop = new Date(allActivity[currentActivityPosition].stop);
+
+            activityStart.setMinutes(activityStart.getMinutes() - 5);
+            activityStop.setMinutes(activityStop.getMinutes() + 5);
+
+
+            window.console.log("Comparaison de row : " + rowStart + " " + rowStop + "   et actcivity : " + activityStart + "    " + activityStop);
+            if (rowStart >= activityStart && rowStop <= activityStop) //easy !
+            {
+                window.console.log("OK");
+                trueResult.push({name : result[i].name, start: result[i].start, stop : result[i].stop});
+            }
+        }
+        window.console.log("fin de la boucle");
+        res.send({result: trueResult});//TODO
         });
 };
 
@@ -373,6 +414,11 @@ exports.getGeoloc = function (req, res) {
     });
 };
 
+
+
+exports.getActivity = function(req, res){
+    res.send({result:xdb.get("backgroundActivity")});
+};
 
 var haversine = (function () {
 

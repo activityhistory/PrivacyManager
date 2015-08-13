@@ -26,6 +26,8 @@ var brush;
 var x;
 
 
+ActivityManager.init();
+
 $.get("/getAllRecordedDays", function (data) {
     x = initBigSlider(data.allRecordedDays);
     $.get("/allScreenshotsDateAndTime", function (data) {

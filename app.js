@@ -71,6 +71,8 @@ http.get(options, function(res) {
   app.get('/runningAppsBetween', routes.runningApps);//return all running apps for the current range
 
   // app.get('/getScreenshotInfos', routes.getScreenshotInformations); //return informations about current screenshot and its context
+  app.get('/getActivity', routes.getActivity); //return informations about activity time range, and bakground apps ids at each range
+
 
 
   http.createServer(app).listen(app.get('port'), function(err){

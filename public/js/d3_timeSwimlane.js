@@ -63,28 +63,11 @@ function printTimeSwimlane() {
         if ((!isNaN(periodStart)) && i == (interVal.data.length - 1 )) { // Last date in an unauth period
             unSCS.push({start: periodStart, stop: one.date});
         }
-/*        if((!isNaN(periodStart)) && (!isNaN(last) && (one.date - last > minDiffPeriod))) {//if is too far during an unauth period with smth inside
-            unSCS.push({start: periodStart, stop: last});
-            periodStart = NaN;
-            last = NaN;
-            if(!isInTheRange(authFrom, authTo, one.date, authWE))
-                periodStart = one.date;
-            continue;
-        }
-
-        if((!isNaN(periodStart)) && (isNaN(last) && (one.date - periodStart > minDiffPeriod))) {//if is too far during an unauth period with nothing inside
-            unSCS.push({start: periodStart, stop: (periodStart +( minDiffPeriod/2))});
-            periodStart = NaN;
-            last = NaN;
-            if(!isInTheRange(authFrom, authTo, one.date, authWE))
-                periodStart = one.date;
-            continue;
-        }*/
         last = one.date;
     }
 
     if(unSCS.length == 0)
-        return;
+        Materialize.toast("No unauthorized times in this range :)", 4000);
 
 
     var svg = d3.select("#sliderSVG svg");
