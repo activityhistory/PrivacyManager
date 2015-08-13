@@ -304,8 +304,16 @@ function ajaxMAJSlider(dateStart, dateStop) {
             bigsSlider_manuelBrushMove(r[0].date, r[r.length-1].date); //To put the brush on the screenshot/activity area only
     });
 
+    ajaxMAJRunningAppsList(dateStart, dateStop);
+
 }
 
+
+function ajaxMAJRunningAppsList(dateStart, dateStop) {
+    $.get("/runningAppsBetween", {start: dateStart, end: dateStop}, function (data) {
+        runningApps = data.apps;
+    });
+}
 
 function printScreenShotSwimlane() {
 

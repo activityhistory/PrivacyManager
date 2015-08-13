@@ -34,6 +34,8 @@ function printScreenshot(date) {
         var img_width;
         var img_height;
 
+        $('.card-content').show();
+
         $("#bigScreenShot")
             .attr("src", '/images/screenshots/' + betterImg)
             .load(function () {
@@ -69,8 +71,8 @@ function printScreenshot(date) {
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
                 }
-            });
-
+            })
+        ;
         //Get app id and window id
         var tmp_app = betterImg.split('app');
         var tmp_win = betterImg.split('win');
@@ -83,21 +85,87 @@ function printScreenshot(date) {
             mainAppID = parseInt(tmp_app[1].split('_')[0]);
             mainWindowID = parseInt(tmp_win[1].split('_')[0]);
 
+            //Get main screenshot's data
+            var app_name = localStorage.getItem('app_' + mainAppID);
+
+            var win_title = windowsData[mainWindowID];
+
+            //Print main screenshot's data
+            var min = (date.getUTCMinutes < 10) ? '0' + date.getUTCMinutes() : date.getUTCMinutes();
+            var month = (date.getUTCMonth() < 10) ? '0' + date.getUTCMonth() : date.getUTCMonth();
+            var day = (date.getUTCDay() < 10) ? '0' + date.getUTCDay() : date.getUTCDay();
+
+            $('#date').html(date.getUTCFullYear() + '/' + month + '/' + day + ' <span>' + date.getHours() + ':' + min + '</span>');
+
+            $('#mainAppName').html(app_name);
+
+            //Get running apps
+            var bestDiff;
+            var bestRunningAppsIDList = [];
+
+            for (j = 0; j < runningApps.length; j++) {
+                var one = runningApps[j];
+                var diff = Math.abs(one.date - date);
+                if (isNaN(bestDiff) || diff < bestDiff) {
+                    bestDiff = diff;
+                    bestRunningAppsIDList = one.runningAppsID;
+                }
+            }
+
+            //Print running apps' name
+            var runningAppsString = '';
+
+            if (bestRunningAppsIDList.length > 0) {
+                $('.card-content').show();
+
+                runningAppsString = 'Other running apps';
+
+                $('#runningApps').show();
+                $('#runningApps').html('Other running apps : <br/> ');
+
+                $('#runningApps').append('<ul class="contextAppsList"></ul>');
+
+                for (k = 0; k < bestRunningAppsIDList.length; k++) {
+                    var id = bestRunningAppsIDList[k];
+                    var appName = localStorage.getItem('app_' + id);
+                    if (appName != null) {
+                        $('#runningApps ul').append('<li>' + appName + '</li>');
+
+                        if (k < 10) {
+                            if (k === 0)
+                                runningAppsString += appName;
+                            else
+                                runningAppsString += ', ' + appName;
+                        }
+                        else if (k === 10) {
+                            runningAppsString += '...';
+                        }
+                    }
+                }
+            }
+
+            //Will print the running apps when main screenshot is in full screen
+            $("#bigScreenShot")
+                .attr("data-caption", runningAppsString);
+
+
             var bestPreviousAppId;
             var bestPreviousSS = -1;
 
 
             //Find previous app screenshot
-            for(var j = imagePosition - 1 ; j -- ;){
-                var currentScreenshotName = interVal.data[j].screenshot;
-                var tmp  = currentScreenshotName.split('app');
-                //If appID found in screenshot name
-                if (tmp[0] != currentScreenshotName) {
-                    bestPreviousSS = currentScreenshotName;
-                    var appID = tmp[1].split('_')[0];
-                    if (appID != mainAppID) {
-                        bestPreviousAppId = appID;
-                        break;
+            for (var j = imagePosition - 1; j--;) {
+                if (typeof(interVal.data[j]) !== 'undefined') {
+                    var currentScreenshotName = interVal.data[j].screenshot; //TODO: test if screenshot realy exists
+                    var tmp = currentScreenshotName.split('app');
+                    //If appID found in screenshot name
+                    if (tmp[0] != currentScreenshotName) {
+                        bestPreviousSS = currentScreenshotName;
+                        var appID = tmp[1].split('_')[0];
+                        if (appID != mainAppID) {
+                            bestPreviousAppId = appID;
+                            break;
+                        }
                     }
                 }
             }
@@ -107,107 +175,44 @@ function printScreenshot(date) {
             var bestNextAppId;
             var bestNextSS = -1;
 
-            if(imagePosition <  interVal.data.length){
-                for(var k = imagePosition + 1 ; k !=  interVal.data.length ; k++){
-                    var currentScreenshotName = interVal.data[k].screenshot;
-                    var tmp  = currentScreenshotName.split('app');
-                    //If appID found in screenshot name
-                    if (tmp[0] != currentScreenshotName) {
-                        var appID = tmp[1].split('_')[0];
-                        if (appID != mainAppID) {
-                            bestNextSS = currentScreenshotName;
-                            bestNextAppId = appID;
-                            break;
+            if (imagePosition < interVal.data.length) {
+                for (var k = imagePosition + 1; k != interVal.data.length; k++) {
+                    if (typeof(interVal.data[k]) !== 'undefined') {
+                        var currentScreenshotName = interVal.data[k].screenshot;
+                        var tmp = currentScreenshotName.split('app');
+                        //If appID found in screenshot name
+                        if (tmp[0] != currentScreenshotName) {
+                            var appID = tmp[1].split('_')[0];
+                            if (appID != mainAppID) {
+                                bestNextSS = currentScreenshotName;
+                                bestNextAppId = appID;
+                                break;
+                            }
                         }
                     }
                 }
             }
 
+            var previous_appName = localStorage.getItem('app_' + bestPreviousAppId);
+            var next_appName = localStorage.getItem('app_' + bestNextAppId);
 
-            //Get informations about current/main screenshot
-            $.get('/getScreenshotInfos',
-                {   mainAppID: mainAppID, mainWindowID: mainWindowID, date: date,
-                    previousAppId : bestPreviousAppId, nextAppId: bestNextAppId},
-                function (data) {
-
-
-                   if (typeof data.error !== 'undefined') {
-                       console.log('Erreur');
-                   }
-                   else {
-                       var min = (date.getUTCMinutes < 10) ? '0' + date.getUTCMinutes() : date.getUTCMinutes();
-                       var month = (date.getUTCMonth() < 10) ? '0' + date.getUTCMonth() : date.getUTCMonth();
-                       var day = (date.getUTCDay() < 10) ? '0' + date.getUTCDay() : date.getUTCDay();
-
-                       $('#date').html(date.getUTCFullYear() + '/' + month + '/' + day + ' <span>' + date.getHours() + ':' + min + '</span>');
-
-                       $('.card-content').show();
-
-                       $('#mainAppName').html(data.informations.app_name);
-
-                       var appsOpen = data.appsOpen;
-                       var appsOpenString = '';
-
-                       if (appsOpen.length > 0) {
-                           appsOpenString += 'Other running apps : ';
-
-                           $('#runningApps').show();
-                           $('#runningApps').html('Other running apps : <br/> ');
-
-                           $('#runningApps').append('<ul class="contextAppsList"></ul>');
-
-                           for (var j = 0; j < appsOpen.length; j++) {
-                               $('#runningApps ul').append('<li>' + appsOpen[j] + '</li>');
-                               if (j < 10) {
-                                   if (j === 0)
-                                       appsOpenString += appsOpen[j];
-                                   else
-                                       appsOpenString += ', ' + appsOpen[j];
-                               }
-                               else if (j === 10) {
-                                   appsOpenString += '...';
-
-                               }
-                           }
-
-                       }
-
-                       else {
-                           $('.card-content').hide();
-                       }
-
-                       //Will print the running apps when main screenshot is in full screen
-                       $("#bigScreenShot")
-                           .attr("data-caption", appsOpenString);
-
-
-                       //if (data.informations.window_title !== '') {
-                       //    $('#screenInfos').append('Window title : ' + data.informations.window_title);
-                       //}
-
-
-                       //Print context data
-                       if(data.context){
-                           if(data.context.previous){
-                               $('#previousContext .smallSCS').attr("src", '/images/screenshots/' + bestPreviousSS);
-                               $('#previousContext .appName').html(data.context.previous.name);
-                           }
-                           else{
-                               $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
-                           }
-                           if(data.context.next){
-                               $('#nextContext .smallSCS').attr("src", '/images/screenshots/' + bestNextSS);
-                               $('#nextContext .appName').html(data.context.next.name);
-                           }
-                           else{
-                               $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
-
-                           }
-                       }
-                   }
-               });
+            //Print context data
+            if (previous_appName !== null) {
+                $('#previousContext .smallSCS').attr("src", '/images/screenshots/' + bestPreviousSS);
+                $('#previousContext .appName').html(previous_appName);
+            }
+            else {
+                $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
+            }
+            if (next_appName) {
+                $('#nextContext .smallSCS').attr("src", '/images/screenshots/' + bestNextSS);
+                $('#nextContext .appName').html(next_appName);
+            }
+            else {
+                $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
 
             }
+        }
 
     }
     //Error case: no recording for this time-lapse

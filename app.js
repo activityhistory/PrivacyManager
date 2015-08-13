@@ -53,6 +53,7 @@ http.get(options, function(res) {
   app.get('/', routes.index);
   //app.get('/test', routes.test);
   app.get('/all_apps_list', routes.all_apps_list); // apps list
+  app.get('/all_windows_list', routes.all_windows_list); // apps list
   app.get('/un_apps_list', routes.un_apps_list); //Unauthorized apps list
   app.get('/upadteApp', routes.upadteApp); //Chage the reccords status of a process
   app.get('/getAllowedTimes', routes.get_allowed_times); //return the allowed range time in JSON
@@ -67,7 +68,9 @@ http.get(options, function(res) {
   app.get('/getAppsData', routes.getAppsData);
   app.get('/getGeoloc', routes.getGeoloc);
 
-  app.get('/getScreenshotInfos', routes.getScreenshotInformations); //return informations about current screenshot and its context
+  app.get('/runningAppsBetween', routes.runningApps);//return all running apps for the current range
+
+  // app.get('/getScreenshotInfos', routes.getScreenshotInformations); //return informations about current screenshot and its context
 
 
   http.createServer(app).listen(app.get('port'), function(err){

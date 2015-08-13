@@ -6,6 +6,9 @@
 
 
 var interVal = {start: new Date(), stop: new Date(), data: "", currentDate: new Date()};
+var runningApps = [];
+var windowsData = [];
+
 
 
 interVal.stop = new Date;
@@ -42,3 +45,7 @@ function JSONToDate(jsonD) {
     });
     return dateList;
 }
+
+$.get("/all_windows_list", function (data) {
+    windowsData = data.windows;
+});

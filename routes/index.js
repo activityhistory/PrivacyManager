@@ -17,10 +17,6 @@ exports.index = function (req, res) {
 };
 
 
-exports.test = function (req, res) {
-    res.render('test', {title: 'Test page'});
-};
-
 exports.un_apps_list = sendUnAppsList;
 
 function sendUnAppsList(req, res) {
@@ -37,21 +33,60 @@ function sendUnAppsList(req, res) {
         }
     });
 }
+
+//TODO
 exports.all_apps_list = function (req, res) {
-    db.all('SELECT * FROM process', [], function (err, rows) {
+    db.all('SELECT * FROM process ORDER BY UPPER(name)', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
             console.log('fetch error', err);
         } else {
-            var names = [];
+            var apps = [];
             rows.forEach(function (row) {
-                names.push({name: row.name, message: row.message});
+                apps.push({id: row.id, name: row.name, record: row.authorized_recording});
             });
-            names.sort(compare);
-            res.send({ok: true, names: names});
+            res.send({ok: true, apps: apps});
         }
     });
 };
+
+
+exports.all_windows_list = function (req, res) {
+    db.all('SELECT * FROM window', [], function (err, rows) {
+        if (err !== null) {
+            res.send({ok: false, message: 'error while fetching'});
+            console.log('fetch error', err);
+        } else {
+            var windows = [];
+            rows.forEach(function (row) {
+                windows[row.id] = row.title;
+            });
+            res.send({ok: true, windows: windows});
+        }
+    });
+};
+
+
+exports.runningApps = function (req, res) {
+    var start_date = new Date(req.query.start);
+    var end_date = new Date(req.query.end);
+
+    db.all('SELECT * FROM snapshot' +
+        ' WHERE created_at BETWEEN "' + formatJSToSQLITE(start_date) + '" AND "' + formatJSToSQLITE(end_date) + '";',
+        [], function (err, rows) {
+            if (err !== null) {
+                res.send({ok: false, message: 'error while fetching'});
+                console.log('fetch error', err);
+            } else {
+                var runningApps = [];
+                rows.forEach(function (row) {
+                    runningApps.push({date: row.created_at, runningAppsID: row.state});
+                });
+                res.send({ok: true, apps: runningApps});
+            }
+        });
+};
+
 
 //To sort the app list array
 function compare(_a, _b) {
@@ -446,116 +481,4 @@ function getJSDateAndTime(screenshotName) {
 
     return new Date('20' + year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + ":" + nanSec);
 
-}
-
-
-// Audréa
-exports.getScreenshotInformations =  function(req,res){
-    var date = new Date(req.query.date);
-    var formattedDate = formatJSToSQLITE(date);
-
-    var nextAppID = req.query.nextAppId;
-    var previousAppID = req.query.previousAppId;
-
-    var mainAppID = req.query.mainAppID;
-    var mainWinID = req.query.mainAppID;
-
-    var informationsPromise = findInformations(mainAppID, mainWinID, formattedDate, previousAppID, nextAppID);
-
-
-    if(informationsPromise === null){
-        res.send({error: 'Error, can\'t find appID and winID from screenshot'});
-    }
-
-    informationsPromise.then(function(data){
-
-        res.send({
-            informations : {window_title: data[0], app_id :data[1].app_id,app_name: data[1].name },
-            appsOpen: data[2],
-            context:{
-                previous: data[3],
-                next: data[4]
-            }
-        });
-    });
-
-};
-
-
-function findInformations(mainAppID, mainWindowID, _date, previousAppID, nextAppID) {
-
-    var date = formatJSToSQLITE(new Date(_date));
-
-    //Check in DB current app name and window title
-    var promiseWindowTitle = getWindowTitle(mainWindowID);
-    var promiseAppName = getAppName(mainAppID);
-    var promiseRunningApps = getRunningApps(date, mainAppID);
-
-
-    //Check previous and next app name
-    var promisePreviousAppName = getAppName(previousAppID);
-    var promiseNextAppName = getAppName(nextAppID);
-
-    return Promise.all([promiseWindowTitle, promiseAppName, promiseRunningApps, promisePreviousAppName, promiseNextAppName]);
-}
-
-
-function getWindowTitle(id){
-    return new Promise(function(resolve, reject){
-        var query = "SELECT title FROM window WHERE id =  " + id;
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(row[0].title);
-            }
-        });
-    });
-}
-
-function getAppName(id){
-    return new Promise(function(resolve, reject){
-        var query = "SELECT name FROM process WHERE id =  " + id;
-
-        db.all(query, function(err, row){
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve({name: row[0].name, app_id: id});
-            }
-        });
-    });
-}
-
-function getRunningApps(date, appID){
-    return new Promise(function(resolve, reject){
-        var query = "SELECT name, event_type" +
-            " FROM process, processevent" +
-            " WHERE processevent.created_at <= '"+ date+ "'" +
-            " AND process_id !="+ appID +
-            " AND process_id = process.id" +
-            " ORDER BY processevent.created_at DESC;";
-        db.all(query, function(err, rows){
-            if(err){
-                reject(err);
-            }
-            else{
-                //Remove from result all process that have been closed in the meantime
-                var results = [];
-                for(var i  = 0; i < rows.length; i++){
-                    //if it's the first time we find this app
-                    if(results.indexOf(rows[i].name) === -1){
-                        //And if it's not a close event
-                        if(rows[i].event_type !== 'Close'){
-                            results.push(rows[i].name);
-                        }
-                    }
-                }
-                resolve(results);
-            }
-        });
-    });
 }
