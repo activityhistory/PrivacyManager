@@ -66,6 +66,13 @@ function printLocationsSwimlanes(){
         .attr( "y2" , 0 )
         .attr("stroke", function(d){return d.color})
         .attr("stroke-width", 3)
-        .attr("title", function(d){return d.name});
+        .attr("data-tooltip", function(d){return d.name})
+        .attr("data-position", "bottom")
+        .attr("class", "tooltipped");
+
+
+
+
+    $('.tooltipped').tooltip({delay: 50});
 
 }

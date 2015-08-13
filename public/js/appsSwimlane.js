@@ -66,7 +66,8 @@ function printAppsSwimlanes(){
             nump++;
         }
 
-        $( document ).tooltip();
+
+        $('.tooltipped').tooltip({delay: 50});
     })
 }
 
@@ -96,7 +97,9 @@ function printOneAppSwimlane(name, color, data, bottom){
         .attr("y2", bottom*6)
         .attr("stroke", color)
         .attr("stroke-width", 5)
-        .attr("title", name);
+        .attr("data-tooltip", name)
+        .attr("data-position", "bottom")
+        .attr("class", "tooltipped");
 
 
 }

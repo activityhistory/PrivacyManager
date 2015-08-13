@@ -96,10 +96,13 @@ function printTimeSwimlane() {
         .attr("y2", 0)
         .attr("stroke", timeFilterColor)
         .attr("stroke-width", 3)
-        .attr("title", "Unauthorized time");
+        .attr("data-tooltip", "Unauthorized time")
+        .attr("data-position", "bottom")
+        .attr("class", "tooltipped");
 
 
-    $( document ).tooltip();
+
+    $('.tooltipped').tooltip({delay: 50});
 }
 
 
