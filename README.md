@@ -17,7 +17,7 @@ Note : This is a pre-version of the readme, made for persons hungry to test this
     <code>npm install nw-gyp -g</code> (unless already installed)<br/>
   - Build the module<br/>
     <code>npm install sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target="NODE_WEBKIT_VERSION"</code>
-    with NODE_WEBKIT_VERSION="0.12.3" at the moment of writing the README # see latest version at https://github.com/nwjs/nw.js#downloads
+    with NODE_WEBKIT_VERSION="0.12.2" at the moment of writing the README # see latest version at https://github.com/nwjs/nw.js#downloads
 <br/><br/>
 - Start it with nwjs : <code>path_to_nwjs_folder/nwjs.app/Contents/MacOS/nwjs . </code>
 - Enjoy !
