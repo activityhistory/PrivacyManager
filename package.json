@@ -7,7 +7,8 @@
     "width": 1200,
     "height": 600,
     "title": "m-cms edit",
-    "toolbar": true
+    "toolbar": false,
+    "resizable": false
   },
   "scripts": {
     "start": "nodewebkit"

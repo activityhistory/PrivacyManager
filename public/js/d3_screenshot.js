@@ -99,6 +99,7 @@ function printScreenshot(date) {
 
             $('#mainAppName').html(app_name);
 
+            $('#windowTitle').html('Window title : <br/>' + win_title);
             //Get running apps
             var bestDiff;
             var bestRunningAppsIDList = [];
@@ -121,7 +122,7 @@ function printScreenshot(date) {
                 runningAppsString = 'Other running apps';
 
                 $('#runningApps').show();
-                $('#runningApps').html('Other running apps : <br/> ');
+                $('#runningApps').html('<br/> Other running apps : <br/> ');
 
                 $('#runningApps').append('<ul class="contextAppsList"></ul>');
 

@@ -58,6 +58,7 @@ a#fullScreen {
 
 #screenshotsView .card .card-reveal {
     z-index: 10000;
+    font-size: 12px;
 }
 
 div#imageContainer {
@@ -72,6 +73,11 @@ img#bigScreenShot {
     max-height: 264px;
 }
 
+/*div#windowTitle {
+    background-color: #E5E5E5;
+    padding: 5px;
+    margin-right: 40px;
+}*/
 /* SLIDERS */
 div#sliderSVG {
     margin-bottom: 5px;
