@@ -1,4 +1,3 @@
-
 public/db/selfspy.sqlite
 node_modules
 npm-debug.log
@@ -6,4 +5,5 @@ selfspy.sqlite
 public/images/AT_screenshots
 public/images/screenshots
 .DS_Store
+*/.DS_Store
 .idea
