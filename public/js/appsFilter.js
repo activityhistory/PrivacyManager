@@ -4,6 +4,9 @@
 
 var FiltredApps =[];
 
+var MAX_FILTERED_APP_SIZE = 4;
+
+
 $.get("/all_apps_list", function (data) {
     $("#appsFilter").html('');
     var apps = data.apps;
@@ -17,6 +20,11 @@ $.get("/all_apps_list", function (data) {
     $(".filter.app").change(function (e) {
         var appName = $(e.target).attr("value");
         if($(e.target).is(':checked')) {
+            if(FiltredApps.length >= (MAX_FILTERED_APP_SIZE)){
+                Materialize.toast("You can not add another apps filter : the limit is " + MAX_FILTERED_APP_SIZE, 4000);
+                $(e.target).prop('checked', false);
+                return;
+            }
             var c = addLegend(appName);
             FiltredApps.push({name: appName, color: c});
             notifyAppsFilterChanged();

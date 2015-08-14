@@ -35,9 +35,8 @@ $( document).ready(function(){
 
 function printTimeSwimlane() {
 
-    d3.select("#timeSwimlane svg g .timeSwimlane").remove();
-
-
+    d3.select("#sliderSVG svg g.timeSwimlane").remove();
+    
 
     var authFrom = privacyParams.auTimes.from,
         authTo = privacyParams.auTimes.to,
@@ -66,8 +65,10 @@ function printTimeSwimlane() {
         last = one.date;
     }
 
-    if(unSCS.length == 0)
+    if(unSCS.length == 0) {
         Materialize.toast("No unauthorized times in this range :)", 4000);
+        return;
+    }
 
 
     var svg = d3.select("#sliderSVG svg");
