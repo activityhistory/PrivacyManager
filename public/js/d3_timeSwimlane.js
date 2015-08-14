@@ -36,7 +36,7 @@ $( document).ready(function(){
 function printTimeSwimlane() {
 
     d3.select("#sliderSVG svg g.timeSwimlane").remove();
-    
+
 
     var authFrom = privacyParams.auTimes.from,
         authTo = privacyParams.auTimes.to,
@@ -50,12 +50,24 @@ function printTimeSwimlane() {
         if (isNaN(periodStart) && (!isInTheRange(authFrom, authTo, one.date, authWE))) // First date out of the auth range
         {
             periodStart = one.date;
+            last = one.date;
             continue;
+        }
+        if((!isNaN(periodStart)) && one.date - last > 360000 ) {//during an unauth perriod, too much distance between two datas
+
+            console.log("yes between : " + last + "   and   " + one.date);
+
+            unSCS.push({start: periodStart, stop: last});
+            periodStart = one.date;
+            last = one.date;
+
+            continue;
+
         }
         if ((!isNaN(periodStart)) && isInTheRange(authFrom, authTo, one.date, authWE)) { // First date in the auth range after some unauth scs
             unSCS.push({start: periodStart, stop: one.date});
             periodStart = NaN;
-            last = NaN;
+            last = one.date;
             continue;
 
         }
