@@ -295,14 +295,11 @@ exports.getAppsData = function (req, res) {
             activityStop.setMinutes(activityStop.getMinutes() + 5);
 
 
-            window.console.log("Comparaison de row : " + rowStart + " " + rowStop + "   et actcivity : " + activityStart + "    " + activityStop);
             if (rowStart >= activityStart && rowStop <= activityStop) //easy !
             {
-                window.console.log("OK");
                 trueResult.push({name : result[i].name, start: result[i].start, stop : result[i].stop});
             }
         }
-        window.console.log("fin de la boucle");
         res.send({result: trueResult});//TODO
         });
 };

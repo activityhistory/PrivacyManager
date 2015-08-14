@@ -2,17 +2,27 @@
  * Created by maxime on 16/07/15.
  */
 
-
-$("#locName").geocomplete();
+if(typeof google !== 'undefined')
+    $("#locName").geocomplete();
+else
+    Materialize.toast("No internet access found. Geocoding is disabeld : you can not add locations.", 6000);
 
 var geocoder;
 var map;
 function initialize() {
-    geocoder = new google.maps.Geocoder();
+
     $("#addLocButton").click(codeAddress);
+    if(!google){
+        Materialize.toast("No internet access found. Geocoding is disabeld : you can not add locations.");
+        return;
+    }
+    geocoder = new google.maps.Geocoder();
 }
 
 function codeAddress() {
+    if(typeof google === 'undefined'){
+        return;
+    }
     var address = document.getElementById('locName').value;
     geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
@@ -26,6 +36,10 @@ function codeAddress() {
 }
 
 function ajaxAddUnLocation(address, lat, long) {
+    if(typeof google === 'undefined'){
+        Materialize.toast("Geocoding is disabeld : it needs an internet connexion. Please connect you and restart the app.");
+        return;
+    }
     $.get("/addUnLocation", {"address": address, "lat": lat, "long": long}, function (data) {
         populateUnLocationsList(data);
         $('#locName').val('');
@@ -71,6 +85,7 @@ function bindDleteLocButtons() {
     });
 }
 
-
-google.maps.event.addDomListener(window, 'load', initialize);
-google.maps.event.addDomListener(window, 'load', ajaxGetUnLocations);
+if(typeof google !== 'undefined'){
+    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', ajaxGetUnLocations);
+}
