@@ -112,9 +112,9 @@ function printScreenshot(date) {
 
             $('#date').html(date.getUTCFullYear() + '/' + month + '/' + day + ' <span>' + date.getHours() + ':' + min + '</span>');
 
-            $('#mainAppName').html(app_name);
+            $('#mainAppName').html(app_name + '<br/> <span class="truncate"> ' + win_title + '</span>');
 
-            $('#windowTitle').html('Window title : <br/>' + win_title);
+            //$('#windowTitle').html('Window title : <br/>' + win_title);
             //Get running apps
             var bestDiff;
             var bestRunningAppsIDList = [];
@@ -165,7 +165,7 @@ function printScreenshot(date) {
 
             //Will print the running apps when main screenshot is in full screen
             $("#bigScreenShot")
-                .attr("data-caption", runningAppsString);
+                .attr("data-caption", app_name + ' - ' + win_title);
 
 
             var bestPreviousAppId;
