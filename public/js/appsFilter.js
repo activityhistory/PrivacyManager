@@ -67,15 +67,11 @@ $.get("/all_apps_list", function (data) {
 });
 
 function printAppsByFilterCounter(apps) {
-    console.log(apps);
     apps.sort(function (a, b) {
-        console.log(a.count - b.count);
         return b.count - a.count;
     });
 
-    console.log(apps);
     for (var i = 0; i < apps.length; i++) {
-        console.log(apps[i].count);
         $("#appsFilter").append("<li><input type='checkbox' value='" + apps[i].name + "' class='filter app' id='" + apps[i].id + "'><label for='" + apps[i].id + "'>" + (apps[i].name.length > 30 ? (apps[i].name.substr(0, 27) + "...") : apps[i].name) + "</label></li>");
 
     }
