@@ -12,6 +12,10 @@ div#rightPanel {
     paddding: 5px;
 }
 
+h4.span {
+    font-size: 15px;
+}
+
 div#leftPanel {
     height: 100%;
     background: #424242;
@@ -40,6 +44,25 @@ div#content {
     padding-left: 15px;
 }
 
+.card-panel.hoverable {
+    padding: 1px;
+}
+
+#accordion h4 {
+    margin: 0;
+    font-size: 15px;
+    padding-left: 11px;
+}
+
+#accordion .collapsible-header {
+    height: 35px;
+    line-height: 35px;
+}
+
+#accordion i.material-icons.tiny {
+    height: 10px;
+    line-height: 35px;
+}
 /* RIGHT PANEL */
 div#screenshotsView {
     height: 55%;
