@@ -385,8 +385,8 @@ exports.getGeoloc = function (req, res) {
 
         }
 
-        //If there is juste one range, send it
-        if(result.length == 1){
+        //If there is juste one range or less ^^, send it
+        if(result.length <= 1){
             res.send({ok: true, result: result});
             return;
 
