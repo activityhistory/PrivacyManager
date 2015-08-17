@@ -195,6 +195,7 @@ function majZoomBrush(){
 
 function goToOneScreenshotNext(direction)
 {
+
     var currentScreenshot = $("#bigScreenShot").attr("src").split("/");
     currentScreenshot = currentScreenshot[currentScreenshot.length -1];
     if(currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png")
@@ -228,6 +229,32 @@ function goToOneScreenshotNext(direction)
     manualMoveSmallSlder(exactDate);
 
 
+}
+
+
+
+
+function goToOneScreenshot(scsName)
+{
+
+    var res = NaN;
+    for(var i = 0 ; i != interVal.data.length; i++ ){
+        var one = interVal.data[i];
+        if(one.screenshot == scsName)
+            res = i;
+    }
+
+    if(
+        isNaN(res)
+        ||      (res  >= interVal.data.length)
+        ||      ( res < 0)
+    )
+    {
+        Materialize.toast("Invalid operation : out of limit or unrecognized screenshot", 4000);
+        return;
+    }
+    var exactDate = interVal.data[res].date;
+    manualMoveSmallSlder(exactDate);
 }
 
 /*function zoom()

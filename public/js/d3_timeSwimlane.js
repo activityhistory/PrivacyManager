@@ -45,7 +45,7 @@ function printTimeSwimlane() {
     var unSCS = [];
     var periodStart = NaN;
     var last = NaN;
-    for (var i = 0; i != interVal.data.length; i++) {
+    for (var i = 0; i != interVal.data.length; i++) { //conditions order is much important
         var one = interVal.data[i];
         if (isNaN(periodStart) && (!isInTheRange(authFrom, authTo, one.date, authWE))) // First date out of the auth range
         {
@@ -53,10 +53,7 @@ function printTimeSwimlane() {
             last = one.date;
             continue;
         }
-        if((!isNaN(periodStart)) && one.date - last > 360000 ) {//during an unauth perriod, too much distance between two datas
-
-            console.log("yes between : " + last + "   and   " + one.date);
-
+        if((!isNaN(periodStart)) && one.date - last > 360000 ) {//during an unauth period, too much distance between two datas
             unSCS.push({start: periodStart, stop: last});
             periodStart = one.date;
             last = one.date;

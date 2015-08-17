@@ -23,6 +23,7 @@ var options = {
   port: 2323
 };
 
+
 app.use(xdb.init("my_db", {
   file: './db.json', //your db file
   restrictAccess: false, //restrict access via browser
@@ -42,6 +43,8 @@ http.get(options, function(res) {
   }
 }).on('error', function(e) {
   //server is not yet running
+
+  routes.initDBPath();
 
   // all environments
   app.set('port', process.env.PORT || 2323);

@@ -215,11 +215,13 @@ function printScreenshot(date) {
             var previous_app = JSON.parse(localStorage.getItem('app_' + bestPreviousAppId));
             var next_app = JSON.parse(localStorage.getItem('app_' + bestNextAppId));
 
+            //TODO unbind maxime
             //Print context data
             if (previous_app !== null) {
                 var previous_appName = previous_app.name;
                 $('#previousContext .smallSCS').attr("src", '/images/screenshots/' + bestPreviousSS);
                 $('#previousContext .appName').html(previous_appName);
+                //$('#previousContext .smallSCS').click(goToOneScreenshot(bestPreviousSS));
             }
             else {
                 $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
@@ -229,6 +231,7 @@ function printScreenshot(date) {
 
                 $('#nextContext .smallSCS').attr("src", '/images/screenshots/' + bestNextSS);
                 $('#nextContext .appName').html(next_appName);
+                //$('#nextContext .smallSCS').click(goToOneScreenshot(bestNextSS));
             }
             else {
                 $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');

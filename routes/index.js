@@ -2,10 +2,14 @@
  * GET home page.
  */
 
-var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3');
+sqlite3.verbose();
 var Promise = require('promise');
 //var db = new sqlite3.Database('selfspy.sqlite');
-var db = new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite');
+//var db = new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite');
+var db; //will be initialize by the call of "initDBPath"
+//var db = new sqlite3.Database(localStorage.getItem("SELFSPY_PATH"));
+//var db = new sqlite3.Database(localStorage.getItem("SELFSPY_PATH"));
 var fs = require('fs');
 var pathToScreenShots = "public/images/screenshots/";
 //var pathToScreenShots = process.env.HOME + "/.selfspy/screenshots/";
@@ -17,6 +21,25 @@ exports.index = function (req, res) {
     res.render('index', {title: 'ActivityHistory PrivacyTool'});
 };
 
+
+function run_cmd(cmd, args, callBack ) {
+    var spawn = require('child_process').spawn;
+    var child = spawn(cmd, args);
+    var resp = "";
+
+    child.stdout.on('data', function (buffer) { resp += buffer.toString() });
+    child.stdout.on('end', function() { callBack (resp) });
+}
+
+
+
+exports.initDBPath = function(){
+
+var p = window.localStorage.getItem("SELFSPY_PATH");
+    db = new sqlite3.Database(p + "/selfspy.sqlite");
+
+    run_cmd("ln", ["-s", "-h", "-F", window.localStorage.getItem("SELFSPY_PATH")+"/screenshots", "public/images/screenshots"], function(resp){window.console.log(resp);});
+};
 
 exports.un_apps_list = sendUnAppsList;
 
