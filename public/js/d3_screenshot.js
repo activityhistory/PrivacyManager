@@ -212,18 +212,21 @@ function printScreenshot(date) {
                 }
             }
 
-            var previous_appName = JSON.parse(localStorage.getItem('app_' + bestPreviousAppId)).name;
-            var next_appName = JSON.parse(localStorage.getItem('app_' + bestNextAppId)).name;
+            var previous_app = JSON.parse(localStorage.getItem('app_' + bestPreviousAppId));
+            var next_app = JSON.parse(localStorage.getItem('app_' + bestNextAppId));
 
             //Print context data
-            if (previous_appName !== null) {
+            if (previous_app !== null) {
+                var previous_appName = previous_app.name;
                 $('#previousContext .smallSCS').attr("src", '/images/screenshots/' + bestPreviousSS);
                 $('#previousContext .appName').html(previous_appName);
             }
             else {
                 $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
             }
-            if (next_appName) {
+            if (next_app != null) {
+                var next_appName = next_app.name;
+
                 $('#nextContext .smallSCS').attr("src", '/images/screenshots/' + bestNextSS);
                 $('#nextContext .appName').html(next_appName);
             }
