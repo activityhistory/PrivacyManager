@@ -101,7 +101,7 @@ function printScreenshot(date) {
             mainWindowID = parseInt(tmp_win[1].split('_')[0]);
 
             //Get main screenshot's data
-            var app_name = localStorage.getItem('app_' + mainAppID);
+            var app_name = JSON.parse(localStorage.getItem('app_' + mainAppID)).name;
 
             var win_title = windowsData[mainWindowID];
 
@@ -212,8 +212,8 @@ function printScreenshot(date) {
                 }
             }
 
-            var previous_appName = localStorage.getItem('app_' + bestPreviousAppId);
-            var next_appName = localStorage.getItem('app_' + bestNextAppId);
+            var previous_appName = JSON.parse(localStorage.getItem('app_' + bestPreviousAppId)).name;
+            var next_appName = JSON.parse(localStorage.getItem('app_' + bestNextAppId)).name;
 
             //Print context data
             if (previous_appName !== null) {
