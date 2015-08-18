@@ -316,6 +316,7 @@ function MAJSlider(data) {
     getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
     notifyTimeFilterChanged();
+    privacyFilter_checkUnauthorizedTimes();
 }
 
 function ajaxMAJSlider(dateStart, dateStop) {

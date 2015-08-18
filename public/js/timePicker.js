@@ -128,6 +128,7 @@ function ajaxSetRange()
 
     privacyFilter_setAuthorizedTimes(fromHour + ":" + fromMinute, toHour + ":" + toMinute, WE == "1");
     notifyTimeFilterChanged();
+    privacyFilter_checkUnauthorizedTimes();
 
 }
 

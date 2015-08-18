@@ -33,11 +33,8 @@ $( document).ready(function(){
 });
 
 
-function printTimeSwimlane() {
 
-    d3.select("#sliderSVG svg g.timeSwimlane").remove();
-
-
+function getUnauthorizedTimeRanges(){
     var authFrom = privacyParams.auTimes.from,
         authTo = privacyParams.auTimes.to,
         authWE = privacyParams.auTimes.weekEnd;
@@ -73,6 +70,16 @@ function printTimeSwimlane() {
         }
         last = one.date;
     }
+
+    return unSCS;
+}
+
+
+function printTimeSwimlane() {
+
+    d3.select("#sliderSVG svg g.timeSwimlane").remove();
+
+    var unSCS = getUnauthorizedTimeRanges();
 
     if(unSCS.length == 0) {
         Materialize.toast("No unauthorized times in this range :)", 4000);

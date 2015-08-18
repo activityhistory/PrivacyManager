@@ -38,7 +38,7 @@ exports.initDBPath = function(){
 var p = window.localStorage.getItem("SELFSPY_PATH");
     db = new sqlite3.Database(p + "/selfspy.sqlite");
 
-    run_cmd("ln", ["-s", "-h", "-F", window.localStorage.getItem("SELFSPY_PATH")+"/screenshots", "public/images/screenshots"], function(resp){window.console.log(resp);});
+    run_cmd("ln", ["-s", "-h", "-F", window.localStorage.getItem("SELFSPY_PATH")+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
 };
 
 exports.un_apps_list = sendUnAppsList;
@@ -345,22 +345,41 @@ exports.getAppsData = function (req, res) {
 
 exports.getGeoloc = function (req, res) {
 
-    var start = new Date(req.query.start);
-    var end = new Date(req.query.stop);
+    var _start = new Date(req.query.start);
+    var _end = new Date(req.query.stop);
 
 
     var result = [];
 
 
-    //remove 12min of the start : that allow  location period to start before the effective start time
-    start.setMinutes(start.getMinutes() - 12);
+    //remove 17min of the start : that allow  location period to start before the effective start time
+    var start = new Date(_start);
+    start.setMinutes(start.getMinutes() - 17);
 
-     //add 12min of the start : that allow  location period to start before the effective start time
-    end.setMinutes(end.getMinutes() + 12);
+     //add 17min of the start : that allow  location period to start before the effective start time
+    var end = new Date(_end);
+    end.setMinutes(end.getMinutes() + 17);
+
+
+
+
+
+    var _activity = getActivityRangeBetween(start, end);
+
+    //make a copy to keep unmofified database
+    var activity = [];
+    for(var i = 0 ; i != _activity.length; i++)
+    {
+        var a = _activity[i];
+        activity.push({start: a.start, stop: a.stop});
+    }
 
     db.all("SELECT created_at, lat, lon FROM location " +
         "WHERE created_at between '" + formatJSToSQLITE(start) + "' " +
         "AND '" + formatJSToSQLITE(end) + "'", function (err, rows) {
+
+
+/*
         if (err) {
             res.send({ok: false, error: err});
             return;
@@ -381,7 +400,7 @@ exports.getGeoloc = function (req, res) {
             }
 
 
-            if(new Date(row.created_at) - new Date(justPreviousTime) > 900000 ){
+            if(new Date(row.created_at) - new Date(justPreviousTime) > 1200000 ){
                 result.push({from: keystart, to: justPreviousTime, lat: key.lat, lon: key.lon});
                 keystart = row.created_at;
                 key.lat = row.lat;
@@ -431,10 +450,101 @@ exports.getGeoloc = function (req, res) {
         }
 
         res.send({ok: true, result: trueResult});
+*/
+
+
+
+    for(var i = 0 ; i != rows.length ; i ++)
+    {
+        var thisLocation = rows[i];
+        for(var k = 0 ; k != activity.length ; k ++)
+        {
+            var thisActivity = activity[k];
+            
+            if(isInTheRange(new Date(thisActivity.start), new Date(thisActivity.stop), new Date(thisLocation.created_at), 17))
+            {
+                //No other location
+                if(typeof(thisActivity.lat) === 'undefined'){
+                    thisActivity.lat = thisLocation.lat;
+                    thisActivity.lon = thisLocation.lon;
+                    var dateLoc = new Date(thisLocation.created_at);
+                    var distSta = Math.abs(dateLoc - new Date(thisActivity.start));
+                    var distSto = Math.abs(new Date(thisActivity.stop) - dateLoc);
+                    thisActivity.dist = distSta > distSto ? distSta : distSto;
+                }
+                else//Other location
+                {
+                    var dateLoc = new Date(thisLocation.created_at);
+                    var distSta = Math.abs(dateLoc - new Date(thisActivity.start));
+                    var distSto = Math.abs(new Date(thisActivity.stop) - dateLoc);
+                    var dist = distSta > distSto ? distSta : distSto;
+                    if(dist < thisActivity.dist)//this is soonest
+                    {
+                        thisActivity.lat = thisLocation.lat;
+                        thisActivity.lon = thisLocation.lon;
+                        thisActivity.dist = dist;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+        for(var i = 0 ; i != activity.length; i++)
+        {
+            var thisActivity = activity[i];
+            if(typeof(thisActivity.lat) === 'undefined')
+            {
+                thisActivity.lat = 'unknow';
+                thisActivity.lon = 'unknow';
+            }
+            thisActivity.from = thisActivity.start;
+            thisActivity.to = thisActivity.stop;
+
+            delete thisActivity.start;
+            delete thisActivity.stop;
+            delete thisActivity.apps;
+        }
+
+
+        res.send({ok: true, result: activity});
+
     });
+
+
 };
 
+function getActivityRangeBetween(start, stop){
+    var result = [];
+    var allActivity = xdb.get('backgroundActivity');
+    var _start = new Date(start);
+    var _stop = new Date(stop);
+    for(var i = 0; i != allActivity.length ; i++)
+    {
+        var thisActivity = allActivity[i];
+        var thisStart = new Date(thisActivity.start);
+        var thisStop = new Date(thisActivity.stop);
 
+        if(thisStart >= _start && thisStop <= _stop)
+        {
+            result.push(thisActivity);
+            continue;
+        }
+        if(thisStop >= _start && thisStart <= _start)
+        {
+            result.push(thisActivity);
+            continue;
+        }
+        if(thisStart <= _stop && thisStop >= _stop)
+        {
+            result.push(thisActivity);
+            continue;
+        }
+    }
+    return result;
+}
 
 exports.getActivity = function(req, res){
     res.send({result:xdb.get("backgroundActivity")});
@@ -477,6 +587,20 @@ var haversine = (function () {
 
 })();
 
+
+function isInTheRange(dateStart, dateStop, val, symp) {
+
+    var start = dateStart.setMinutes(dateStart.getMinutes()-symp);
+    var stop = dateStop.setMinutes(dateStop.getMinutes()+symp);
+
+    if(
+        val >= start
+    &&  val <= stop
+    ){
+        return true;
+    }
+    return false;
+}
 
 function formatJSToSQLITE(jsDate) {
     return 'Y-m-d h:k:s.p'

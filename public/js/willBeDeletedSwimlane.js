@@ -9,7 +9,8 @@ var privacyParams = {
     auLocations : []
 };
 
-var willBeDeletedData = [];
+var willBeDeletedData = []; //TODO : rename it to willBeDeletedApps
+var willBeDeletedLocations = [];
 
 var willBeDeletedColor = legend_getAColor("Will be deleted");
 
@@ -38,11 +39,37 @@ function privacyFilter_addAutorizedLocation(locationName, _lat, _long){
 }
 
 
+function privacyFilter_checkLocations(){
+    willBeDeletedLocations = [];
+    //LocationFilter.locationData); .name
+    //privacyParams.auLocations);  . name
+
+    LocationFilter.locationData.forEach(function(locationRange){
+        if(locationRange.name == "unknow")
+        {
+            willBeDeletedLocations.push({start:locationRange.from,stop:locationRange.to, caused_by:"location"});
+        }
+
+    });
+
+    if(willBeDeletedLocations.length != 0)
+    {
+        var chk = $("#unknow.filter.location");
+        if(!chk.is(':checked'))
+        {
+            chk.prop('checked', true);
+            chk.trigger("change");
+        }
+    }
+
+    MAJWillBeDeletedSwimlane();
+}
+
 function privacyFilter_checkDeletedApps() {
     var filterdApps = getFilterdApps();
-    willBeDeletedData = filterdApps; //TODO changer l'organisation pouyr pouvoir supprimer certaines parties
+    willBeDeletedData = filterdApps;
     MAJWillBeDeletedSwimlane();
-    //extract apps names that will delete some part
+    //extract apps names that will delete some parts
     var appNames = [];
     for (var i = 0; i != filterdApps.length; i++) {
         var an = filterdApps[i].name;
@@ -54,7 +81,7 @@ function privacyFilter_checkDeletedApps() {
         if (ajouter == true)
             appNames.push(an);
     }
-    //print the filter swimlane of apps that delete some part
+    //print the filter swimlane of apps that delete some parts
     appNames.forEach(function (one) {
         var inp = $("input[value='" + one + "']");
         if (!inp.is(':checked')) {
@@ -63,10 +90,24 @@ function privacyFilter_checkDeletedApps() {
         }
     });
 }
+var willBeDeletedByTime = [];
+function privacyFilter_checkUnauthorizedTimes(){
+    willBeDeletedByTime = getUnauthorizedTimeRanges();
+
+    if(willBeDeletedByTime.length != 0){
+        var chk = $(".filter.time");
+        if(!chk.is(':checked')){
+            chk.prop('checked', true);
+            chk.trigger("change");
+        }
+    }
+    MAJWillBeDeletedSwimlane();
+}
 
 
 function MAJWillBeDeletedSwimlane(){
 
+    var allWillBeDeletedData = (willBeDeletedData.concat(willBeDeletedByTime)).concat(willBeDeletedLocations);
 
     d3.select("#sliderSVG svg g.willBeDeleted").remove();
 
@@ -80,7 +121,7 @@ function MAJWillBeDeletedSwimlane(){
         .attr('class', 'willBeDeleted');
 
     var rectangles = mini.selectAll("line")
-        .data(willBeDeletedData)
+        .data(allWillBeDeletedData)
         .enter()
         .append("line");
 
