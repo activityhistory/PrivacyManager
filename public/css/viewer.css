@@ -38,16 +38,20 @@ img.smallSCS {
 
 #screenshotsView .card .card-content {
     height: 20%;
+    position: relative;
 }
 
 div#date {
     height: 5%;
     margin-bottom: 10px;
-    text-align: right;
+    right: 28px;
+    font-size: 13px;
+    position: absolute;
+    top: -17px;
 }
 
 p#mainAppName {
-    font-size: 15px;
+    font-size: 13px;
     line-height: 15px;
     width: 90%;
 }
@@ -81,11 +85,21 @@ img#bigScreenShot {
     width: 100%;
 }
 
-/*div#windowTitle {
-    background-color: #E5E5E5;
-    padding: 5px;
-    margin-right: 40px;
-}*/
+.boutons-line.row {
+    margin: 0;
+    padding: 2px;
+}
+
+div#remove {
+    width: 25px;
+    height: 25px;
+}
+
+#remove i.material-icons {
+    line-height: 15px;
+    font-size: 20px;
+}
+
 /* SLIDERS */
 div#sliderSVG {
     margin-bottom: 5px;
@@ -102,4 +116,8 @@ div#bigSlider {
     stroke: #fff;
     fill-opacity: .125;
     shape-rendering: crispEdges;
+}
+
+div#remove {
+    float: right;
 }

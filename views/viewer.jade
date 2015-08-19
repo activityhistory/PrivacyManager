@@ -2,8 +2,9 @@
 
 
 #screenshotsView.row
-    #date.row
-            span
+    div.boutons-line.row
+        #remove.btn-floating.waves-effect.waves-light.red.tooltipped(data-position="left", data-tooltip="Remove all indicated data")
+            i.material-icons delete
     #previousContext.col.s3
         img.smallSCS(src="").row
         div.appName
@@ -14,6 +15,8 @@
         div.card-content(style="display : none;")
             span.card-title.activator.grey-text.text-darken-4
                 i.material-icons.right more_vert
+                #date
+                    span
                 p#mainAppName.truncate
         div.card-reveal
             span.card-title.grey-text.text-darken-4

@@ -13,7 +13,7 @@ var ActivityManager = {
         return new Promise(function(ok,ko){
             $.get("/getActivity", function (data) {
                 self.allActivityData = data.result;
-                self.changeAllDataToDate()
+                self.changeAllDataToDate();
                 ok();
             })
                 .fail(function(){
