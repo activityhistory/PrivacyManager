@@ -24,24 +24,12 @@ function initBrush() {
         .attr("height", miniHeight + 4);
 
 
+    //Init to last activity
+    var activity_data = ActivityManager.allActivityData;
+    var last_activity_data = activity_data[activity_data.length - 1];
 
-
-
-
-    var aaa = new Date();
-    aaa.setDate(aaa.getDate() -1);
-    var bbb = new Date();
-    bbb.setDate(bbb.getDate() -1);
-    aaa.setHours(0);
-    aaa.setMinutes(0);
-    bbb.setHours(23);
-    bbb.setHours(59);
-
-
-    //Init to yesterday
-    bigsSlider_manuelBrushMove(aaa, bbb);
+    bigsSlider_manuelBrushMove(last_activity_data.start, last_activity_data.stop);
     brushed();
-
 
     return brush;
 }
