@@ -1,11 +1,19 @@
 /* CONTEXT */
 div#previousContext {
-    height: 100%;
+    cursor: pointer;
+}
+
+div#previousContext:hover {
+    cursor: pointer;
 }
 
 div#nextContext {
     height: 100%;
     position: relative;
+}
+
+div#nextContext:hover {
+    cursor: pointer;
 }
 
 img.smallSCS {
@@ -41,6 +49,7 @@ div#date {
 p#mainAppName {
     font-size: 15px;
     line-height: 15px;
+    width: 90%;
 }
 
 a#fullScreen {

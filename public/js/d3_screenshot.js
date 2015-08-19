@@ -2,8 +2,8 @@
  * Created by Maxime on 23/07/2015.
  */
 
-//TODO
 function printScreenshot(date) {
+
 
     //Get main screenshot
     if (interVal.currentDate.valueOf() == date.valueOf) {
@@ -26,8 +26,6 @@ function printScreenshot(date) {
             imagePosition = i;
         }
     }
-
-
 
     //CHANGE HERE IF YOU WANT TO ALWAYS SEE A Screenshot ( also when you'r far away)
     if (betterDiff / 1000 < 60){
@@ -145,15 +143,16 @@ function printScreenshot(date) {
                 for (k = 0; k < bestRunningAppsIDList.length; k++) {
                     var id = parseInt(bestRunningAppsIDList[k]);
 
-                    var appName = localStorage.getItem('app_' + id);
-                    if (appName != null) {
-                        $('#runningApps ul').append('<li>' + appName + '</li>');
+                    var app = localStorage.getItem('app_' + id);
+                    if (app != null) {
+                        var appName = JSON.parse(app);
+                        $('#runningApps ul').append('<li>' + appName.name + '</li>');
 
                         if (a < 9) {
                             if (a === 0)
-                                runningAppsString += appName;
+                                runningAppsString += appName.name;
                             else
-                                runningAppsString += ', ' + appName;
+                                runningAppsString += ', ' + appName.name;
                         }
                         else if (a === 9) {
                             runningAppsString += '...';
@@ -235,7 +234,6 @@ function printScreenshot(date) {
             }
             else {
                 $('#nextContext .smallSCS').attr("src", '/images/no-image.jpg');
-
             }
         }
 

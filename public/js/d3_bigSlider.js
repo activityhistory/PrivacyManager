@@ -51,6 +51,8 @@ function brushed() {
     var ext = brush.extent();
     interVal.start = new Date(ext[0]);
     interVal.stop = new Date(ext[1]);
+
+
     ajaxMAJSlider(ext[0], ext[1]); //TODO listener
 }
 
@@ -128,8 +130,7 @@ function initBigSlider(daysList) {
 }
 
 
-function bigsSlider_manuelBrushMove(dateStart, dateStop)
-{
+function bigsSlider_manuelBrushMove(dateStart, dateStop) {
     brush.extent([dateStart, dateStop]);
     brush(d3.select(".brush").transition());
 }

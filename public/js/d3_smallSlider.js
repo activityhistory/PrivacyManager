@@ -167,8 +167,10 @@ function initializeSmallSlider() {
 
 function brushedZoom(){
     var ext = zoomBrush.extent();
+
     interVal.start = new Date(ext[0]);
     interVal.stop = new Date(ext[1]);
+
     ajaxMAJSlider(ext[0], ext[1]);
     zoomBrush.clear();
     d3.select("#sliderSVG svg g.zoomBrush")
@@ -176,6 +178,7 @@ function brushedZoom(){
         .selectAll("rect")
         .attr("y", 0)
         .attr("height", 34);
+
 }
 
 
@@ -193,13 +196,11 @@ function majZoomBrush(){
         .attr("height", 34);
 }
 
-function goToOneScreenshotNext(direction)
-{
-
+function goToOneScreenshotNext(direction) {
     var currentScreenshot = $("#bigScreenShot").attr("src").split("/");
     currentScreenshot = currentScreenshot[currentScreenshot.length -1];
-    if(currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png")
-    {
+
+    if (currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png") {
         Materialize.toast("You have to be somewhere to go elsewhere ...",4000);
         return;
     }
@@ -227,8 +228,6 @@ function goToOneScreenshotNext(direction)
 
     var exactDate = interVal.data[res].date;
     manualMoveSmallSlder(exactDate);
-
-
 }
 
 
@@ -303,24 +302,33 @@ function MAJSlider(data) {
         Materialize.toast("No screenshot found in the selected range",4000);
         return;
     }
+
+    interVal.start = data[0].date;
+    interVal.stop = data[data.length - 1].date;
+    interVal.data = data;
+
     xSmallSlider.domain([data[0].date, data[data.length - 1].date]);
 
     d3.select("#sliderSVG svg .x.axis")
         .call(xAxisSmallSlider);
 
-    interVal.start = data[0].date;
-    interVal.stop = data[data.length -1].date;
-    interVal.data = data;
+
     printScreenShotSwimlane();
     majZoomBrush();
     getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
     notifyTimeFilterChanged();
     privacyFilter_checkUnauthorizedTimes();
+
+    var data_length = interVal.data.length;
+    var middle = Math.round(data_length / 2);
+
+
+    var exactDate = interVal.data[middle].date;
+    manualMoveSmallSlder(exactDate);
 }
 
 function ajaxMAJSlider(dateStart, dateStop) {
-
     $.get("/getScreenshotsListBetween", {start: dateStart, end: dateStop}, function (data) {
         var d = data.result;
         var r = [];
@@ -328,12 +336,11 @@ function ajaxMAJSlider(dateStart, dateStop) {
             r.push({date: new Date(one.date), screenshot: one.screenshot});
         });
         MAJSlider(r);
-        if(r)
+        if (r) {
             bigsSlider_manuelBrushMove(r[0].date, r[r.length-1].date); //To put the brush on the screenshot/activity area only
+            ajaxMAJRunningAppsList(r[0].date, r[r.length - 1].date);
+        }
     });
-
-    ajaxMAJRunningAppsList(dateStart, dateStop);
-
 }
 
 
@@ -344,8 +351,6 @@ function ajaxMAJRunningAppsList(dateStart, dateStop) {
 }
 
 function printScreenShotSwimlane() {
-
-
 
     var color = legend_getAColor("Activity intensity");
 
@@ -378,6 +383,4 @@ function printScreenShotSwimlane() {
 
     var b = $(".bobobop").length;
     $(".bobobop").css({'fill-opacity' : ((5/b)+0.005)});
-
-
 }
