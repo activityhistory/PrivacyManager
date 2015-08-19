@@ -27,13 +27,17 @@
       var PATH_TO_SELFSPY_FOLDER;
 
       PATH_TO_SELFSPY_FOLDER = localStorage.getItem('SELFSPY_PATH');
+      //ASK_FOR_SELFSPY_FOLDER = localStorage.getItem('ask_location');
 
       if(PATH_TO_SELFSPY_FOLDER != null){
+        //if(ASK_FOR_SELFSPY_FOLDER != 'true'){
         var b = confirm("Please confirm your .selfspy folder location :\n" + PATH_TO_SELFSPY_FOLDER + "\nIt is the good location ?");
-        if(b == true)
+        if (b == true)
           loadApp();
         else
-          askLocationThenLoadApp()
+          askLocationThenLoadApp();
+        //}
+
       }
       else{
         alert("Please enter your .selfspy folder location.");

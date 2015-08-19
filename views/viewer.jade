@@ -5,6 +5,28 @@
     div.boutons-line.row
         #remove.btn-floating.waves-effect.waves-light.red.tooltipped(data-position="left", data-tooltip="Remove all indicated data")
             i.material-icons delete
+        #settings.btn-floating.waves-effect.waves-light.grey.darken-3.tooltipped.modal-trigger(data-position="bottom", data-tooltip="Settings" data-target="settingsModal")
+            i.material-icons settings
+        #help.btn-floating.waves-effect.waves-light.green.darken-3.tooltipped.modal-trigger(data-position="bottom", data-tooltip="Show help", data-target="helpModal")
+            i.material-icons live_help
+
+    #helpModal.modal
+        div.modal-content
+            h4 Help
+            img(src="/images/tuto.png")
+        div.modal-footer
+            a.modal-action.modal-close.waves-effect.waves-green.btn-flat(href="#!") Close
+
+    #settingsModal.modal
+        div.modal-content
+            h4 Settings
+            div.switch
+                label Next boot, ask for Selfspy location.
+                    input#lever_selfspyLocation(type='checkbox')
+                    span.lever
+        div.modal-footer
+            a.modal-action.modal-close.waves-effect.waves-green.btn-flat(href="#!") Close
+
     #previousContext.col.s3
         img.smallSCS(src="").row
         div.appName

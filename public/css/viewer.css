@@ -54,6 +54,7 @@ p#mainAppName {
     font-size: 13px;
     line-height: 15px;
     width: 90%;
+    font-weight: bold;
 }
 
 a#fullScreen {
@@ -74,6 +75,10 @@ a#fullScreen {
     font-size: 12px;
 }
 
+#mainAppName span {
+    font-weight: normal;
+}
+
 div#imageContainer {
     height: 100%;
     border: 5px solid rgba(12, 12, 12, 0.8);
@@ -88,16 +93,18 @@ img#bigScreenShot {
 .boutons-line.row {
     margin: 0;
     padding: 2px;
+    text-align: right;
 }
 
-div#remove {
+.boutons-line .btn-floating {
     width: 25px;
     height: 25px;
+    margin-left: 5px;
 }
 
-#remove i.material-icons {
-    line-height: 15px;
-    font-size: 20px;
+.boutons-line .btn-floating i.material-icons {
+    line-height: 20px;
+    font-size: 22px;
 }
 
 /* SLIDERS */
@@ -118,6 +125,34 @@ div#bigSlider {
     shape-rendering: crispEdges;
 }
 
-div#remove {
-    float: right;
+/* Modal */
+div#helpModal {
+    z-index: 10000;
+    width: 80%;
+    overflow: hidden;
+}
+
+div#settingsModal {
+    z-index: 10000;
+    width: 80%;
+    overflow: hidden;
+}
+
+#helpModal img {
+    width: 54%;
+}
+
+#helpModal .modal-content {
+    padding: 10px;
+    text-align: center;
+}
+
+#helpModal h4 {
+    margin: 0px;
+    text-align: left;
+    font-size: 20px;
+}
+
+#helpModal .modal-footer {
+    height: 20px;
 }
