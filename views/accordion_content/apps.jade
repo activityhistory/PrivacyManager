@@ -12,8 +12,8 @@ script.
 
     //List of apps to autocomplete add form
     $.get("/all_apps_list", function(data){
-        var names = data.names;
-        $.each(names, function(i, item){
+        var apps = data.apps;
+        $.each(apps, function (i, item) {
             $("#allAppsList").append("<option value='"+item.name+ "'/>");
         });
     });
