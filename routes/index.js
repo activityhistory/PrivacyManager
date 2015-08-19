@@ -41,6 +41,20 @@ var p = window.localStorage.getItem("SELFSPY_PATH");
     run_cmd("ln", ["-s", "-h", "-F", window.localStorage.getItem("SELFSPY_PATH")+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
 };
 
+exports.checkInitSqlDb = function(){
+    db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
+        if(typeof(row) === 'undefined')
+        {
+            var fromHour = 9,
+                toHour = 19,
+                fromMinute = 0,
+                toMinute = 0,
+                WE = 0;
+            db.run("INSERT INTO privacytimeinterval (fromHour, toHour, fromMinute, toMinute, weekend) VALUES ( ?,  ?,  ?, ?, ?)", fromHour, toHour, fromMinute, toMinute, WE);
+        }
+    });
+};
+
 exports.un_apps_list = sendUnAppsList;
 
 function sendUnAppsList(req, res) {

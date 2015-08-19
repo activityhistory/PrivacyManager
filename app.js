@@ -44,7 +44,10 @@ http.get(options, function(res) {
 }).on('error', function(e) {
   //server is not yet running
 
+  //intialize the path of the .selfspy/selfspy.sqlite db
   routes.initDBPath();
+  //intialize the presence of unauthorized times if not exist
+  routes.checkInitSqlDb();
 
   // all environments
   app.set('port', process.env.PORT || 2323);
