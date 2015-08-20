@@ -282,6 +282,7 @@ exports.getAppsData = function (req, res) {
     var start = new Date(req.query.start);
     start.setHours(start.getHours() - 3);
     var end = new Date(req.query.stop);
+    end.setHours(end.getHours() + 3);
 
 
     db.all("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
@@ -475,7 +476,7 @@ exports.getGeoloc = function (req, res) {
         {
             var thisActivity = activity[k];
             
-            if(isInTheRange(new Date(thisActivity.start), new Date(thisActivity.stop), new Date(thisLocation.created_at), 17))
+            if(isInTheRange(new Date(thisActivity.start), new Date(thisActivity.stop), new Date(thisLocation.created_at), 35))
             {
                 //No other location
                 if(typeof(thisActivity.lat) === 'undefined'){
@@ -505,6 +506,7 @@ exports.getGeoloc = function (req, res) {
     }
 
 
+        //Add the unknow location, rename start and dtop to from and to
 
         for(var i = 0 ; i != activity.length; i++)
         {
@@ -520,6 +522,25 @@ exports.getGeoloc = function (req, res) {
             delete thisActivity.start;
             delete thisActivity.stop;
             delete thisActivity.apps;
+        }
+
+
+        //smooth
+        for(var i = 0 ; i != activity.length-1; i++)
+        {
+            var un = activity[i],
+                deux = activity[i+1];
+            if(un.to != deux.from)
+            {
+                var unDateTo = new Date(un.to),
+                    deuxDateFrom = new Date(deux.from);
+
+                if(deuxDateFrom - unDateTo <= 3840000)//8min
+                {
+
+                    un.to = deux.from;
+                }
+            }
         }
 
 
@@ -563,6 +584,46 @@ function getActivityRangeBetween(start, stop){
 exports.getActivity = function(req, res){
     res.send({result:xdb.get("backgroundActivity")});
 };
+
+
+exports.cleanAll = function(req, res){
+
+    var ranges = req.query.ranges;
+
+    for(var i=0; i!= ranges.length; i++){
+        var oneRange = ranges[i];
+        removeDataBetween(new Date(oneRange.start), new Date(oneRange.stop));
+    }
+
+    res.send({ok : "ok"});
+};
+
+
+
+function removeDataBetween(start, end)
+{
+    db.run("DELETE  FROM bookmark WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM click WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM debrief WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM experience WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM geometry WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM keys WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM location WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM processevent WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM snapshot WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM window WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+    db.run("DELETE  FROM windowevent WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
+
+
+    var allscs = fs.readdirSync(pathToScreenShots);
+    for(var i = 0; getJSDateAndTime(allscs[i]) < start; i++);
+    while(getJSDateAndTime(allscs[i]) <= end )
+    {
+        fs.unlinkSync(pathToScreenShots+allscs[i]);
+        i++;
+    }
+
+}
 
 var haversine = (function () {
 

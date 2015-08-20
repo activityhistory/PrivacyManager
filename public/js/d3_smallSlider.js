@@ -168,8 +168,22 @@ function initializeSmallSlider() {
 function brushedZoom(){
     var ext = zoomBrush.extent();
 
+
+
+    //unauthorized zoom too much
+    var a = new Date(ext[0]),
+        b = new Date(ext[1]);
+    if(b - a < 300000)//5min
+    {
+        Materialize.toast("Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?", 5000);
+        return;
+    }
+
     interVal.start = new Date(ext[0]);
     interVal.stop = new Date(ext[1]);
+
+
+
 
     ajaxMAJSlider(ext[0], ext[1]);
     zoomBrush.clear();

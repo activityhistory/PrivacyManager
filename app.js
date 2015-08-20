@@ -33,6 +33,8 @@ app.use(xdb.init("my_db", {
 }));
 
 
+
+
 activityDB.madeAllActivity(xdb, new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite'));
 
 //check if server is already running
@@ -73,6 +75,7 @@ http.get(options, function(res) {
   app.get('/getScreenshotsListBetween', routes.getScreenshotsListBetween);
   app.get('/getAppsData', routes.getAppsData);
   app.get('/getGeoloc', routes.getGeoloc);
+  app.get('/clean', routes.cleanAll);
 
   app.get('/runningAppsBetween', routes.runningApps);//return all running apps for the current range
 

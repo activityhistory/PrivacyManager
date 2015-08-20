@@ -94,6 +94,10 @@ var willBeDeletedByTime = [];
 function privacyFilter_checkUnauthorizedTimes(){
     willBeDeletedByTime = getUnauthorizedTimeRanges();
 
+    willBeDeletedByTime.forEach(function(one){
+        one.caused_by = "Time";
+    });
+
     if(willBeDeletedByTime.length != 0){
         var chk = $(".filter.time");
         if(!chk.is(':checked')){
@@ -137,7 +141,13 @@ function MAJWillBeDeletedSwimlane(){
         .attr("y2", 40)
         .attr("stroke", willBeDeletedColor)
         .attr("stroke-width", 80)
-        .style("stroke-opacity", 0.15);
+        .style("stroke-opacity", 0.15)
+        .attr("data-tooltip", function(d){return "Deleted because of " + d.caused_by})
+        .attr("data-position", "bottom")
+        .attr("class", "tooltipped");
+
+
+    $('.tooltipped').tooltip({delay: 50});
 
 
 }
@@ -152,9 +162,15 @@ function getFilterdApps()
             if(currentAppsData[i].name == privacyParams.unApps[k])
             {
                 result.push(currentAppsData[i]);
+
             }
         }
     }
+
+
+    result.forEach(function(one){
+       one.caused_by="Application" ;
+    });
 
     return result;
 

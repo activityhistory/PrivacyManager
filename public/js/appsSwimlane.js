@@ -65,6 +65,10 @@ function printAppsSwimlanes(){
             printOneAppSwimlane(name, color, thisAppData, nump);
             nump++;
         }
+        else
+        {
+            Materialize.toast("No "+name+" usage found in this range.", 4000);
+        }
 
 
         $('.tooltipped').tooltip({delay: 50});
