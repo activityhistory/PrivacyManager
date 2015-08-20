@@ -27,8 +27,18 @@ function initBrush() {
     //Init to last activity
     var activity_data = ActivityManager.allActivityData;
     var last_activity_data = activity_data[activity_data.length - 1];
+    var stop = last_activity_data.stop;
+    var start;
+    var i = 6;
 
-    bigsSlider_manuelBrushMove(last_activity_data.start, last_activity_data.stop);
+
+    while (activity_data.length < i) {
+        i--;
+    }
+
+    start = activity_data[activity_data.length - i].start;
+
+    bigsSlider_manuelBrushMove(start, stop);
     brushed();
 
     return brush;
