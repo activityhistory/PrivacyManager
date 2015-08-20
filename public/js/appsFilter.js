@@ -23,7 +23,17 @@ $.get("/all_apps_list", function (data) {
             localStorage.setItem('app_' + item.id, JSON.stringify(app_data));
         }
         else {
-            app_data = JSON.parse(app);
+            var json_app = JSON.parse(app);
+
+            //If database have changed...
+            if (json_app.name != item.name) {
+                app_data = {id: item.id, name: item.name, count: 0};
+                localStorage.setItem('app_' + item.id, JSON.stringify(app_data));
+            }
+
+            else {
+                app_data = json_app;
+            }
         }
 
 
