@@ -47,7 +47,8 @@ div#date {
     right: 28px;
     font-size: 13px;
     position: absolute;
-    top: -17px;
+    top: -13px;
+    font-weight: bolder;
 }
 
 p#mainAppName {
@@ -88,6 +89,11 @@ div#imageContainer {
 img#bigScreenShot {
     height: 100%;
     width: 100%;
+    max-height: 264px;
+}
+
+img#bigScreenShot.materialboxed.intialized.active {
+    max-height: none;
 }
 
 .boutons-line.row {
