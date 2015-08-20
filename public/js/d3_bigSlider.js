@@ -38,8 +38,6 @@ function initBrush() {
 
     start = activity_data[activity_data.length - i].start;
 
-    console.log(i);
-
     bigsSlider_manuelBrushMove(start, stop);
     brushed();
 
