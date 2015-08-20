@@ -20,55 +20,6 @@
       <img src="public/images/load.gif">
     </div>
 
-    <input type="file" id="getFile" style="display:none;" webkitdirectory directory />
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script>
-      var PATH_TO_SELFSPY_FOLDER;
-
-      PATH_TO_SELFSPY_FOLDER = localStorage.getItem('SELFSPY_PATH');
-      //ASK_FOR_SELFSPY_FOLDER = localStorage.getItem('ask_location');
-
-      if(PATH_TO_SELFSPY_FOLDER != null){
-        //if(ASK_FOR_SELFSPY_FOLDER != 'true'){
-        var b = confirm("Please confirm your .selfspy folder location :\n" + PATH_TO_SELFSPY_FOLDER + "\nIt is the good location ?");
-        if (b == true)
-          loadApp();
-        else
-          askLocationThenLoadApp();
-        //}
-
-      }
-      else{
-        alert("Please enter your .selfspy folder location.");
-        askLocationThenLoadApp();
-      }
-
-        function askLocationThenLoadApp(){
-          alert("Tips to find you .selfspy folder location :\n-The usually location is /Users/YOU/.selfspy\n-To find the .selfspy, folder, you need to activate hidden folders visualisation : in the dialog box press \" cmd + shift + . \" then reload your current location.\n-Choose the .selfspy folder, not any subfolder. ")
-          document.getElementById('getFile').addEventListener('change', gotogo);
-          document.getElementById('getFile').click();
-
-           function gotogo () {
-
-            PATH_TO_SELFSPY_FOLDER = document.getElementById('getFile').value;
-            loadApp();
-          };
-
-
-        }
-
-        function loadApp(){
-          localStorage.setItem("SELFSPY_PATH", PATH_TO_SELFSPY_FOLDER);
-
-          $.getScript("app.js");
-
-        }
-
-
-
-
-    </script>
-    <!--<script type="text/javascript" src="app.js"></script>-->
+    <script type="text/javascript" src="app.js"></script>
   </body>
 </html>

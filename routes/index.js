@@ -33,13 +33,17 @@ function run_cmd(cmd, args, callBack ) {
 
 
 
-exports.initDBPath = function(){
+exports.initDBPath = aaaa;
 
-var p = window.localStorage.getItem("SELFSPY_PATH");
-    db = new sqlite3.Database(p + "/selfspy.sqlite");
 
-    run_cmd("ln", ["-s", "-h", "-F", window.localStorage.getItem("SELFSPY_PATH")+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
-};
+
+    function aaaa(){
+
+        var p = xdb.get("SELFSPY_PATH");
+        db = new sqlite3.Database(p + "/selfspy.sqlite");
+
+        run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
+    };
 
 exports.checkInitSqlDb = function(){
     db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
@@ -598,6 +602,31 @@ exports.cleanAll = function(req, res){
     res.send({ok : "ok"});
 };
 
+
+exports.getSelfspyFolderPath = function(res, res){
+    var c = xdb.get("SELFSPY_PATH");
+    if(c == false)
+        res.send({status:"ko", error:"inexistant"});
+    else
+        res.send({status:"ok", value:c});
+};
+
+exports.setSelfspyFolderPath = function(req, res){
+    var path = req.query.path;
+
+    var db2 = new sqlite3.Database(path + "/selfspy.sqlite", sqlite3.OPEN_READONLY, function(error){
+        if(error != null){
+            res.send({status : "ko", error:error});
+        }
+        else {
+            xdb.set("SELFSPY_PATH", path);
+            aaaa();
+            res.send({status: "ok"});
+        }
+        db2.close();
+    });
+
+};
 
 
 function removeDataBetween(start, end)

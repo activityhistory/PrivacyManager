@@ -20,10 +20,33 @@
     #settingsModal.modal
         div.modal-content
             h4 Settings
-            div.switch
-                label Next boot, ask for Selfspy location.
-                    input#lever_selfspyLocation(type='checkbox')
-                    span.lever
+            div.row
+                div.col.s8.offset-s2
+                    h6="Choose the .selfspy folder location :"
+                    #error
+                    ul.collapsible(data-collapsible="accordion")
+                        li
+                           .collapsible-header
+                               i.small.material-icons
+                                |info
+                               |Tips
+                           .collapsible-body
+                               p
+                                   | The usually location is /Users/YOU/.selfspy <br />
+                                   | To find the .selfspy, folder, you need to activate hidden folders visualisation :<br />
+                                   | In the dialog box press " cmd + shift + . "<br />
+                                   | Then reload your current location.<br />
+                                   | Choose the .selfspy folder, not any subfolder. <br />
+                    br
+                    .input-field
+                        input#filePath(type="text", placeholder="Please enter you .selfspy folder location")
+                        label(for='filePath') Folder path
+                    .input-field
+                        input#getFile(type="file", webkitdirectory directory)
+                    .right-align
+                        button.btn.waves-effect.waves-light#submitNewPath(type="submit", name="action") Submit
+
+
         div.modal-footer
             a.modal-action.modal-close.waves-effect.waves-green.btn-flat(href="#!") Close
 
@@ -61,3 +84,30 @@
 #edrthiujoedrftyguhi(style="position:absolute;top:388px;left:302px;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;")
     p="Time"
 
+
+script.
+    $('#getFile').change(function(){
+        var path = this.value;
+    $('#filePath').val(path);
+    });
+
+    //TODO check if it is a good location
+
+    $("#submitNewPath").click(function(){
+        var newLoc = $("#filePath").val();
+        $.get("/setSelfspyFolderLocation", {path:newLoc}, function(data){
+            if(data.status == "ko"){
+                $("#error").attr("class", "card-panel red accent-4")
+                        .text("PLease verify your folder location. Error : " + data.error.code);
+                return;
+
+            }
+            localStorage.setItem("SELFSPY_PATH", newLoc);
+            $("#error").attr("class", "card-panel light-green lighten-2")
+                    .text("New Path successfully added. The app will restart.");
+            setTimeout(function () {
+                document.location.href = "http://localhost:2323/";
+            }, 4000);
+        });
+
+    });

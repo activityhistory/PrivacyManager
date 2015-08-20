@@ -28,7 +28,7 @@ app.use(xdb.init("my_db", {
   file: './db.json', //your db file
   restrictAccess: false, //restrict access via browser
   autoSave: true, //autosave enabled
-  backupInterval: 10000, //interval in ms,
+  backupInterval: 100, //interval in ms,
   viewCaching: true //cache views then requested
 }));
 
@@ -81,6 +81,10 @@ http.get(options, function(res) {
 
   // app.get('/getScreenshotInfos', routes.getScreenshotInformations); //return informations about current screenshot and its context
   app.get('/getActivity', routes.getActivity); //return informations about activity time range, and bakground apps ids at each range
+
+
+  app.get('/getSelfspyFolderLocation', routes.getSelfspyFolderPath);
+  app.get('/setSelfspyFolderLocation', routes.setSelfspyFolderPath);
 
 
 

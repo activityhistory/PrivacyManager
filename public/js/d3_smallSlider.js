@@ -396,5 +396,6 @@ function printScreenShotSwimlane() {
         .attr("class", "bobobop");
 
     var b = $(".bobobop").length;
-    $(".bobobop").css({'fill-opacity' : ((5/b)+0.005)});
+     b =((5/b)+0.005 > 1) ? 1 : ((5/b)+0.005);
+    $(".bobobop").css({'fill-opacity' : b});
 }
