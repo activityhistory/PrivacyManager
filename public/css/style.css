@@ -39,7 +39,7 @@ div#content {
     background: #fff;
     height: 100px;
     padding: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-size: 12px;
     padding-left: 15px;
 }
