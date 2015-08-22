@@ -29,6 +29,8 @@ function printScreenshot(date) {
 
     //CHANGE HERE IF YOU WANT TO ALWAYS SEE A Screenshot ( also when you'r far away)
     if (betterDiff / 1000 < 60){
+        //interVal.currentIndex = imagePosition;
+
         var img_width;
         var img_height;
 
@@ -67,13 +69,18 @@ function printScreenshot(date) {
                 }
                 //Screenshot with only 1 screen
                 else {
-
+                    /*var max_height = 264;
+                     if (img_height > max_height) {
+                     img_width *= max_height / img_height;
+                     }*/
                     $('#previousContext').css({'float': 'left', 'height': '100%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
                     $('#nextContext').css({'height': '100%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
+                    /*$('#bigScreenShot').height(max_height);
+                     $('#bigScreenShot').width(img_width);*/
 
 
                     $('#mainContext').removeClass('s9');

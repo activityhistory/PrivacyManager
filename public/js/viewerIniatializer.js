@@ -47,16 +47,19 @@ $(document).ready(function () {
         }
     });
 
-    $('.modal-trigger').leanModal();
+    $('#help').click(function () {
+        if ($('.help').is(":visible")) {
+            $('.help').hide();
 
-    $('#lever_selfspyLocation').change(function () {
-        var state = $('#lever_selfspyLocation').is(':checked');
-        localStorage.setItem('ask_location', state);
+        }
+        else {
+            $('.help').show();
+        }
     });
 
-    if (localStorage.getItem('ask_location') == 'true') {
-        $('#lever_selfspyLocation').prop('checked', true);
-    }
+
+    $('.modal-trigger').leanModal();
+
 });
 
 
