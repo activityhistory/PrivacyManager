@@ -12,6 +12,10 @@ $( document ).ready(function(){
             alert("No .selfspy folder found, please fill it.");
             $('#settingsModal').openModal();
         }
+        else
+        {
+            $("#filePath").val(data.value);
+        }
     });
 
 

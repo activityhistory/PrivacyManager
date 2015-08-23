@@ -33,17 +33,17 @@ function run_cmd(cmd, args, callBack ) {
 
 
 
-exports.initDBPath = aaaa;
+exports.initDBPath = initThisAppDatabase;
 
 
 
-    function aaaa(){
+function initThisAppDatabase(){
 
-        var p = xdb.get("SELFSPY_PATH");
-        db = new sqlite3.Database(p + "/selfspy.sqlite");
+    var p = xdb.get("SELFSPY_PATH");
+    db = new sqlite3.Database(p + "/selfspy.sqlite");
 
-        run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
-    };
+    run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
+};
 
 exports.checkInitSqlDb = function(){
     db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
@@ -288,6 +288,10 @@ exports.getAppsData = function (req, res) {
     var end = new Date(req.query.stop);
     end.setHours(end.getHours() + 3);
 
+    window.console.log("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
+        "WHERE processevent.process_id = process.id AND (processevent.event_type = 'Active' OR processevent.event_type = 'Inactive' ) " +
+        "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +
+        "AND '" + formatJSToSQLITE(end) + "' ORDER BY processevent.created_at ASC ; ");
 
     db.all("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
         "WHERE processevent.process_id = process.id AND (processevent.event_type = 'Active' OR processevent.event_type = 'Inactive' ) " +
@@ -300,7 +304,8 @@ exports.getAppsData = function (req, res) {
 
             if(rows[i].name != "selfspy" && rows[i].event_type == 'Active'){ //TODO : check if we keep selfspy
                 for(var k = i; k != rows.length; k++){
-                    if(rows[k].event_type == 'Inactive' && rows[k].name == rows[i].name){
+                    if(rows[k].event_type == 'Inactive' && rows[k].name == rows[i].name)
+                    {
                         result.push({name : rows[i].name, start: rows[i].created_at, stop : rows[k].created_at});
                         break;
                     }
@@ -309,6 +314,7 @@ exports.getAppsData = function (req, res) {
         }
 
 
+        //TODO HERE : the last activity not accept apps activity
         var allActivity = xdb.get("backgroundActivity");
         var currentActivityPosition = 0;
         var trueResult = [];
@@ -325,7 +331,7 @@ exports.getAppsData = function (req, res) {
                 )
                 currentActivityPosition++;
 
-            if(currentActivityPosition >= (allActivity.length-1))
+            if(currentActivityPosition >= (allActivity.length))
                 break;
 
 
@@ -620,7 +626,7 @@ exports.setSelfspyFolderPath = function(req, res){
         }
         else {
             xdb.set("SELFSPY_PATH", path);
-            aaaa();
+            initThisAppDatabase();
             res.send({status: "ok"});
         }
         db2.close();
@@ -643,9 +649,9 @@ function removeDataBetween(start, end)
     db.run("DELETE  FROM window WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
     db.run("DELETE  FROM windowevent WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
 
-
+    //TODO remove the .DS_Store
     var allscs = fs.readdirSync(pathToScreenShots);
-    for(var i = 0; getJSDateAndTime(allscs[i]) < start; i++);
+    for(var i = 0; allscs[i] == ".DS_Store" || getJSDateAndTime(allscs[i]) < start; i++);
     while(getJSDateAndTime(allscs[i]) <= end )
     {
         fs.unlinkSync(pathToScreenShots+allscs[i]);
