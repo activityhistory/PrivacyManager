@@ -67,6 +67,7 @@ div#content {
 div#screenshotsView {
     height: 55%;
     margin-bottom: 0;
+    position: relative;
 }
 
 div#sliders {
@@ -78,6 +79,63 @@ div#sliders {
     z-index: 999999999;
 }
 
+/* HELP */
+.help {
+    display: none;
+}
 
+.card.blue-grey.darken-1.help {
+    font-size: 10px;
+    position: absolute;
+    z-index: 9999999;
+    width: 150px;
+}
 
+div#help_filter {
+    left: 180px;
+    top: 0;
+}
 
+.card.help .card-content .card-title {
+    font-size: 13px;
+    line-height: 23px !important;
+}
+
+.help i.material-icons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.help .card-content.white-text {
+    padding: 5px;
+}
+
+div#help_parameters {
+    left: 195px;
+    top: 227px;
+}
+
+div#help_legend {
+    bottom: 72px;
+}
+
+div#help_smallSlider {
+    bottom: 38px;
+    height: 71px;
+    width: 241px;
+    right: 0;
+}
+
+div#help_bigSlider {
+    bottom: -27px;
+    height: 45px;
+    width: 194px;
+}
+
+#screenshotsView div#help_screenshots {
+    height: 80px;
+    width: 266px;
+    top: 50px;
+    right: 44px;
+}

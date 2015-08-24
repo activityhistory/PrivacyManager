@@ -47,16 +47,6 @@ $(document).ready(function () {
         }
     });
 
-    $('.modal-trigger').leanModal();
-
-    $('#lever_selfspyLocation').change(function () {
-        var state = $('#lever_selfspyLocation').is(':checked');
-        localStorage.setItem('ask_location', state);
-    });
-
-    if (localStorage.getItem('ask_location') == 'true') {
-        $('#lever_selfspyLocation').prop('checked', true);
-    }
 });
 
 

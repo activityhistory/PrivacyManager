@@ -6,6 +6,7 @@ var brushSmallSlider;
 var zoomBrush;
 var xAxisSmallSlider;
 var manualMoveSmallSlder;
+var zooming;
 
 function initializeSmallSlider() {
 
@@ -63,7 +64,61 @@ function initializeSmallSlider() {
         .attr("stroke", "grey");
 
 
+    zooming = d3.behavior.zoom()
+        .center(xSmallSlider(currentValue), 0)
+        .on("zoom", zoomed);
 
+    function zoomed() {
+        var wheelDelta = d3.event.sourceEvent.wheelDelta;
+
+        var start_zoom_date = interVal.start;
+        var end_zoom_date = interVal.stop;
+
+        var diff = start_zoom_date - end_zoom_date;
+
+
+        //if diff >= 1 day
+        if (diff >= 86400000) {
+            //zoom in
+            if (wheelDelta > 0) {
+                start_zoom_date.setDay(interVal.start.getDay() + 1);
+                end_zoom_date.setDay(interVal.stop.getDay() - 1);
+            }
+            //zoom out : 1 hour
+            else if (wheelDelta < 0) {
+                start_zoom_date.setHours(interVal.start.getHours() - 1);
+                end_zoom_date.setHours(interVal.stop.getHours() + 1);
+            }
+        }
+        //diff >= 1h
+        else if (diff >= 3600000) {
+            //zoom in
+            if (wheelDelta > 0) {
+                start_zoom_date.setHours(interVal.start.getHours() + 1);
+                end_zoom_date.setHours(interVal.stop.getHours() - 1);
+            }
+            //zoom out : 1 hour
+            else if (wheelDelta < 0) {
+                start_zoom_date.setHours(interVal.start.getHours() - 1);
+                end_zoom_date.setHours(interVal.stop.getHours() + 1);
+            }
+        }
+        //diff < 1hour
+        else {
+            //zoom in
+            if (wheelDelta > 0) {
+                start_zoom_date.setMinutes(interVal.start.getMinutes() + 15);
+                end_zoom_date.setMinutes(interVal.stop.getMinutes() - 15);
+            }
+            //zoom out : 1 hour
+            else if (wheelDelta < 0) {
+                start_zoom_date.setMinutes(interVal.start.getMinutes() - 15);
+                end_zoom_date.setMinutes(interVal.stop.getMinutes() + 15);
+            }
+        }
+
+        manualBrushedZoom(start_zoom_date, end_zoom_date);
+    }
 
     var slider = svg.append("g")
         .attr("class", "slider")
@@ -74,7 +129,7 @@ function initializeSmallSlider() {
 
     slider.select(".background")
         .attr("height", height/2)
-        .attr("transform", "translate(0, 30)");
+        .attr("transform", "translate(0, 30)").call(zooming);
 
     var handle = slider.append("rect")
         .attr("class", "handle")
@@ -150,16 +205,14 @@ function initializeSmallSlider() {
         .x(xSmallSlider)
         .on("brushend", brushedZoom);
 
-    d3.select("#sliderSVG svg").append("g")
+    d3.select("#sliderSVG svg").append("g").call(zooming)
+
         .attr('transform', 'translate(' + margin.left + ', 95)')
         .attr("class", "zoomBrush")
         .call(zoomBrush)
         .selectAll("rect")
         .attr("y", 0)
         .attr("height", 34);
-
-
-
 
 
     return xSmallSlider;
@@ -270,6 +323,28 @@ function goToOneScreenshot(scsName)
     manualMoveSmallSlder(exactDate);
 }
 
+
+function manualBrushedZoom(start_date, end_date) {
+
+    if (end_date - start_date < 300000)//5min
+    {
+        Materialize.toast("Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?", 5000);
+        return;
+    }
+
+    interVal.start = new Date(start_date);
+    interVal.stop = new Date(end_date);
+
+
+    ajaxMAJSlider(start_date, end_date);
+    zoomBrush.clear();
+    d3.select("#sliderSVG svg g.zoomBrush")
+        .call(zoomBrush)
+        .selectAll("rect")
+        .attr("y", 0)
+        .attr("height", 34);
+
+}
 /*function zoom()
 {
 
@@ -317,8 +392,8 @@ function MAJSlider(data) {
         return;
     }
 
-    interVal.start = data[0].date;
-    interVal.stop = data[data.length - 1].date;
+    /* interVal.start = data[0].date;
+     interVal.stop = data[data.length - 1].date;*/
     interVal.data = data;
 
     xSmallSlider.domain([data[0].date, data[data.length - 1].date]);
@@ -351,8 +426,9 @@ function ajaxMAJSlider(dateStart, dateStop) {
         });
         MAJSlider(r);
         if (r) {
-            bigsSlider_manuelBrushMove(r[0].date, r[r.length-1].date); //To put the brush on the screenshot/activity area only
-            ajaxMAJRunningAppsList(r[0].date, r[r.length - 1].date);
+            //TODO
+            bigsSlider_manuelBrushMove(dateStart, dateStop); //To put the brush on the screenshot/activity area only
+            ajaxMAJRunningAppsList(dateStart, dateStop);
         }
     });
 }

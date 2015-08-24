@@ -26,6 +26,7 @@ function initBrush() {
 
     //Init to last activity
     var activity_data = ActivityManager.allActivityData;
+    console.log(activity_data);
     var last_activity_data = activity_data[activity_data.length - 1];
     var stop = last_activity_data.stop;
     var start;

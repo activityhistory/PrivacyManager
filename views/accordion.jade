@@ -6,6 +6,11 @@ block accordion
         div.card-panel.hoverable
             ul.collapsible.popout(data-collapsible="accordion")
                 h4 Visualisation filters
+                div#help_filter.card.blue-grey.darken-1.help
+                    div.card-content.white-text
+                        span.card-title Filters
+                            i.material-icons info
+                        p Here, you can choose different type of filters to help you visualizing your activity.
                 li
                     div.collapsible-header Applications Filter
                         i.material-icons.tiny view_list
@@ -25,6 +30,11 @@ block accordion
                                 input#timeFilter.filter.time(type='checkbox')
                                 span.lever
                 h4 Privacy parameters
+                div#help_parameters.card.blue-grey.darken-1.help
+                    div.card-content.white-text
+                        span.card-title Privacy settings
+                            i.material-icons info
+                        p These settings allow you to delete all elements you think shouldn't be recorded.
                 li
                     div.collapsible-header Unauthorized applications
                         i.material-icons.tiny not_interested
