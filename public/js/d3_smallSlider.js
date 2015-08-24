@@ -74,7 +74,7 @@ function initializeSmallSlider() {
         var start_zoom_date = interVal.start;
         var end_zoom_date = interVal.stop;
 
-        var diff = start_zoom_date - end_zoom_date;
+        var diff = end_zoom_date - start_zoom_date;
 
 
         //if diff >= 1 day
@@ -83,11 +83,13 @@ function initializeSmallSlider() {
             if (wheelDelta > 0) {
                 start_zoom_date.setDay(interVal.start.getDay() + 1);
                 end_zoom_date.setDay(interVal.stop.getDay() - 1);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
-            //zoom out : 1 hour
+            //zoom out
             else if (wheelDelta < 0) {
-                start_zoom_date.setHours(interVal.start.getHours() - 1);
-                end_zoom_date.setHours(interVal.stop.getHours() + 1);
+                start_zoom_date.setHours(interVal.start.getDay() - 1);
+                end_zoom_date.setHours(interVal.start.getDay() + 1);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
         }
         //diff >= 1h
@@ -96,11 +98,13 @@ function initializeSmallSlider() {
             if (wheelDelta > 0) {
                 start_zoom_date.setHours(interVal.start.getHours() + 1);
                 end_zoom_date.setHours(interVal.stop.getHours() - 1);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
-            //zoom out : 1 hour
+            //zoom out
             else if (wheelDelta < 0) {
                 start_zoom_date.setHours(interVal.start.getHours() - 1);
                 end_zoom_date.setHours(interVal.stop.getHours() + 1);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
         }
         //diff < 1hour
@@ -109,18 +113,19 @@ function initializeSmallSlider() {
             if (wheelDelta > 0) {
                 start_zoom_date.setMinutes(interVal.start.getMinutes() + 15);
                 end_zoom_date.setMinutes(interVal.stop.getMinutes() - 15);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
-            //zoom out : 1 hour
+            //zoom out
             else if (wheelDelta < 0) {
                 start_zoom_date.setMinutes(interVal.start.getMinutes() - 15);
                 end_zoom_date.setMinutes(interVal.stop.getMinutes() + 15);
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
             }
         }
 
-        manualBrushedZoom(start_zoom_date, end_zoom_date);
     }
 
-    var slider = svg.append("g")
+    var slider = svg.append("g").call(zooming)
         .attr("class", "slider")
         .call(brushSmallSlider);
 
@@ -129,7 +134,7 @@ function initializeSmallSlider() {
 
     slider.select(".background")
         .attr("height", height/2)
-        .attr("transform", "translate(0, 30)").call(zooming);
+        .attr("transform", "translate(0, 30)");
 
     var handle = slider.append("rect")
         .attr("class", "handle")
@@ -180,6 +185,7 @@ function initializeSmallSlider() {
         printScreenshot(to);
     };
 
+
     $( document ).keydown(function(e) {
         e = e || window.event;
         // RIP Zoom +/-
@@ -190,12 +196,38 @@ function initializeSmallSlider() {
         //    unzoom();
         //}
         if(e.keyCode == 39){// ->
-            goToOneScreenshotNext("right");
+            if(event.getModifierState('Control')){
+                var start_zoom_date = new Date(interVal.stop);
+                var end_zoom_date = new Date(interVal.stop);
+
+                var diff = interVal.stop - interVal.start;
+
+
+                end_zoom_date.setMilliseconds(end_zoom_date.getMilliseconds() + diff);
+
+
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
+            }
+            else{
+                goToOneScreenshotNext("right");
+            }
             e.preventDefault();
         }
         if(e.keyCode == 37){ // <-
-            goToOneScreenshotNext("left");
-            e.preventDefault();
+            if(event.getModifierState('Control')){
+                var start_zoom_date = new Date(interVal.start);
+                var end_zoom_date = new Date(interVal.start);
+
+                var diff =  interVal.stop - interVal.start;
+
+                start_zoom_date.setMilliseconds(start_zoom_date.getMilliseconds() - diff);
+
+                manualBrushedZoom(start_zoom_date, end_zoom_date);
+            }
+            else{
+                goToOneScreenshotNext("left");
+                e.preventDefault();
+            }
         }
 
     });
@@ -205,11 +237,9 @@ function initializeSmallSlider() {
         .x(xSmallSlider)
         .on("brushend", brushedZoom);
 
-    d3.select("#sliderSVG svg").append("g").call(zooming)
-
+    d3.select("#sliderSVG svg").append("g")
         .attr('transform', 'translate(' + margin.left + ', 95)')
         .attr("class", "zoomBrush")
-        .call(zoomBrush)
         .selectAll("rect")
         .attr("y", 0)
         .attr("height", 34);
@@ -217,6 +247,7 @@ function initializeSmallSlider() {
 
     return xSmallSlider;
 }
+
 
 function brushedZoom(){
     var ext = zoomBrush.extent();
@@ -328,7 +359,8 @@ function manualBrushedZoom(start_date, end_date) {
 console.log("manual brushed zoom");
     if (end_date - start_date < 300000)//5min
     {
-        Materialize.toast("Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?", 5000);
+        if($('#errorZoomZoom').length == 0)
+            Materialize.toast("<div id='errorZoomZoom'>Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?</div>", 5000);
         return;
     }
 
