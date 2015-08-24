@@ -50,7 +50,7 @@ function printScreenshot(date) {
                 //Change visualisation disposition if 2 screens
                 if (ratioImg >= 3) {
                     //Move previous context side:
-                    $('#previousContext').css({'float': 'right', 'height': '50%'});
+                    $('#previousContext').css({'float': 'right', 'height': '45%'});
                     $('#previousContext img.smallSCS').css({
                         'margin-top': '0',
                         'height': 'auto',
@@ -58,7 +58,7 @@ function printScreenshot(date) {
                     });
 
                     //Change next context height
-                    $('#nextContext').css({'height': '50%'});
+                    $('#nextContext').css({'height': '45%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '150px'});
 
 

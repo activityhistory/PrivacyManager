@@ -162,3 +162,16 @@ div#settingsModal {
 #helpModal .modal-footer {
     height: 20px;
 }
+
+
+a#removeRange {
+    position: absolute;
+    float: right;
+    height: 20px;
+    width: 125px;
+    font-size: 10px;
+    padding: 1px;
+    line-height: 20px;
+    bottom: -29px;
+    right: 0;
+}

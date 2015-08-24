@@ -67,6 +67,7 @@ div#content {
 div#screenshotsView {
     height: 55%;
     margin-bottom: 0;
+    position: relative;
 }
 
 div#sliders {

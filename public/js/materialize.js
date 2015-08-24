@@ -2224,20 +2224,20 @@ Vel = $ ? $.Velocity : Velocity, function (a) {
                                 opacity: 1,
                                 marginTop: m,
                                 marginLeft: n
-                            }, {duration: 350, queue: !1}), j.css({display: "block"}).velocity({opacity: 1}, {
-                                duration: 55,
+                            }, {duration: 0, queue: !1}), j.css({display: "block"}).velocity({opacity: 1}, {
+                                duration: 0,
                                 delay: 0,
                                 queue: !1
-                            }).velocity({scale: o}, {duration: 300, delay: 0, queue: !1, easing: "easeInOutQuad"})
+                            }).velocity({scale: o}, {duration: 0, delay: 0, queue: !1, easing: "easeInOutQuad"})
                         }
                     }, 10)
                 }, mouseleave: function () {
                     clearInterval(e), c = 0, i.velocity({opacity: 0, marginTop: 0, marginLeft: 0}, {
-                        duration: 225,
+                        duration: 0,
                         queue: !1,
-                        delay: 275
+                        delay: 0
                     }), j.velocity({opacity: 0, scale: 1}, {
-                        duration: 225, delay: 275, queue: !1, complete: function () {
+                        duration: 0, delay: 0, queue: !1, complete: function () {
                             j.css("display", "none"), i.css("display", "none"), d = !1
                         }
                     })

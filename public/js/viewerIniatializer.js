@@ -47,19 +47,6 @@ $(document).ready(function () {
         }
     });
 
-    $('#help').click(function () {
-        if ($('.help').is(":visible")) {
-            $('.help').hide();
-
-        }
-        else {
-            $('.help').show();
-        }
-    });
-
-
-    $('.modal-trigger').leanModal();
-
 });
 
 
