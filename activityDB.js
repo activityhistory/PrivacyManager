@@ -5,15 +5,35 @@
 
 var fs = require('fs');
 var sqlite3 = require('sqlite3').verbose();
+var db;
 
 module.exports = {
 
 
     madeAllActivity: function(xdb){
+        window.console.log("MAKEALLACTIVITY");
 
+        if(!fs.existsSync("public/images/screenshots/"))
+        {
+            window.console.log("ERROR: Symbolic link to screenshot not exist. Activity calculating is not possible.");
+            return;
+        }
 
-        var db = new sqlite3.Database(xdb.get("SELFSPY_PATH")+"/selfspy.sqlite");
+        var self = this;
+        db = new sqlite3.Database(xdb.get("SELFSPY_PATH")+"/selfspy.sqlite", function(error){
+            if(error != null){
+                window.console.log("ERROR: Can not access database. Activity calculating is not possible.");
+                return;
+            }
+            else
+            {
+                self.makeAll(xdb);
+            }
+        });
 
+    },
+
+    makeAll: function(xdb){
         var allScreenshots = removeHiddenFiles(fs.readdirSync("public/images/screenshots/"));
 
         if(allScreenshots[allScreenshots.length - 1] == xdb.get("lastScreenshotWhenLastActivity"))
@@ -173,3 +193,4 @@ function compare(_a,_b) {
         return 1;
     return 0;
 }
+

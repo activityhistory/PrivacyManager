@@ -15,6 +15,10 @@ var pathToScreenShots = "public/images/screenshots/";
 //var pathToScreenShots = process.env.HOME + "/.selfspy/screenshots/";
 var xdb = require('express-db');
 
+
+var  path = require('path'),
+    activityDB = require(path.join(process.cwd(), 'activityDB.js'));
+
 var distMinBetweenTwoLocations = 2000; // in meters
 
 exports.index = function (req, res) {
@@ -610,6 +614,8 @@ exports.cleanAll = function(req, res){
 
 
 exports.getSelfspyFolderPath = function(res, res){
+    //Au cas ou, on lance une MAJ de l'activité
+    activityDB.madeAllActivity(xdb);
     var c = xdb.get("SELFSPY_PATH");
     if(c == false)
         res.send({status:"ko", error:"inexistant"});

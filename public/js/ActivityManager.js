@@ -12,9 +12,34 @@ var ActivityManager = {
         var self = this;
         return new Promise(function(ok,ko){
             $.get("/getActivity", function (data) {
-                self.allActivityData = data.result;
-                self.changeAllDataToDate();
-                ok();
+                if(data.result == false)
+                {
+                    Materialize.toast("Please wait during activity calculating. This could take time.", 15000);
+                    setTimeout(function(){
+                        Materialize.toast("Tring to get activity ...", 1000);
+                        $.get("/getActivity", function (data) {
+                            if(data.result == false)
+                            {
+                                Materialize.toast("No activity data found. Please wait a little more and restart the app.");
+                                ko();
+                            }
+                            else{
+                                Materialize.toast("Activity is now updated. The app will restart soon.", 1000);
+                                setTimeout(function () {
+                                    document.location.href = "http://localhost:2323/";
+                                }, 1100);
+                            }
+                        });
+
+                    }, 15000);
+                }
+                else
+                {
+                    self.allActivityData = data.result;
+                    self.changeAllDataToDate();
+                    ok();
+
+                }
             })
                 .fail(function(){
                     alert("Error during getting activity data. Please restart.");
