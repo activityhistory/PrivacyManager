@@ -419,7 +419,6 @@ function unzoom()
 }*/
 
 function MAJSlider(data) {
-    console.log("MAJSLIDER APPELE");
     if ((!data[0]) || (!data[1])) {
         Materialize.toast("No screenshot found in the selected range",4000);
         return;

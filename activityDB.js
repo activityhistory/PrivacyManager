@@ -33,6 +33,7 @@ module.exports = {
     },
 
     makeAll: function(xdb){
+
         var allScreenshots = removeHiddenFiles(fs.readdirSync("public/images/screenshots/"));
 
         if(allScreenshots[allScreenshots.length - 1] == xdb.get("lastScreenshotWhenLastActivity"))
@@ -40,9 +41,19 @@ module.exports = {
             window.console.log("NOTICE: No need to recalculate the activity.");
             return;
         }
+        var lastscs = xdb.get("lastScreenshotWhenLastActivity");
+        var useFrom = false;
+        if(lastscs != false){
+            useFrom = true;
+            window.console.log("NOTICE: Calculate the partial activity, from " + getJSDateAndTime(lastscs) + " to " + getJSDateAndTime(allScreenshots[allScreenshots.length -1]));
+        }
         var res = [];
         //Activity by snapchot table
-        db.all("SELECT * FROM snapshot ; ", function (err, rows) {
+        var query = "SELECT * FROM snapshot ; ";
+        if(useFrom)
+            query = "SELECT * FROM snapshot WHERE created_at > '"+formatJSToSQLITE(getJSDateAndTime(lastscs))+"';";
+        window.console.log(query);
+        db.all(query, function (err, rows) {
             var encours = {start:"undefined", stop:"undefined", apps:"undefined"};
             var theVeryLastTime = NaN;
             for(var i = 0 ; i != rows.length; i++){
@@ -71,7 +82,9 @@ module.exports = {
             }
             //Activity by screenshots (...)
             var notInAnyActivityScreenshots = [];
-            for(var i = 0 ; i != allScreenshots.length; i++)
+            var i;
+            for(i=0; allScreenshots[i]!= lastscs; i++);
+            for(; i != allScreenshots.length; i++)
             {
                 if(!isOnOneRange(res, getJSDateAndTime(allScreenshots[i])))
                     notInAnyActivityScreenshots.push(allScreenshots[i]);
@@ -108,7 +121,6 @@ module.exports = {
             //Add apps to the firsts ranges if it's undefined
             var i;
             for(i=0; res[i].apps == "undefined" ; i++);
-            window.console.log(res[i].apps);
             for(var k = 0 ; k != i; k++)
                 res[k].apps = res[i].apps;
 
@@ -131,7 +143,10 @@ module.exports = {
                     trueResult.push(encours);
                 }
             }
-            xdb.set("backgroundActivity", trueResult);
+            if(useFrom)
+                xdb.set("backgroundActivity", xdb.get("backgroundActivity").concat(trueResult));
+            else
+                xdb.set("backgroundActivity", trueResult);
             xdb.set("lastScreenshotWhenLastActivity", allScreenshots[allScreenshots.length - 1]);
         });
 
@@ -193,3 +208,13 @@ function compare(_a,_b) {
     return 0;
 }
 
+function formatJSToSQLITE(jsDate) {
+    return 'Y-m-d h:k:s.p'
+        .replace('Y', jsDate.getFullYear())//i'v got 85 years to add the 0 ... YOU, CODER OF 2100, do you still eat pancakes ? The climate still allow me to eat ice cream,  you ? mouhahaha
+        .replace('m', jsDate.getMonth() + 1 < 10 ? '0' + (jsDate.getMonth() + 1) : jsDate.getMonth() + 1)
+        .replace('d', jsDate.getDate() < 10 ? '0' + jsDate.getDate() : jsDate.getDate())
+        .replace('h', jsDate.getHours() < 10 ? '0' + jsDate.getHours() : jsDate.getHours())
+        .replace('k', jsDate.getMinutes() < 10 ? '0' + jsDate.getMinutes() : jsDate.getMinutes())
+        .replace('s', jsDate.getSeconds() < 10 ? '0' + jsDate.getSeconds() : jsDate.getSeconds())
+        .replace('p', jsDate.getMilliseconds());
+}
