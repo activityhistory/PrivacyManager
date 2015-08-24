@@ -4,11 +4,15 @@
 
 
 var fs = require('fs');
+var sqlite3 = require('sqlite3').verbose();
 
 module.exports = {
 
 
-    madeAllActivity: function(xdb, db){
+    madeAllActivity: function(xdb){
+
+
+        var db = new sqlite3.Database(xdb.get("SELFSPY_PATH")+"/selfspy.sqlite");
 
         var allScreenshots = removeHiddenFiles(fs.readdirSync("public/images/screenshots/"));
 
@@ -60,7 +64,7 @@ module.exports = {
                 var start = getJSDateAndTime(unClassedScreenshot);
                 var stop = getJSDateAndTime(unClassedScreenshot);
                 start.setMinutes(start.getMinutes()-1);
-                stop.getMinutes(stop.getMinutes()+1);
+                stop.setMinutes(stop.getMinutes()+1);
 
                 res.push({start: start, stop:stop, apps:"undefined"});
             }
@@ -85,9 +89,30 @@ module.exports = {
             //Add apps to the firsts ranges if it's undefined
             var i;
             for(i=0; res[i].apps == "undefined" ; i++);
+            window.console.log(res[i].apps);
             for(var k = 0 ; k != i; k++)
                 res[k].apps = res[i].apps;
-            xdb.set("backgroundActivity", res);
+
+            var trueResult = [];
+            if(res.length > 0)
+                trueResult.push(res[0]);
+            for(var i = 1 ; i < res.length ; i++)
+            {
+                var encours = res[i];
+                var lastTrue = trueResult[trueResult.length - 1];
+
+                var lastTrueStop = new Date(lastTrue.stop);
+                var encoursStart = new Date(encours.start);
+
+                if(encoursStart - lastTrueStop <= 300000 && encours.apps == lastTrue.apps) //5min
+                {
+                    trueResult[trueResult.length -1].stop = encours.stop;
+                }
+                else{
+                    trueResult.push(encours);
+                }
+            }
+            xdb.set("backgroundActivity", trueResult);
             xdb.set("lastScreenshotWhenLastActivity", allScreenshots[allScreenshots.length - 1]);
         });
 

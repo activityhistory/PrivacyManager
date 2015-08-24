@@ -15,8 +15,6 @@ var http = require('http')
 ;
 
 
-var sqlite3 = require('sqlite3').verbose();
-
 
 var options = {
   host: 'localhost',
@@ -35,7 +33,7 @@ app.use(xdb.init("my_db", {
 
 
 
-activityDB.madeAllActivity(xdb, new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite'));
+activityDB.madeAllActivity(xdb);
 
 //check if server is already running
 http.get(options, function(res) {
