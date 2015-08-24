@@ -119,7 +119,7 @@ function printTimeSwimlane() {
 
 
 
-    $('.tooltipped').tooltip({delay: 50});
+    $('.tooltipped').tooltip({delay: 0});
 }
 
 

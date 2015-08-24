@@ -325,7 +325,7 @@ function goToOneScreenshot(scsName)
 
 
 function manualBrushedZoom(start_date, end_date) {
-
+console.log("manual brushed zoom");
     if (end_date - start_date < 300000)//5min
     {
         Materialize.toast("Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?", 5000);
@@ -387,6 +387,7 @@ function unzoom()
 }*/
 
 function MAJSlider(data) {
+    console.log("MAJSLIDER APPELE");
     if ((!data[0]) || (!data[1])) {
         Materialize.toast("No screenshot found in the selected range",4000);
         return;

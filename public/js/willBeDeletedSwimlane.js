@@ -149,6 +149,7 @@ function MAJWillBeDeletedSwimlane(){
 
     $('.tooltipped').tooltip({delay: 50});
 
+    putAllOtherSwimlaneToTheTop();
 
 }
 
@@ -173,5 +174,13 @@ function getFilterdApps()
     });
 
     return result;
+
+}
+
+
+function putAllOtherSwimlaneToTheTop(){
+    putGroupOnTheTop("appSwimlane");
+    putGroupOnTheTop("timeSwimlane");
+    putGroupOnTheTop("locationSwimlane");
 
 }

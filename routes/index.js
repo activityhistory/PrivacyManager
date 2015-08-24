@@ -292,11 +292,6 @@ exports.getAppsData = function (req, res) {
     var end = new Date(req.query.stop);
     end.setHours(end.getHours() + 3);
 
-    window.console.log("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
-        "WHERE processevent.process_id = process.id AND (processevent.event_type = 'Active' OR processevent.event_type = 'Inactive' ) " +
-        "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +
-        "AND '" + formatJSToSQLITE(end) + "' ORDER BY processevent.created_at ASC ; ");
-
     db.all("SELECT process.id, process.name, processevent.created_at, event_type from processevent join process " +
         "WHERE processevent.process_id = process.id AND (processevent.event_type = 'Active' OR processevent.event_type = 'Inactive' ) " +
         "AND processevent.created_at between '" + formatJSToSQLITE(start) + "' " +

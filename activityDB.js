@@ -11,7 +11,6 @@ module.exports = {
 
 
     madeAllActivity: function(xdb){
-        window.console.log("MAKEALLACTIVITY");
 
         if(!fs.existsSync("public/images/screenshots/"))
         {
