@@ -649,6 +649,8 @@ exports.setSelfspyFolderPath = function(req, res){
         }
         else {
             xdb.set("SELFSPY_PATH", path);
+            xdb.remove('backgroundActivity');
+            xdb.remove('lastScreenshotWhenLastActivity');
             initThisAppDatabase();
             res.send({status: "ok"});
         }
