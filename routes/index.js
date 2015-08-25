@@ -689,7 +689,7 @@ function removeDataBetween(start, end)
     var t = 0;
     for(var i = 0; i < allscs.length; i++){
         if(typeof allscs[i] == "string"){
-           if(allscs[i] == '.DS_Store' || getJSDateAndTime(allscs[i]) >= start){
+           if(allscs[i] != '.DS_Store' && getJSDateAndTime(allscs[i]) >= start){
                t = i;
                break;
            }
