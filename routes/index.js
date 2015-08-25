@@ -766,6 +766,7 @@ function removeDataBetween(start, end)
         if(typeof allscs[i] == "string"){
            if(allscs[i] != '.DS_Store' && getJSDateAndTime(allscs[i]) >= start){
                t = i;
+               i = allscs.length;
                break;
            }
         }
@@ -775,14 +776,16 @@ function removeDataBetween(start, end)
         }
 
     }
-
-    for(var j = t; j < allscs.length; j++){
-        if(typeof allscs[j] == "string" && allscs[j] != ".DS_Store"){
-            if(getJSDateAndTime(allscs[j]) <= end){
-                fs.unlinkSync(pathToScreenShots+allscs[j]);
-            }
-            if(getJSDateAndTime(allscs[j]) > end){
-                break;
+    if(t != allscs.length && t != 0){
+        for(var j = t; j < allscs.length; j++){
+            if(typeof allscs[j] == "string" && allscs[j] != ".DS_Store"){
+                if(getJSDateAndTime(allscs[j]) <= end){
+                    fs.unlinkSync(pathToScreenShots+allscs[j]);
+                }
+                else{
+                    j = allscs.length;
+                    break;
+                }
             }
         }
     }
