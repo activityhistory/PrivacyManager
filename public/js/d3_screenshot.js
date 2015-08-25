@@ -61,6 +61,7 @@ function printScreenshot(date) {
                     $('#nextContext').css({'height': '35%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '85px'});
 
+                    $('#bigScreenShot').css({  'max-height': 'none'});
 
                     //Change main screenshot col
                     $('#mainContext').removeClass('s6');
@@ -77,6 +78,7 @@ function printScreenshot(date) {
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
 
+                    $('#bigScreenShot').css({  'max-height': '220px'});
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
                 }
