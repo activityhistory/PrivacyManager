@@ -684,11 +684,30 @@ function removeDataBetween(start, end)
 
     //TODO remove the .DS_Store
     var allscs = fs.readdirSync(pathToScreenShots);
-    for(var i = 0; allscs[i] == ".DS_Store" || getJSDateAndTime(allscs[i]) < start; i++);
-    while(getJSDateAndTime(allscs[i]) <= end )
-    {
-        fs.unlinkSync(pathToScreenShots+allscs[i]);
-        i++;
+
+
+    var t = 0;
+    for(var i = 0; i < allscs.length; i++){
+        if(typeof allscs[i] == "string"){
+           if(allscs[i] == '.DS_STORE' || getJSDateAndTime(allscs[i]) >= start){
+               t = i;
+               break;
+           }
+        }
+        else{
+            window.console.log("i === " + i);
+            window.console.log(allscs[i]);
+        }
+
+    }
+
+    for(var j = t; j < allscs.length; j++){
+        if(typeof allscs[j] == "string" && allscs[j] != ".DS_STORE"){
+            if(getJSDateAndTime(allscs[t]) <= end){
+                fs.unlinkSync(pathToScreenShots+allscs[t]);
+                t++;
+            }
+        }
     }
 
 }
@@ -797,11 +816,9 @@ function getJSDate(screenshotName) {
 
 
 function getJSDateAndTime(screenshotName) {
-
     var splited = screenshotName.split("\.")[0].split("_")[0].split("-");
     var date = splited[0];
     var time = splited[1];
-
 
     var year = date.substring(0, 2);
     var month = date.substring(2, 4);
