@@ -22,7 +22,9 @@ $( document ).ready(function(){
 
    $("#remove").click(function(){
        //Get the ranges to delete
-       var r = (willBeDeletedData.concat(willBeDeletedByTime)).concat(willBeDeletedLocations);
+       var r = (willBeDeletedData.concat(willBeDeletedByTime).concat(willBeDeletedLocations));
+       console.log(r);
+
        $.get('/clean', {ranges:r}, function(data){
            document.location.href="http://localhost:2323/";
        })
@@ -46,7 +48,7 @@ $( document ).ready(function(){
             var r = [];
             var range = {start : interVal.start, stop: interVal.stop};
             r.push(range);
-            $.get('/clean', {ranges:r}, function(data){
+            $.get('/clean', {ranges:r, isRangeRemove: true}, function(data){
                 document.location.href="http://localhost:2323/";
             });
         }

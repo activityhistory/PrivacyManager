@@ -621,12 +621,30 @@ exports.cleanAll = function(req, res){
 
     var ranges = req.query.ranges;
 
+    if(typeof req.query.isRangeRemove == "undefined"){
+        for (var key in ranges) {
 
-    for(var i = 0; i < ranges.length ; i++){
-        var oneRange = ranges[i];
-        if(typeof(oneRange) != "undefined")
-            removeDataBetween(new Date(oneRange.start), new Date(oneRange.stop));
+            if (ranges.hasOwnProperty(key)) {
+                var obj = ranges[key];
+                for (var prop in obj) {
+                    // important check that this is objects own property
+                    // not from prototype prop inherited
+                    if(obj.hasOwnProperty(prop)){
+                        removeDataBetween(new Date(obj.start), new Date(obj.stop));
+                    }
+                }
+            }
+        }
     }
+    else{
+        for(var i = 0; i < ranges.length ; i++){
+            var oneRange = ranges[i];
+            window.console.log(oneRange);
+            if(typeof(oneRange) != "undefined")
+                removeDataBetween(new Date(oneRange.start), new Date(oneRange.stop));
+        }
+    }
+
 
     res.send({ok : "ok"});
 };
@@ -667,8 +685,6 @@ function removeDataBetween(start, end)
 
     start.setSeconds(start.getSeconds() - 10);
     end.setSeconds(end.getSeconds() + 10);
-
-    window.console.log("NOTICE : DELETING data between " + start + " and " + end);
 
     db.run("DELETE  FROM bookmark WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
     db.run("DELETE  FROM click WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
