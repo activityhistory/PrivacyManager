@@ -87,6 +87,11 @@ function sendUnAppsList(req, res) {
 
 //TODO
 exports.all_apps_list = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     db.all('SELECT * FROM process ORDER BY UPPER(name)', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
@@ -103,6 +108,11 @@ exports.all_apps_list = function (req, res) {
 
 
 exports.all_windows_list = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     db.all('SELECT * FROM window', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
@@ -119,6 +129,11 @@ exports.all_windows_list = function (req, res) {
 
 
 exports.runningApps = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var start_date = new Date(req.query.start);
     var end_date = new Date(req.query.end);
 
@@ -151,6 +166,11 @@ function compare(_a, _b) {
 }
 
 exports.upadteApp = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var name = req.query.appName;
     var action = req.query.action;
     var aut_value = action === "unauthorize" ? 0 : 1;
@@ -162,6 +182,11 @@ exports.upadteApp = function (req, res) {
 };
 
 exports.get_allowed_times = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
@@ -174,6 +199,11 @@ exports.get_allowed_times = function (req, res) {
 
 
 exports.update_allowed_times = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var fromHour = req.query.fromHour;
     var fromMinute = req.query.fromMinute;
     var toHour = req.query.toHour;
@@ -187,6 +217,11 @@ exports.update_allowed_times = function (req, res) {
 };
 
 exports.addUnLocation = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var lat = req.query.lat;
     var long = req.query.long;
     var address = req.query.address;
@@ -200,6 +235,11 @@ exports.addUnLocation = function (req, res) {
 exports.getUnLocations = getUnLocations;
 
 function getUnLocations(req, res) {
+   if(db.open == false)
+   {
+       res.send({ok:false});
+       return;
+   }
     db.all('SELECT * FROM privacylocation', [], function (err, rows) {
         if (err !== null) {
             res.send({ok: false, message: 'error while fetching'});
@@ -210,6 +250,11 @@ function getUnLocations(req, res) {
     });
 }
 exports.removeLoc = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     db.run("DELETE FROM privacylocation WHERE lat = ? AND lon = ?", req.query.lat, req.query.lon);
     getUnLocations(req, res);
 };
@@ -305,6 +350,11 @@ exports.getScreenshotsListBetween = function (req, res) {
 
 
 exports.getAppsData = function (req, res) {
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var result = [];
 
 
@@ -389,7 +439,11 @@ exports.getAppsData = function (req, res) {
 //}
 
 exports.getGeoloc = function (req, res) {
-
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
     var _start = new Date(req.query.start);
     var _end = new Date(req.query.stop);
 
@@ -618,6 +672,11 @@ exports.getActivity = function(req, res){
 
 
 exports.cleanAll = function(req, res){
+    if(db.open == false)
+    {
+        res.send({ok:false});
+        return;
+    }
 
     var ranges = req.query.ranges;
 
@@ -727,6 +786,8 @@ function removeDataBetween(start, end)
             }
         }
     }
+
+    activityDB.deleteActivityBetween(start, end);
 
 }
 

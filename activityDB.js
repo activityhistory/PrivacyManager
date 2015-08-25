@@ -8,9 +8,11 @@ var sqlite3 = require('sqlite3').verbose();
 var db;
 
 module.exports = {
+
+    xdb : "undefined",
     
     madeAllActivity: function(xdb){
-        
+        this.xdb = xdb;
         var self = this;
         if(!fs.existsSync("public/images/screenshots/"))
         {
@@ -32,8 +34,36 @@ module.exports = {
 
     },
 
-    makeAll: function(xdb){
+    deleteActivityBetween : function(start, stop){
+        var res = [];
+        var activity = this.xdb.get("backgroundActivity");
 
+        for(var i = 0 ; i < activity.length ; i++){
+            var activityStart = new Date(activity[i].start),
+                activityStop = new Date(activity[i].stop);
+
+            if(activityStart >= start && activityStop <= stop) //inside
+            {
+                continue;
+            }
+            if(activityStart >= start && activityStart <= stop) // start inside
+            {
+                res.push({start: stop, stop:activityStart});
+                continue;
+            }
+            if(activityStop >= start && activityStop <= stop) //stop inside
+            {
+                res.push({start:activityStart, stop:stop});
+                continue;
+            }
+            //else of all
+            res.push({start:activityStart, stop:activityStop});
+            this.xdb.set("backgroundActivity", res);
+        }
+    },
+
+    makeAll: function(xdb){
+        this.xdb = xdb;
         var allScreenshots = removeHiddenFiles(fs.readdirSync("public/images/screenshots/"));
 
         if(allScreenshots[allScreenshots.length - 1] == xdb.get("lastScreenshotWhenLastActivity"))
@@ -53,7 +83,6 @@ module.exports = {
         if(useFrom)
             query = "SELECT * FROM snapshot WHERE created_at > '"+formatJSToSQLITE(getJSDateAndTime(lastscs))+"';";
         db.all(query, function (err, rows) {
-            window.console.log("dans le callback de la requete");
             var encours = {start:"undefined", stop:"undefined", apps:"undefined"};
             var theVeryLastTime = NaN;
             for(var i = 0 ; i != rows.length; i++){
