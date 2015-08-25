@@ -621,7 +621,8 @@ exports.cleanAll = function(req, res){
 
     var ranges = req.query.ranges;
 
-    for(var i=0; i != (ranges.length -1); i++){
+
+    for(var i = 0; i < ranges.length ; i++){
         var oneRange = ranges[i];
         if(typeof(oneRange) != "undefined")
             removeDataBetween(new Date(oneRange.start), new Date(oneRange.stop));
@@ -663,9 +664,11 @@ exports.setSelfspyFolderPath = function(req, res){
 
 function removeDataBetween(start, end)
 {
+
     start.setSeconds(start.getSeconds() - 10);
     end.setSeconds(end.getSeconds() + 10);
 
+    window.console.log("NOTICE : DELETING data between " + start + " and " + end);
 
     db.run("DELETE  FROM bookmark WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
     db.run("DELETE  FROM click WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
