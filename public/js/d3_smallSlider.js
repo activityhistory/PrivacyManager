@@ -11,7 +11,7 @@ var zooming;
 function initializeSmallSlider() {
 
     var margin = {top: 5, right: 10, bottom: 10, left: 20},
-        width = 900 - margin.left - margin.right,
+        width = 800 - margin.left - margin.right,
         height = 50 - margin.bottom - margin.top,
         moving,
         currentValue = 0,
@@ -125,7 +125,8 @@ function initializeSmallSlider() {
 
     }
 
-    var slider = svg.append("g").call(zooming)
+    var slider = svg.append("g")
+        .call(zooming)
         .attr("class", "slider")
         .call(brushSmallSlider);
 
@@ -185,49 +186,39 @@ function initializeSmallSlider() {
         printScreenshot(to);
     };
 
+    $('#sliders .arrow.right').click(function(){
+        var start_zoom_date = new Date(interVal.stop);
+        var end_zoom_date = new Date(interVal.stop);
+
+        var diff = interVal.stop - interVal.start;
+
+
+        end_zoom_date.setMilliseconds(end_zoom_date.getMilliseconds() + diff);
+
+
+        manualBrushedZoom(start_zoom_date, end_zoom_date);
+    });
+
+    $('#sliders .arrow.left').click(function(){
+        var start_zoom_date = new Date(interVal.start);
+        var end_zoom_date = new Date(interVal.start);
+
+        var diff =  interVal.stop - interVal.start;
+
+        start_zoom_date.setMilliseconds(start_zoom_date.getMilliseconds() - diff);
+
+        manualBrushedZoom(start_zoom_date, end_zoom_date);
+    });
 
     $( document ).keydown(function(e) {
         e = e || window.event;
-        // RIP Zoom +/-
-        //if(e.keyCode == 107){//+
-        //    zoom();
-        //}
-        //if(e.keyCode == 109){ //-
-        //    unzoom();
-        //}
         if(e.keyCode == 39){// ->
-            if(event.getModifierState('Control')){
-                var start_zoom_date = new Date(interVal.stop);
-                var end_zoom_date = new Date(interVal.stop);
-
-                var diff = interVal.stop - interVal.start;
-
-
-                end_zoom_date.setMilliseconds(end_zoom_date.getMilliseconds() + diff);
-
-
-                manualBrushedZoom(start_zoom_date, end_zoom_date);
-            }
-            else{
-                goToOneScreenshotNext("right");
-            }
+            goToOneScreenshotNext("right");
             e.preventDefault();
         }
         if(e.keyCode == 37){ // <-
-            if(event.getModifierState('Control')){
-                var start_zoom_date = new Date(interVal.start);
-                var end_zoom_date = new Date(interVal.start);
-
-                var diff =  interVal.stop - interVal.start;
-
-                start_zoom_date.setMilliseconds(start_zoom_date.getMilliseconds() - diff);
-
-                manualBrushedZoom(start_zoom_date, end_zoom_date);
-            }
-            else{
-                goToOneScreenshotNext("left");
-                e.preventDefault();
-            }
+            goToOneScreenshotNext("left");
+            e.preventDefault();
         }
 
     });
