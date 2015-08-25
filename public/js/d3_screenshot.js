@@ -50,16 +50,16 @@ function printScreenshot(date) {
                 //Change visualisation disposition if 2 screens
                 if (ratioImg >= 3) {
                     //Move previous context side:
-                    $('#previousContext').css({'float': 'right', 'height': '45%'});
+                    $('#previousContext').css({'float': 'right', 'height': '35%'});
                     $('#previousContext img.smallSCS').css({
                         'margin-top': '0',
                         'height': 'auto',
-                        'max-height': '150px'
+                        'max-height': '85px'
                     });
 
                     //Change next context height
-                    $('#nextContext').css({'height': '45%'});
-                    $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '150px'});
+                    $('#nextContext').css({'height': '35%'});
+                    $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '85px'});
 
 
                     //Change main screenshot col
@@ -69,18 +69,12 @@ function printScreenshot(date) {
                 }
                 //Screenshot with only 1 screen
                 else {
-                    /*var max_height = 264;
-                     if (img_height > max_height) {
-                     img_width *= max_height / img_height;
-                     }*/
-                    $('#previousContext').css({'float': 'left', 'height': '100%'});
+
+                    $('#previousContext').css({'float': 'left', 'height': '90%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
-                    $('#nextContext').css({'height': '100%'});
+                    $('#nextContext').css({'height': '90%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
-
-                    /*$('#bigScreenShot').height(max_height);
-                     $('#bigScreenShot').width(img_width);*/
 
 
                     $('#mainContext').removeClass('s9');

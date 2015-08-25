@@ -5,7 +5,7 @@
 
 
 var margin = {top: 10, right: 10, bottom: 20, left: 20},
-    width = 900 - margin.right - margin.left,
+    width = 800 - margin.right - margin.left,
     height = 75 - margin.top - margin.bottom,
     miniHeight = 50;
 

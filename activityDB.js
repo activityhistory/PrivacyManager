@@ -8,13 +8,9 @@ var sqlite3 = require('sqlite3').verbose();
 var db;
 
 module.exports = {
-
-
-
-
+    
     madeAllActivity: function(xdb){
-
-
+        
         var self = this;
         if(!fs.existsSync("public/images/screenshots/"))
         {
@@ -52,7 +48,7 @@ module.exports = {
             window.console.log("NOTICE: Calculate the partial activity, from " + getJSDateAndTime(lastscs) + " to " + getJSDateAndTime(allScreenshots[allScreenshots.length -1]));
         }
         var res = [];
-        //Activity by snapchot table
+        //Activity by snapshot table
         var query = "SELECT * FROM snapshot ; ";
         if(useFrom)
             query = "SELECT * FROM snapshot WHERE created_at > '"+formatJSToSQLITE(getJSDateAndTime(lastscs))+"';";

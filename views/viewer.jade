@@ -77,16 +77,18 @@
     a#removeRange.waves-effect.waves-light.btn.red.darken-4 Remove range data
 
 #sliders.row
-    #sliderSVG.row
-        svg.mainSVG
-    #bigSlider.row
-#edrthiujoedrftyguhi(style="position:absolute;top:429px;left:302px;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;")
-    p="Apps"
-#edrthiujoedrftyguhi(style="position:absolute;top:368px;left:302px;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;")
-    p="Location"
-#edrthiujoedrftyguhi(style="position:absolute;top:388px;left:302px;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;")
-    p="Time"
+    div.arrow.col.s1.left <
+    div.col.s11
+        #sliderSVG.row
+            svg.mainSVG
+        #bigSlider.row
+    div.arrow.col.s1.right >
 
+
+#slidersLegend
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;") Location
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;top: 20px;") Time
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent; top:59px") Apps
 
 script.
     $('#getFile').change(function(){

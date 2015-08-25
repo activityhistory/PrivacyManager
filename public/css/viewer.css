@@ -30,15 +30,16 @@ img.smallSCS {
 /* MAIN SCREENSHOT */
 
 #screenshotsView .card {
-    height: 100%;
+    height: 91%;
     margin: 0;
     padding: 0;
     overflow: visible;
 }
 
 #screenshotsView .card .card-content {
-    height: 20%;
+    height: 24%;
     position: relative;
+    margin-top: 9px;
 }
 
 div#date {
@@ -64,7 +65,7 @@ a#fullScreen {
 }
 
 #screenshotsView .card-image {
-    height: 80%;
+    height: 73%;
     width: 100%;
     z-index: 1000;
     overflow: visible;
@@ -96,6 +97,7 @@ img#bigScreenShot.materialboxed.intialized.active {
     max-height: none;
 }
 
+/* TOP NAV */
 .boutons-line.row {
     margin: 0;
     padding: 2px;
@@ -130,6 +132,31 @@ div#bigSlider {
     fill-opacity: .125;
     shape-rendering: crispEdges;
 }
+
+
+#sliders .arrow.col.s1 {
+    line-height: 231px;
+    font-size: 45px;
+    color: #424242;
+    padding: 6px;
+    width: 32px;
+}
+
+#sliders .arrow.col.s1:hover {
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+#sliders  .col.s11 {
+    padding: 0;
+}
+
+div#slidersLegend {
+    position: absolute;
+    bottom: 258px;
+    left: 44px;
+}
+
 
 /* Modal */
 div#helpModal {
@@ -172,6 +199,6 @@ a#removeRange {
     font-size: 10px;
     padding: 1px;
     line-height: 20px;
-    bottom: -29px;
+    bottom: 0;
     right: 0;
 }
