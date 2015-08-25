@@ -88,7 +88,12 @@ module.exports = {
             var notInAnyActivityScreenshots = [];
             var i;
             if(useFrom)
-                for(i=0; allScreenshots[i]!= lastscs; i++);
+                for(i=0; allScreenshots[i]!= lastscs; i++){
+                    if(typeof(allScreenshots[i]) == "undefined"){
+                        window.console.log("ERROR: Trying to find a screenshot from another folder. Give up.");
+                        return;
+                    }
+                }
             else
                 i = 0;
             for(; i != allScreenshots.length; i++)

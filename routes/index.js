@@ -52,7 +52,6 @@ function initThisAppDatabase(){
     });
 
     run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
-    activityDB.madeAllActivity(xdb);
 };
 
 exports.checkInitSqlDb = function(){
