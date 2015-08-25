@@ -11,10 +11,15 @@ var http = require('http')
   , routes = require(path.join(process.cwd(), 'routes', 'index.js'))
   , app = express()
     , xdb = require('express-db'),
-    activityDB = require(path.join(process.cwd(), 'activityDB.js'))
-;
+    fs = require('fs');
 
+var bdd_content = fs.readFileSync('db.json');
+if(bdd_content.length == 0)
+{
+  fs.writeFileSync('db.json', '{ "info": { "version": "0.0.2", "name": "my_db"},  "data": {}}');
+}
 
+var    activityDB = require(path.join(process.cwd(), 'activityDB.js'));
 
 var options = {
   host: 'localhost',

@@ -10,8 +10,12 @@ var db;
 module.exports = {
 
 
+
+
     madeAllActivity: function(xdb){
 
+
+        var self = this;
         if(!fs.existsSync("public/images/screenshots/"))
         {
             window.console.log("ERROR: Symbolic link to screenshot not exist. Activity calculating is not possible.");
@@ -52,8 +56,8 @@ module.exports = {
         var query = "SELECT * FROM snapshot ; ";
         if(useFrom)
             query = "SELECT * FROM snapshot WHERE created_at > '"+formatJSToSQLITE(getJSDateAndTime(lastscs))+"';";
-        window.console.log(query);
         db.all(query, function (err, rows) {
+            window.console.log("dans le callback de la requete");
             var encours = {start:"undefined", stop:"undefined", apps:"undefined"};
             var theVeryLastTime = NaN;
             for(var i = 0 ; i != rows.length; i++){
@@ -83,7 +87,10 @@ module.exports = {
             //Activity by screenshots (...)
             var notInAnyActivityScreenshots = [];
             var i;
-            for(i=0; allScreenshots[i]!= lastscs; i++);
+            if(useFrom)
+                for(i=0; allScreenshots[i]!= lastscs; i++);
+            else
+                i = 0;
             for(; i != allScreenshots.length; i++)
             {
                 if(!isOnOneRange(res, getJSDateAndTime(allScreenshots[i])))

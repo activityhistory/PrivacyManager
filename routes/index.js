@@ -44,9 +44,15 @@ exports.initDBPath = initThisAppDatabase;
 function initThisAppDatabase(){
 
     var p = xdb.get("SELFSPY_PATH");
-    db = new sqlite3.Database(p + "/selfspy.sqlite");
+    db = new sqlite3.Database(p + "/selfspy.sqlite", function(error){
+        if(error != null)
+        {
+            window.console.log("ERROR: Can not open selfspy database. Path : " + p + "/selfspy.sqlite");
+        }
+    });
 
     run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
+    activityDB.madeAllActivity(xdb);
 };
 
 exports.checkInitSqlDb = function(){
@@ -211,11 +217,19 @@ exports.removeLoc = function (req, res) {
 
 
 exports.getAllScreenshotsNames = function (req, res) {
+    if(!fs.existsSync(pathToScreenShots)){
+        res.send({ko:[]});
+        return;
+    }
     res.send(fs.readdirSync(pathToScreenShots));
 };
 
 
 exports.getAllScreenshotsDateAndTime = function (req, res) {
+    if(!fs.existsSync(pathToScreenShots)){
+        res.send({allRecords:[]});
+        return;
+    }
     var all = fs.readdirSync(pathToScreenShots);
     all.sort();
     var result = [];
@@ -230,6 +244,10 @@ exports.getAllScreenshotsDateAndTime = function (req, res) {
 
 
 exports.getAllScreenshotsRange = function (req, res) {
+    if(!fs.existsSync(pathToScreenShots)){
+        res.send({start: "undefined", end: "undefined", numberOfDays: 0});
+        return;
+    }
     var all = fs.readdirSync(pathToScreenShots);
     all.sort();
     if (all[0] === ".DS_Store")//TODO : reemove all files started with .
@@ -247,6 +265,10 @@ exports.getAllScreenshotsRange = function (req, res) {
 };
 
 exports.getAllRecordedDays = function (req, res) {
+    if(!fs.existsSync(pathToScreenShots)){
+        res.send({allRecordedDays:[]});
+        return;
+    }
     var all = fs.readdirSync(pathToScreenShots);
     all.sort();
     var allRecordedDays = [];
@@ -591,6 +613,7 @@ function getActivityRangeBetween(start, stop){
 }
 
 exports.getActivity = function(req, res){
+    activityDB.madeAllActivity(xdb);
     res.send({result:xdb.get("backgroundActivity")});
 };
 
