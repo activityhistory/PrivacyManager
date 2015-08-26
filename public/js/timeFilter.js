@@ -5,12 +5,12 @@
 $(function () {
     $(".filter.time").change(function (e) {
         if ($(e.target).is(':checked')) {
-            var c = addLegend("Unauthorized times");
+            var c = Legend.addLegend("Unauthorized times");
             timeSwimlane.setTimeFilterColor(c);
             timeSwimlane.notifyTimeFilterChanged();
         }
         else {
-            removeLegend("Unauthorized times");
+            Legend.removeLegend("Unauthorized times");
             timeSwimlane.removeTimeFilter();
         }
     });

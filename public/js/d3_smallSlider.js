@@ -418,7 +418,7 @@ function ajaxMAJRunningAppsList(dateStart, dateStop) {
 
 function printScreenShotSwimlane() {
 
-    var color = legend_getAColor("Activity intensity");
+    var color = Legend.getAColor("Activity intensity");
 
     var data = interVal.data;
 

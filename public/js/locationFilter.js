@@ -115,7 +115,7 @@ var LocationFilter = {
 
 
 
-            var c = legend_getAColor(addr.split(',')[0]);
+            var c = Legend.getAColor(addr.split(',')[0]);
 
 
             for (i = 0; i != self.locationData.length; i++) {
@@ -146,7 +146,7 @@ var LocationFilter = {
                     alert("Sorry, no location data found. Are you sure you used the good version of SelfSpy ?");
                     return;
                 }
-                var c = legend_getAColor(addr.split(',')[0]);
+                var c = Legend.getAColor(addr.split(',')[0]);
                 //add color and 'filtred' attribute
                 for (i = 0; i != self.locationData.length; i++) {
                     var one = self.locationData[i];
@@ -161,7 +161,7 @@ var LocationFilter = {
                 if (!self.locationData) {
                     return;
                 }
-                removeLegend(addr.split(',')[0]);
+                Legend.removeLegend(addr.split(',')[0]);
                 //remove color and 'filtred' attribute
                 for (i = 0; i != self.locationData.length; i++) {
                     var one = self.locationData[i];
