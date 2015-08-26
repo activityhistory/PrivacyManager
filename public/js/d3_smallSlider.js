@@ -146,12 +146,6 @@ function initializeSmallSlider() {
         .attr("height", 130)
         .style("fill", "white");
 
-    //slider
-    //    .call(brushSmallSlider.event)
-    //    .transition() // gratuitous intro!
-    //    .duration(750)
-    //    .call(brushSmallSlider.extent([targetValue, targetValue]))
-    //    .call(brushSmallSlider.event);
 
     function brushedSmallSlider() {
         if (d3.event.sourceEvent) { // not a programmatic event
@@ -367,46 +361,6 @@ function manualBrushedZoom(start_date, end_date) {
         .attr("height", 34);
 
 }
-/*function zoom()
-{
-
-    var currentPostion = new Date(brushSmallSlider.extent()[0]);
-
-    var diffStart = currentPostion - interVal.start;
-    var diffStop = interVal.stop - currentPostion;
-
-    var newStart = new Date(interVal.start);
-    var newStop = new Date(interVal.stop);
-
-    newStart.setMilliseconds(newStart.getMilliseconds() + (diffStart/2)
-    );
-    newStop.setMilliseconds(newStop.getMilliseconds() - (diffStop/2));
-
-    ajaxMAJSlider(newStart, newStop);
-    bigsSlider_manuelBrushMove(newStart, newStop);
-
-
-}
-
-
-function unzoom()
-{
-    var currentPostion = new Date(brushSmallSlider.extent()[0]);
-
-    var diffStart = currentPostion - interVal.start;
-    var diffStop = interVal.stop - currentPostion;
-
-    var newStart = new Date(interVal.start);
-    var newStop = new Date(interVal.stop);
-
-    newStart.setMilliseconds(newStart.getMilliseconds() - (diffStart/2)
-    );
-    newStop.setMilliseconds(newStop.getMilliseconds() + (diffStop/2));
-
-    ajaxMAJSlider(newStart, newStop);
-    bigsSlider_manuelBrushMove(newStart, newStop);
-
-}*/
 
 function MAJSlider(data) {
     if ((!data[0]) || (!data[1])) {
