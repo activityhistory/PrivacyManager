@@ -153,6 +153,10 @@ div#slidersLegend {
 }
 
 
+rect.background {
+    cursor: pointer !important;
+}
+
 /* Modal */
 div#helpModal {
     z-index: 10000;
