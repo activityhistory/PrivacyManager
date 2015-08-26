@@ -10,7 +10,7 @@ function getAndPrintAppSwimlane()
     $.get("/getAppsData", {start:interVal.start, stop : interVal.stop}, function(data){
         currentAppsData = data.result;
         printAppsSwimlanes(); //print the resqueted dilters
-        privacyFilter_checkDeletedApps(); // print the filters that will be deteted by the privacy filter
+        willBeDeletedSwimlane.checkDeletedApps(); // print the filters that will be deteted by the privacy filter
     });
 }
 

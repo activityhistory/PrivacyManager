@@ -103,7 +103,7 @@ function ajaxGetRange()
 
         $("#includingWE").prop('checked', WE == "1");
 
-        privacyFilter_setAuthorizedTimes(startTime, endTime, WE == "1");
+        willBeDeletedSwimlane.setAuthorizedTimes(startTime, endTime, WE == "1");
         notifyTimeFilterChanged();
 
     })
@@ -126,9 +126,9 @@ function ajaxSetRange()
     $.get("setAllowedTimes", {fromHour: fromHour, fromMinute: fromMinute, toHour : toHour, toMinute : toMinute, WE : WE});
 
 
-    privacyFilter_setAuthorizedTimes(fromHour + ":" + fromMinute, toHour + ":" + toMinute, WE == "1");
+    willBeDeletedSwimlane.setAuthorizedTimes(fromHour + ":" + fromMinute, toHour + ":" + toMinute, WE == "1");
     notifyTimeFilterChanged();
-    privacyFilter_checkUnauthorizedTimes();
+    willBeDeletedSwimlane.checkUnauthorizedTimes();
 
 }
 
@@ -153,4 +153,4 @@ ajaxGetRange();
 $('#includingWE').change(
     function(){
         ajaxSetRange();
-    });
+});

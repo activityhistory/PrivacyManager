@@ -35,9 +35,9 @@ $( document).ready(function(){
 
 
 function getUnauthorizedTimeRanges(){
-    var authFrom = privacyParams.auTimes.from,
-        authTo = privacyParams.auTimes.to,
-        authWE = privacyParams.auTimes.weekEnd;
+    var authFrom = willBeDeletedSwimlane.privacyParams.auTimes.from,
+        authTo = willBeDeletedSwimlane.privacyParams.auTimes.to,
+        authWE = willBeDeletedSwimlane.privacyParams.auTimes.weekEnd;
 
     var unSCS = [];
     var periodStart = NaN;

@@ -54,13 +54,13 @@ function populateUnLocationsList(data) {
     LocationFilter.populateLocationFilter();
     document.dispatchEvent(new Event('knownLocationOk'));
 
-    privacyFilter_RAZAuthorizedLocations(); //Delete all old locations ion the object used by the visualization
+    willBeDeletedSwimlane.RAZAuthorizedLocations(); //Delete all old locations ion the object used by the visualization
 
     var locs = data.locations;
     $("#locList ul").html('');
     $.each(locs, function (i, item) {
         $("#locList ul").append("<li><span class='col s10'>" + item.address.split(",")[0] + "</span><a href='#' class='col s2' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteLocButton' data-lat='" + item.lat + "'  data-long='" + item.lon + "'/></a></li>");
-        privacyFilter_addAutorizedLocation(item.address, item.lat, item.lon); //add news locations to the visualiztion privacy object
+        willBeDeletedSwimlane.addAutorizedLocation(item.address, item.lat, item.lon); //add news locations to the visualiztion privacy object
     });
 
     bindDleteLocButtons();

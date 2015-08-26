@@ -65,7 +65,7 @@ var LocationFilter = {
                 self.locationData = res;
                 self.decorateLocationDataWithLocationNames();
                 self.filterLocations();
-                privacyFilter_checkLocations();
+                willBeDeletedSwimlane.checkLocations();
                 ok();
             });
 

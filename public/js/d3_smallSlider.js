@@ -347,7 +347,6 @@ function goToOneScreenshot(scsName)
 
 
 function manualBrushedZoom(start_date, end_date) {
-console.log("manual brushed zoom");
     if (end_date - start_date < 300000)//5min
     {
         if($('#errorZoomZoom').length == 0)
@@ -430,7 +429,7 @@ function MAJSlider(data) {
     getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
     notifyTimeFilterChanged();
-    privacyFilter_checkUnauthorizedTimes();
+    willBeDeletedSwimlane.checkUnauthorizedTimes();
 
     var data_length = interVal.data.length;
     var middle = Math.round(data_length / 2);
