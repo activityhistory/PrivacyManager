@@ -2,7 +2,6 @@
  * Created by Maxime on 24/07/2015.
  */
 
-
 var legendData = [];
 var colorscale = d3.scale.category10();
 var currentColorIndex = 0;
