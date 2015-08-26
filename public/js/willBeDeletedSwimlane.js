@@ -206,10 +206,10 @@ var willBeDeletedSwimlane = {
 
     getFilterdApps: function () {
         var result = [];
-        for (var i = 0; i != currentAppsData.length; i++) {
+        for (var i = 0; i != AppsSwimlane.currentAppsData.length; i++) {
             for (var k = 0; k != privacyParams.unApps.length; k++) {
-                if (currentAppsData[i].name == privacyParams.unApps[k]) {
-                    result.push(currentAppsData[i]);
+                if (AppsSwimlane.currentAppsData[i].name == privacyParams.unApps[k]) {
+                    result.push(AppsSwimlane.currentAppsData[i]);
 
                 }
             }

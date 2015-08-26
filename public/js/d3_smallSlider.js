@@ -426,7 +426,7 @@ function MAJSlider(data) {
 
     printScreenShotSwimlane();
     majZoomBrush();
-    getAndPrintAppSwimlane();
+    AppsSwimlane.getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
     timeSwimlane.notifyTimeFilterChanged();
     willBeDeletedSwimlane.checkUnauthorizedTimes();
