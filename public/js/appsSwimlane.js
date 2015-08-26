@@ -51,7 +51,7 @@ function printAppsSwimlanes(){
     var svg = d3.select("#sliderSVG svg");
 
     var nump = 0;
-    FiltredApps.forEach(function(one){
+    AppsFilter.FiltredApps.forEach(function(one){
         var color = one.color;
         var name = one.name;
 
