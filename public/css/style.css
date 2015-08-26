@@ -1,19 +1,8 @@
 /* GLOBAL */
-
-.content {
-    height: 100%;
-    margin-bottom: 0px;
-
-}
-
 div#rightPanel {
     height: 100%;
     background: #e0e0e0;
     position: relative;
-}
-
-h4.span {
-    font-size: 15px;
 }
 
 div#leftPanel {
@@ -65,10 +54,6 @@ div#content {
     line-height: 35px;
 }
 
-#accordion li.active {
-    margin: 9px;
-}
-
 /* RIGHT PANEL */
 div#screenshotsView {
     height: 55%;
@@ -79,10 +64,6 @@ div#screenshotsView {
 div#sliders {
     height: 55%;
     margin-bottom: 0;
-}
-
-.superGrilledToast{
-    z-index: 999999999;
 }
 
 /* HELP */
