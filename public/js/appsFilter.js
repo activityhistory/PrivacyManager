@@ -2,15 +2,27 @@
  * Created by Maxime on 27/07/2015.
  */
 
-
+/**
+ * Manage the application filter that allow visualization of focused applications.
+ * @type {{MAX_FILTERED_APP_SIZE: number, FiltredApps: Array, init: Function, printAppsByFilterCounter: Function}}
+ */
 var AppsFilter = {
 
 
+    /**
+     * Maximum Number of filtered apps in the same time, depends of the layout
+     */
     MAX_FILTERED_APP_SIZE: 4,
 
+    /**
+     * List of apps name currentely filtered
+     */
     FiltredApps: [],
 
 
+    /**
+     * Initialize aplication list and triggers to view filtered applications
+     */
     init: function () {
         var self = this;
         $.get("/all_apps_list", function (data) {
@@ -70,7 +82,7 @@ var AppsFilter = {
 
                     var c = addLegend(appName);
                     self.FiltredApps.push({name: appName, color: c});
-                    notifyAppsFilterChanged();
+                    AppsSwimlane.notifyAppsFilterChanged();
                 }
                 else {
                     removeLegend(appName);
@@ -85,6 +97,10 @@ var AppsFilter = {
     },
 
 
+    /**
+     * Print application list in the application filter div
+     * @param apps : array of apps objects (name dans number of usage)
+     */
     printAppsByFilterCounter: function (apps) {
         apps.sort(function (a, b) {
             return b.count - a.count;
@@ -98,6 +114,5 @@ var AppsFilter = {
 
 };
 
-
-
+// Init the application filter
 AppsFilter.init();
