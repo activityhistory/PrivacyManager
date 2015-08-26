@@ -428,7 +428,7 @@ function MAJSlider(data) {
     majZoomBrush();
     getAndPrintAppSwimlane();
     LocationFilter.initAndPrint();
-    notifyTimeFilterChanged();
+    timeSwimlane.notifyTimeFilterChanged();
     willBeDeletedSwimlane.checkUnauthorizedTimes();
 
     var data_length = interVal.data.length;

@@ -24,7 +24,7 @@ module.exports = {
         db = new sqlite3.Database(xdb.get("SELFSPY_PATH")+"/selfspy.sqlite", function(error){
             if(error != null){
                 window.console.log("ERROR: Can not access database. Activity calculating is not possible.");
-                return;
+
             }
             else
             {

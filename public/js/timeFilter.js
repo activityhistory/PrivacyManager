@@ -6,12 +6,12 @@ $(function () {
     $(".filter.time").change(function (e) {
         if ($(e.target).is(':checked')) {
             var c = addLegend("Unauthorized times");
-            setTimeFilterColor(c);
-            notifyTimeFilterChanged();
+            timeSwimlane.setTimeFilterColor(c);
+            timeSwimlane.notifyTimeFilterChanged();
         }
         else {
             removeLegend("Unauthorized times");
-            removeTimeFilter();
+            timeSwimlane.removeTimeFilter();
         }
     });
 });

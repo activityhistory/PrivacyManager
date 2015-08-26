@@ -90,7 +90,7 @@ function printScreenshot(date) {
 
         //Error case when the screenshot's name doesn't contain the app ID and the window ID
         if(tmp_app[0] === betterImg || tmp_win[0] === betterImg){
-            return;
+
         }
         else{
             mainAppID = parseInt(tmp_app[1].split('_')[0]);

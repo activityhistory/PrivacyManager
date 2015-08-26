@@ -6,7 +6,7 @@ var willBeDeletedSwimlane = {
 
 
     /**
-     * Object that keep privacay params up to date
+     * Object that keep privacy params up to date
      */
     privacyParams: privacyParams = {
         unApps: [],
@@ -56,7 +56,7 @@ var willBeDeletedSwimlane = {
     },
 
     /**
-     * Upadte unaurthorized times
+     * Update unauthorized times
      * @param dateFrom : Date
      * @param dateTo : Date
      * @param weekend : bool
@@ -138,7 +138,7 @@ var willBeDeletedSwimlane = {
      * Then update the swimlane
      */
     checkUnauthorizedTimes: function () {
-        this.willBeDeletedByTime = getUnauthorizedTimeRanges();
+        this.willBeDeletedByTime = timeSwimlane.getUnauthorizedTimeRanges();
 
         this.willBeDeletedByTime.forEach(function (one) {
             one.caused_by = "Time";
@@ -154,6 +154,10 @@ var willBeDeletedSwimlane = {
         this.MAJWillBeDeletedSwimlane();
     },
 
+    /**
+     * Update the "will be deleted" swimlane
+     * @constructor
+     */
     MAJWillBeDeletedSwimlane: function () {
 
         var allWillBeDeletedData = (this.willBeDeletedData.concat(this.willBeDeletedByTime)).concat(this.willBeDeletedLocations);
@@ -175,7 +179,7 @@ var willBeDeletedSwimlane = {
             .append("line");
 
 
-        var rectangleAttributes = rectangles
+        rectangles
             .attr("x1", function (d) {
                 return xSmallSlider(new Date(d.start));
             })

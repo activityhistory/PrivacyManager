@@ -52,8 +52,7 @@ function initThisAppDatabase(){
     });
 
     run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
-};
-
+}
 exports.checkInitSqlDb = function(){
     db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
         if(typeof(row) === 'undefined')
@@ -659,7 +658,7 @@ function getActivityRangeBetween(start, stop){
         if(thisStart <= _stop && thisStop >= _stop)
         {
             result.push(thisActivity);
-            continue;
+
         }
     }
     return result;

@@ -104,13 +104,12 @@ function ajaxGetRange()
         $("#includingWE").prop('checked', WE == "1");
 
         willBeDeletedSwimlane.setAuthorizedTimes(startTime, endTime, WE == "1");
-        notifyTimeFilterChanged();
+        timeSwimlane.notifyTimeFilterChanged();
 
     })
 }
 
-function ajaxSetRange()
-{
+function ajaxSetRange() {
     var val = $("#slider-range").slider("values");
     var startTime = miutesSumToNormalTime(val[0]);
     var stopTime = miutesSumToNormalTime(val[1]);
@@ -122,14 +121,12 @@ function ajaxSetRange()
     var WE = $("#includingWE").is(':checked') ? 1 : 0;
 
 
-    //TODO callback to verify if it's OK (also on the sever-side)
     $.get("setAllowedTimes", {fromHour: fromHour, fromMinute: fromMinute, toHour : toHour, toMinute : toMinute, WE : WE});
 
 
     willBeDeletedSwimlane.setAuthorizedTimes(fromHour + ":" + fromMinute, toHour + ":" + toMinute, WE == "1");
-    notifyTimeFilterChanged();
+    timeSwimlane.notifyTimeFilterChanged();
     willBeDeletedSwimlane.checkUnauthorizedTimes();
-
 }
 
 function miutesSumToNormalTime (minutesSum) //not the strange 12 hours format

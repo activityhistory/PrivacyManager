@@ -65,7 +65,6 @@ function printLegend(){
                 return 0.15;
             return 1.0;
         });
-    ;
     currentY = -5;
     var texts = legendSVG.selectAll("text")
         .data(toAdd)
