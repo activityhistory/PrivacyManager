@@ -30,7 +30,7 @@ var willBeDeletedSwimlane = {
     /**
      * The (always same) color of the willbedeleted swimlane
      */
-    willBeDeletedColor: legend_getAColor("Will be deleted"),
+    willBeDeletedColor: Legend.getAColor("Will be deleted"),
 
     /**
      * Remove all data in unauthorized applications

@@ -80,12 +80,12 @@ var AppsFilter = {
                     localStorage.setItem('app_' + appID, JSON.stringify(app_data));
 
 
-                    var c = addLegend(appName);
+                    var c = Legend.addLegend(appName);
                     self.FiltredApps.push({name: appName, color: c});
                     AppsSwimlane.notifyAppsFilterChanged();
                 }
                 else {
-                    removeLegend(appName);
+                    Legend.removeLegend(appName);
                     self.FiltredApps = self.FiltredApps.filter(function (e) {
                         return e.name != appName
                     });

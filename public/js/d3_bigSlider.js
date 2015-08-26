@@ -57,9 +57,9 @@ function brushed() {
 function printMiniItems(data) {
 
     //just to get a most beautiful color :)
-    legend_getAColor("a");
-    var color = legend_getAColor("Activity intensity");
-    removeLegend("a");
+    Legend.getAColor("a");
+    var color = Legend.getAColor("Activity intensity");
+    Legend.removeLegend("a");
 
     var scsDates = JSONToDate(data);
 
