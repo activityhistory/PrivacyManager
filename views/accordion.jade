@@ -5,6 +5,28 @@ block accordion
     #accordion.row
         div.card-panel.hoverable
             ul.collapsible.popout(data-collapsible="accordion")
+                h4 Privacy parameters
+                div#help_parameters.card.blue-grey.darken-1.help
+                    div.card-content.white-text
+                        span.card-title Privacy settings
+                            i.material-icons info
+                        p These settings allow you to delete all elements you think shouldn't be recorded.
+                li
+                    div.collapsible-header Unauthorized applications
+                        i.material-icons.tiny not_interested
+                    div.collapsible-body
+                        include accordion_content/apps
+                li
+                    div.collapsible-header Authorized times
+                        i.material-icons.tiny query_builder
+                    div.collapsible-body
+                        include accordion_content/times
+                li
+                    div.collapsible-header Authorized locations
+                        i.material-icons.tiny my_location
+                    div.collapsible-body
+                        include accordion_content/location
+
                 h4 Visualisation filters
                 div#help_filter.card.blue-grey.darken-1.help
                     div.card-content.white-text
@@ -29,24 +51,3 @@ block accordion
                             label Print unauthorized times
                                 input#timeFilter.filter.time(type='checkbox')
                                 span.lever
-                h4 Privacy parameters
-                div#help_parameters.card.blue-grey.darken-1.help
-                    div.card-content.white-text
-                        span.card-title Privacy settings
-                            i.material-icons info
-                        p These settings allow you to delete all elements you think shouldn't be recorded.
-                li
-                    div.collapsible-header Unauthorized applications
-                        i.material-icons.tiny not_interested
-                    div.collapsible-body
-                        include accordion_content/apps
-                li
-                    div.collapsible-header Authorized times
-                        i.material-icons.tiny query_builder
-                    div.collapsible-body
-                        include accordion_content/times
-                li
-                    div.collapsible-header Authorized locations
-                        i.material-icons.tiny my_location
-                    div.collapsible-body
-                        include accordion_content/location

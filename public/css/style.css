@@ -54,6 +54,11 @@ div#content {
     line-height: 35px;
 }
 
+img#bigScreenShot.onescreen {
+    width: 90%;
+}
+
+
 /* RIGHT PANEL */
 div#screenshotsView {
     height: 55%;
@@ -78,7 +83,7 @@ div#sliders {
     width: 150px;
 }
 
-div#help_filter {
+div#help_parameters {
     left: 180px;
     top: 0;
 }
@@ -98,7 +103,7 @@ div#help_filter {
     padding: 5px;
 }
 
-div#help_parameters {
+div#help_filter {
     left: 195px;
     top: 227px;
 }

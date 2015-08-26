@@ -143,7 +143,7 @@ function initializeSmallSlider() {
         .attr("x", width/2+margin.left )
         .attr("y", 0)
         .attr("width", 2)
-        .attr("height", 130)
+        .attr("height", 145)
         .style("fill", "white");
 
 
