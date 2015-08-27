@@ -66,7 +66,7 @@ var AppsFilter = {
                 var appID = $(e.target).attr("id");
                 if ($(e.target).is(':checked')) {
                     if (self.FiltredApps.length >= (self.MAX_FILTERED_APP_SIZE)) {
-                        Materialize.toast("You can not add another apps filter : the limit is " + self.MAX_FILTERED_APP_SIZE, 4000);
+                        Materialize.toast(_t.limitAppsFilter + self.MAX_FILTERED_APP_SIZE, 4000);
                         $(e.target).prop('checked', false);
                         return;
                     }

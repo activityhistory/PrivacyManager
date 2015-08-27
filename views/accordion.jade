@@ -1,53 +1,51 @@
 //
    Created by maxime on 11/07/15.
-
 block accordion
     #accordion.row
         div.card-panel.hoverable
             ul.collapsible.popout(data-collapsible="accordion")
-                h4 Privacy parameters
-                div#help_parameters.card.blue-grey.darken-1.help
-                    div.card-content.white-text
-                        span.card-title Privacy settings
-                            i.material-icons info
-                        p These settings allow you to delete all elements you think shouldn't be recorded.
-                li
-                    div.collapsible-header Unauthorized applications
-                        i.material-icons.tiny not_interested
-                    div.collapsible-body
-                        include accordion_content/apps
-                li
-                    div.collapsible-header Authorized times
-                        i.material-icons.tiny query_builder
-                    div.collapsible-body
-                        include accordion_content/times
-                li
-                    div.collapsible-header Authorized locations
-                        i.material-icons.tiny my_location
-                    div.collapsible-body
-                        include accordion_content/location
-
-                h4 Visualisation filters
+                h4 !{t.filter_title}
                 div#help_filter.card.blue-grey.darken-1.help
                     div.card-content.white-text
-                        span.card-title Filters
+                        span.card-title !{t.Filters}
                             i.material-icons info
-                        p Here, you can choose different type of filters to help you visualizing your activity.
+                        p !{t.filtersHelp}
                 li
-                    div.collapsible-header Applications Filter
+                    div.collapsible-header !{t.appFilter}
                         i.material-icons.tiny view_list
                     div.collapsible-body
                         ul#appsFilter
                 li
-                    div.collapsible-header Locations Filter
+                    div.collapsible-header !{t.locationFilter}
                         i.material-icons.tiny location_on
                     div.collapsible-body
                         ul#locationFilter
                 li
-                    div.collapsible-header Time Filter
+                    div.collapsible-header !{t.timeFilter}
                         i.material-icons.tiny av_timer
                     div.collapsible-body
                         div.switch
-                            label Print unauthorized times
+                            label !{t.printUnTimes}
                                 input#timeFilter.filter.time(type='checkbox')
                                 span.lever
+                h4 !{t.privacy_params_title}
+                div#help_parameters.card.blue-grey.darken-1.help
+                    div.card-content.white-text
+                        span.card-title !{t.privacySettings}
+                            i.material-icons info
+                        p !{t.privacySettingsHelp}
+                li
+                    div.collapsible-header !{t.unApps}
+                        i.material-icons.tiny not_interested
+                    div.collapsible-body
+                        include accordion_content/apps
+                li
+                    div.collapsible-header !{t.auTimes}
+                        i.material-icons.tiny query_builder
+                    div.collapsible-body
+                        include accordion_content/times
+                li
+                    div.collapsible-header !{t.auLocations}
+                        i.material-icons.tiny my_location
+                    div.collapsible-body
+                        include accordion_content/location
