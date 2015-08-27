@@ -10,7 +10,6 @@
 var Legend = {
     legendData: [],
     colorscale: d3.scale.category10(),
-    currentColorIndex: 0,
 
 
     /**
@@ -19,11 +18,33 @@ var Legend = {
      * @returns color
      */
     addLegend: function (_name) {
-        var _color = this.colorscale(this.currentColorIndex);
+        if(_name == "Will be deleted")
+            var _color = "#d62728";
+        else
+        {
+            var _color = 4;
+            for(var i=0 ; i!= 10 ; i++)
+            {
+                var color = this.colorscale(i);
+                var usable = true;
+                for(var k = 0 ; k != this.legendData.length; k++)
+                    if(this.legendData[k].color == color)
+                        usable = false;
+                if(usable)
+                {
+                    _color = color;
+                    break;
+                }
+            }
+        }
+        if(_color == 4)
+        {
+            this.colorscale = d3.scale.category20();
+            return this.addLegend(_name);
+        }
         this.legendData.push({name: _name, color: _color});
         this.printLegend();
 
-        this.currentColorIndex++;
         return _color;
     },
 
