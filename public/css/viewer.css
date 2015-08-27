@@ -112,12 +112,11 @@ img#bigScreenShot.materialboxed.intialized.active {
 /* SLIDERS */
 div#sliderSVG {
     margin-bottom: 5px;
-    height: 50%;
+    height: 57%;
 }
 
 div#bigSlider {
     height: 30%;
-    margin-top: 25px;
 }
 
 
@@ -143,6 +142,7 @@ div#bigSlider {
 
 #sliders  .col.s11 {
     padding: 0;
+    height: 100%;
 }
 
 div#slidersLegend {

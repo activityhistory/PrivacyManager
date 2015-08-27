@@ -22,6 +22,7 @@ div#content {
 #accordion {
     height: 75%;
     margin-bottom: 5px;
+    position:relative;
 }
 
 #accordion .collapsible-body {
@@ -54,6 +55,21 @@ div#content {
     line-height: 35px;
 }
 
+i#remove {
+    float: right;
+    font-size: 19px;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    /* font-size: 19px; */
+    /* height: 25px; */
+    /* width: 25px; */
+    /* color: black; */
+}
+
+i#remove:hover{
+    cursor: pointer;
+}
 
 /* RIGHT PANEL */
 div#screenshotsView {

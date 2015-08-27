@@ -35,7 +35,7 @@ function initializeSmallSlider() {
 
     var margin = {top: 5, right: 10, bottom: 10, left: 20},
         width = 800 - margin.left - margin.right,
-        height = 50 - margin.bottom - margin.top,
+        height = 90 - margin.bottom - margin.top,
         moving,
         currentValue = 0,
         targetValue = 70,
