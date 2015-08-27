@@ -2,25 +2,12 @@
  * Created by Maxime on 29/07/2015.
  */
 
-
-$( document).ready(function(){
-    //
-    //d3.select("#sliderSVG svg").append("text")
-    //    .attr("x", 10)
-    //    .attr("y", 20)
-    //    .attr("dy", ".35em")
-    //    .text("Location");
-
-
-});
-
-
-
-
-
+/**
+ * Print locations' swimlane
+ * Each app will have a different colour
+ * The colour is selected randomly
+ */
 function printLocationsSwimlanes(){
-
-
 
     d3.select("#sliderSVG svg g.locationSwimlane").remove();
 
@@ -31,16 +18,12 @@ function printLocationsSwimlanes(){
     }
 
     var locationToprint = [];
-    for(var i = 0 ; i!= LocationFilter.locationData.length ; i++)
-    {
+    for(var i = 0 ; i!= LocationFilter.locationData.length ; i++) {
         var one = LocationFilter.locationData[i];
-        if(one.filtered == true)
-        {
+        if(one.filtered == true) {
             locationToprint.push(one);
         }
     }
-
-
 
 
     var svg = d3.select("#sliderSVG svg");
@@ -58,7 +41,7 @@ function printLocationsSwimlanes(){
         .append("line");
 
 
-    var rectangleAttributes = rectangles
+    rectangles
         .attr("x1", function (d) {
             return xSmallSlider(new Date(d.from));
         })
@@ -74,8 +57,5 @@ function printLocationsSwimlanes(){
         .attr("class", "tooltipped");
 
 
-
-
     $('.tooltipped').tooltip({delay: 0});
-
 }

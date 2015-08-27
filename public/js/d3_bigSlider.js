@@ -9,10 +9,13 @@ var margin = {top: 10, right: 10, bottom: 20, left: 20},
     height = 75 - margin.top - margin.bottom,
     miniHeight = 50;
 
-
+/**
+ * Init big slider's brush
+ * @returns {*}
+ */
 function initBrush() {
-    brush = d3.svg.brush()
-        .x(x)
+    var brush = d3.svg.brush()
+        .x(xBigSlider)
         .on("brushend", brushed);
 
     d3.select("#bigSlider svg").append("g")
@@ -23,37 +26,24 @@ function initBrush() {
         .attr("y", -2)
         .attr("height", miniHeight + 4);
 
-
-    //Init to last activity
-    var activity_data = ActivityManager.allActivityData;
-    var last_activity_data = activity_data[activity_data.length - 1];
-    var stop = last_activity_data.stop;
-    var start;
-    var i = 6;
-
-
-    while (activity_data.length < i) {
-        i--;
-    }
-
-    start = activity_data[activity_data.length - i].start;
-
-    bigsSlider_manuelBrushMove(start, stop);
-    brushed();
-
     return brush;
 }
 
-
+/**
+ * Call back for brush's action
+ */
 function brushed() {
-    var ext = brush.extent();
+    var ext = bigSliderBrush.extent();
     interVal.start = new Date(ext[0]);
     interVal.stop = new Date(ext[1]);
 
-
-    ajaxMAJSlider(ext[0], ext[1]); //TODO listener
+    ajaxMAJSlider(ext[0], ext[1]);
 }
 
+/**
+ * Print  activity intensity
+ * @param data
+ */
 function printMiniItems(data) {
 
     //just to get a most beautiful color :)
@@ -61,7 +51,7 @@ function printMiniItems(data) {
     var color = Legend.getAColor("Activity intensity");
     Legend.removeLegend("a");
 
-    var scsDates = JSONToDate(data);
+    var scsDates = util.JSONToDate(data);
 
     var mini = d3.select("#bigSlider svg").append('g')
         .attr('transform', 'translate(' + margin.left + ',' + (height - miniHeight + 7) + ')')
@@ -75,9 +65,9 @@ function printMiniItems(data) {
         .append("circle");
 
 
-    var rectangleAttributes = rectangles
+    rectangles
         .attr("cx", function (d) {
-            return x(d);
+            return xBigSlider(d);
         })
         .attr("cy", function (d) {
             return Math.floor((Math.random() * miniHeight) + 1)
@@ -89,9 +79,14 @@ function printMiniItems(data) {
 
 }
 
+/**
+ * Init big slider
+ * @param daysList
+ * @returns {*}
+ */
 function initBigSlider(daysList) {
 
-    var dateList = JSONToDate(daysList);
+    var dateList = util.JSONToDate(daysList);
 
     var x = d3.time.scale()
         .domain([dateList[0], d3.time.day.offset(dateList[dateList.length - 1], 1)])
@@ -112,25 +107,15 @@ function initBigSlider(daysList) {
     svg.selectAll('.axis line, .axis path')
         .style({'stroke': 'Black', 'fill': 'none', 'stroke-width': '2px'});
 
-    //mainSVG.append("text")
-    //    .attr("x", 10)
-    //    .attr("y", 5)
-    //    .attr("dy", ".35em")
-    //    .text("Activity");
-    //
-    //
-    //mainSVG.append("svg:image")
-    //    .attr("x", 10)
-    //    .attr("y", 0)
-    //    .attr('width', 36)
-    //    .attr('height', 36)
-    //    .attr("xlink:href", "images/ic_history_black_18dp_2x.png");
-
     return x;
 }
 
-
+/**
+ * Manual brush when we want to move the brush manually
+ * @param dateStart
+ * @param dateStop
+ */
 function bigsSlider_manuelBrushMove(dateStart, dateStop) {
-    brush.extent([dateStart, dateStop]);
-    brush(d3.select(".brush").transition());
+    bigSliderBrush.extent([dateStart, dateStop]);
+    bigSliderBrush(d3.select(".brush").transition());
 }

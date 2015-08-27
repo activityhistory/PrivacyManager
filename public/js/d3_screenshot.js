@@ -71,7 +71,7 @@ function printScreenshot(date) {
                 else {
 
 
-                    $('#bigScreenShot').addClass('onescreen').width('90%');
+                    $('#bigScreenShot').addClass('onescreen').width('85%');
 
                     $('#previousContext').css({'float': 'left', 'height': '90%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
@@ -212,7 +212,6 @@ function printScreenshot(date) {
             var previous_app = JSON.parse(localStorage.getItem('app_' + bestPreviousAppId));
             var next_app = JSON.parse(localStorage.getItem('app_' + bestNextAppId));
 
-            //TODO unbind maxime
             //Print context data
             if (previous_app !== null) {
                 var previous_appName = previous_app.name;

@@ -29,7 +29,7 @@ var Legend = {
 
 
     /**
-     * Seachr for a pre-existing legend, if exist renturn it color, else create it
+     * Seach for a pre-existing legend, if exist return it color, else create it
      * @param name : string --> name of legended thing
      * @returns color
      */
