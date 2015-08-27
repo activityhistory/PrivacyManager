@@ -2,90 +2,97 @@
  * Created by maxime on 16/07/15.
  */
 
-if(typeof google !== 'undefined')
-    $("#locName").geocomplete();
-else
-    Materialize.toast(_t.noInternet, 6000);
+var locationSettings = {
+    knownLocations: [],
 
-var geocoder;
-var map;
-function initialize() {
+    geocoder : null,
 
-    $("#addLocButton").click(codeAddress);
-    if(!google){
-        Materialize.toast(_t.noInternet);
-        return;
-    }
-    geocoder = new google.maps.Geocoder();
-}
+    map : null,
 
-function codeAddress() {
-    if(typeof google === 'undefined'){
-        return;
-    }
-    var address = document.getElementById('locName').value;
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var lat = results[0].geometry.location.lat();
-            var long = results[0].geometry.location.lng();
-            ajaxAddUnLocation(address, lat, long);
-        } else {
-            alert(_t.errorGeocoding + status);
+    initialize: function(){
+        this.geocoder = new google.maps.Geocoder();
+
+        $("#addLocButton").click(this.codeAddress.bind(this));
+
+        if(!google){
+            Materialize.toast("No internet access found. Geocoding is disabled : you can not add locations.");
+            return;
         }
-    });
-}
+        $("#locName").geocomplete();
 
-function ajaxAddUnLocation(address, lat, long) {
-    if(typeof google === 'undefined'){
-        Materialize.toast(_t.geocodingdisabeld);
-        return;
-    }
-    $.get("/addUnLocation", {"address": address, "lat": lat, "long": long}, function (data) {
-        populateUnLocationsList(data);
-        $('#locName').val('');
-    });
-}
+    },
 
-//Authorized or not ? that is the question.
-function populateUnLocationsList(data) {
-
-
-    knownLocations = data.locations;
-    LocationFilter.populateLocationFilter();
-    document.dispatchEvent(new Event('knownLocationOk'));
-
-    willBeDeletedSwimlane.RAZAuthorizedLocations(); //Delete all old locations ion the object used by the visualization
-
-    var locs = data.locations;
-    $("#locList ul").html('');
-    $.each(locs, function (i, item) {
-        $("#locList ul").append("<li><span class='col s10'>" + item.address.split(",")[0] + "</span><a href='#' class='col s2' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteLocButton' data-lat='" + item.lat + "'  data-long='" + item.lon + "'/></a></li>");
-        willBeDeletedSwimlane.addAutorizedLocation(item.address, item.lat, item.lon); //add news locations to the visualiztion privacy object
-    });
-
-    bindDleteLocButtons();
-}
-
-var knownLocations; // lat lng name
-
-function ajaxGetUnLocations(){
-    $.get("/getUnLocation", function(data){
-        populateUnLocationsList(data);
-    })
-}
-
-//remove
-function bindDleteLocButtons() {
-    $(".deleteLocButton").on("click", function (event) {
-        var lat =  event.target.attributes[2].value;
-        var lon =  event.target.attributes[3].value;
-        $.get("/removeLoc", {"lat":lat, "lon":lon}, function (data) {
-            populateUnLocationsList(data);
+    codeAddress: function(){
+        var self = this;
+        if(typeof google === 'undefined'){
+            return;
+        }
+        var address = document.getElementById('locName').value;
+        this.geocoder.geocode({'address': address}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var lat = results[0].geometry.location.lat();
+                var long = results[0].geometry.location.lng();
+                self.ajaxAddUnauthorizedLocation(address, lat, long);
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
         });
-    });
-}
+    },
+
+    ajaxAddUnauthorizedLocation: function(address, lat, long){
+        var self = this;
+        if(typeof google === 'undefined'){
+            Materialize.toast("Geocoding is disabled : it needs an internet connexion. Please connect you and restart the app.");
+            return;
+        }
+        $.get("/addUnLocation", {"address": address, "lat": lat, "long": long}, function (data) {
+            self.populateUnauthorizedLocationsList(data);
+            $('#locName').val('');
+        });
+    },
+
+    populateUnauthorizedLocationsList : function(data){
+        this.knownLocations = data.locations;
+        LocationFilter.populateLocationFilter();
+        document.dispatchEvent(new Event('knownLocationOk'));
+
+        willBeDeletedSwimlane.RAZAuthorizedLocations(); //Delete all old locations on the object used by the visualization
+
+        var locs = data.locations;
+        $("#locList").find("ul").html('');
+        $.each(locs, function (i, item) {
+            $("#locList").find("ul").append("<li><span class='col s10'>" + item.address.split(",")[0] + "</span><a href='#' class='col s2' ><img src='/images/glyphicons/png/glyphicons-257-delete.png' class='deleteLocButton' data-lat='" + item.lat + "'  data-long='" + item.lon + "'/></a></li>");
+            willBeDeletedSwimlane.addAutorizedLocation(item.address, item.lat, item.lon); //add news locations to the visualiztion privacy object
+        });
+
+        this.bindDeleteButtons();
+    },
+
+    ajaxGetUnauthorizedLocations: function(){
+        var self = this;
+        $.get("/getUnLocation", function(data){
+            self.populateUnauthorizedLocationsList(data);
+        })
+    },
+
+    bindDeleteButtons: function(){
+        var self = this;
+        $(".deleteLocButton").on("click", function (event) {
+            var lat =  event.target.attributes[2].value;
+            var lon =  event.target.attributes[3].value;
+            $.get("/removeLoc", {"lat":lat, "lon":lon}, function (data) {
+                self.populateUnauthorizedLocationsList(data);
+            });
+        });
+    }
+
+};
+
 
 if(typeof google !== 'undefined'){
-    google.maps.event.addDomListener(window, 'load', initialize);
-    google.maps.event.addDomListener(window, 'load', ajaxGetUnLocations);
+    google.maps.event.addDomListener(window, 'load', locationSettings.initialize.bind(locationSettings));
+    google.maps.event.addDomListener(window, 'load', locationSettings.ajaxGetUnauthorizedLocations.bind(locationSettings));
+}
+else{
+    Materialize.toast("No internet access found. Geocoding is disabled : you can not add locations.", 6000);
 }

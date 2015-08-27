@@ -204,7 +204,7 @@ function isOnOneRange(rangeSet, _date)
     return false;
 }
 
-function getJSDateAndTime(screenshotName) {
+function getJSDateAndTime(screenshotName){
 
     var splited = screenshotName.split("\.")[0].split("_")[0].split("-");
     var date = splited[0];

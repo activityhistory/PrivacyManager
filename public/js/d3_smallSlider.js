@@ -2,12 +2,31 @@
  * Created by Maxime on 23/07/2015.
  */
 
+/**
+ * D3's svg brush for the small slider
+ */
 var brushSmallSlider;
+
+/**
+ * D3's svg brush to allow user to zoom in using the small slider
+ */
 var zoomBrush;
 var xAxisSmallSlider;
+
+/**
+ * Update the slider
+ */
 var manualMoveSmallSlder;
+
+/**
+ * D3's zoom behavior to allow people to zoom in or out using mouse's wheel
+ */
 var zooming;
 
+
+/**
+ * Init and print the small slider
+ */
 function initializeSmallSlider() {
 
     var margin = {top: 5, right: 10, bottom: 10, left: 20},
@@ -143,7 +162,7 @@ function initializeSmallSlider() {
         .attr("x", width/2+margin.left )
         .attr("y", 0)
         .attr("width", 2)
-        .attr("height", 130)
+        .attr("height", 145)
         .style("fill", "white");
 
 
@@ -180,7 +199,7 @@ function initializeSmallSlider() {
         printScreenshot(to);
     };
 
-    $('#sliders .arrow.right').click(function(){
+    $('#sliders').find('.arrow.right').click(function(){
         var start_zoom_date = new Date(interVal.stop);
         var end_zoom_date = new Date(interVal.stop);
 
@@ -193,7 +212,7 @@ function initializeSmallSlider() {
         manualBrushedZoom(start_zoom_date, end_zoom_date);
     });
 
-    $('#sliders .arrow.left').click(function(){
+    $('#sliders').find('.arrow.left').click(function(){
         var start_zoom_date = new Date(interVal.start);
         var end_zoom_date = new Date(interVal.start);
 
@@ -234,6 +253,9 @@ function initializeSmallSlider() {
 }
 
 
+/**
+ * Call back for zoom select action
+ */
 function brushedZoom(){
     var ext = zoomBrush.extent();
 
@@ -265,7 +287,9 @@ function brushedZoom(){
 }
 
 
-
+/**
+ * Clean and print zoom brush
+ */
 function majZoomBrush(){
 
     d3.select("#sliderSVG svg .zoomBrush").remove();
@@ -279,6 +303,10 @@ function majZoomBrush(){
         .attr("height", 34);
 }
 
+/**
+ * Allow user to navigate between screenshot using keyboard's arrow
+ * @param direction
+ */
 function goToOneScreenshotNext(direction) {
     var currentScreenshot = $("#bigScreenShot").attr("src").split("/");
     currentScreenshot = currentScreenshot[currentScreenshot.length -1];
@@ -313,33 +341,11 @@ function goToOneScreenshotNext(direction) {
     manualMoveSmallSlder(exactDate);
 }
 
-
-
-
-function goToOneScreenshot(scsName)
-{
-
-    var res = NaN;
-    for(var i = 0 ; i != interVal.data.length; i++ ){
-        var one = interVal.data[i];
-        if(one.screenshot == scsName)
-            res = i;
-    }
-
-    if(
-        isNaN(res)
-        ||      (res  >= interVal.data.length)
-        ||      ( res < 0)
-    )
-    {
-        Materialize.toast(_t.invalidScreenshotSlide, 4000);
-        return;
-    }
-    var exactDate = interVal.data[res].date;
-    manualMoveSmallSlder(exactDate);
-}
-
-
+/**
+ * Update brushed zoom (mouse)
+ * @param start_date
+ * @param end_date
+ */
 function manualBrushedZoom(start_date, end_date) {
     if (end_date - start_date < 300000)//5min
     {
@@ -362,6 +368,11 @@ function manualBrushedZoom(start_date, end_date) {
 
 }
 
+/**
+ * Update SLIDER
+ * @param data
+ * @constructor
+ */
 function MAJSlider(data) {
     if ((!data[0]) || (!data[1])) {
         Materialize.toast(_t.noScreenshotInTheRange,4000);
@@ -391,6 +402,11 @@ function MAJSlider(data) {
     manualMoveSmallSlder(exactDate);
 }
 
+/**
+ * Get data to update interVal object
+ * @param dateStart
+ * @param dateStop
+ */
 function ajaxMAJSlider(dateStart, dateStop) {
     $.get("/getScreenshotsListBetween", {start: dateStart, end: dateStop}, function (data) {
         var d = data.result;
@@ -400,20 +416,26 @@ function ajaxMAJSlider(dateStart, dateStop) {
         });
         MAJSlider(r);
         if (r) {
-            //TODO
             bigsSlider_manuelBrushMove(dateStart, dateStop); //To put the brush on the screenshot/activity area only
             ajaxMAJRunningAppsList(dateStart, dateStop);
         }
     });
 }
 
-
+/**
+ * Update running apps data
+ * @param dateStart
+ * @param dateStop
+ */
 function ajaxMAJRunningAppsList(dateStart, dateStop) {
     $.get("/runningAppsBetween", {start: dateStart, end: dateStop}, function (data) {
         runningApps = data.apps;
     });
 }
 
+/**
+ * Print green circle
+ */
 function printScreenShotSwimlane() {
 
     var color = Legend.getAColor("Activity intensity");
@@ -435,7 +457,7 @@ function printScreenShotSwimlane() {
         .append("circle");
 
 
-    var rectangleAttributes = rectangles
+    rectangles
         .attr("cx", function (d) {
             return xSmallSlider(d.date);
         })

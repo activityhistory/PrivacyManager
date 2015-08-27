@@ -34,8 +34,6 @@ function printScreenshot(date) {
         var img_width;
         var img_height;
 
-        $('#bigScreenShot').height('100%');
-        $('#bigScreenShot').width('100%');
 
         $('.card-content').show();
 
@@ -49,6 +47,9 @@ function printScreenshot(date) {
 
                 //Change visualisation disposition if 2 screens
                 if (ratioImg >= 3) {
+
+                    $('#bigScreenShot').width('100%');
+
                     //Move previous context side:
                     $('#previousContext').css({'float': 'right', 'height': '35%'});
                     $('#previousContext img.smallSCS').css({
@@ -61,8 +62,6 @@ function printScreenshot(date) {
                     $('#nextContext').css({'height': '35%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '0', 'height': 'auto', 'max-height': '85px'});
 
-                    $('#bigScreenShot').css({  'max-height': 'none'});
-
                     //Change main screenshot col
                     $('#mainContext').removeClass('s6');
                     $('#mainContext').addClass('s9');
@@ -71,14 +70,15 @@ function printScreenshot(date) {
                 //Screenshot with only 1 screen
                 else {
 
+
+                    $('#bigScreenShot').addClass('onescreen').width('90%');
+
                     $('#previousContext').css({'float': 'left', 'height': '90%'});
                     $('#previousContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
                     $('#nextContext').css({'height': '90%'});
                     $('#nextContext img.smallSCS').css({'margin-top': '65px', 'height': 'auto'});
 
-
-                    $('#bigScreenShot').css({  'max-height': '220px'});
                     $('#mainContext').removeClass('s9');
                     $('#mainContext').addClass('s6');
                 }

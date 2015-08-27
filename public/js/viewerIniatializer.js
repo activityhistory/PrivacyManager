@@ -2,13 +2,54 @@
  * Created by Maxime on 20/07/2015.
  */
 
-//d3_smallSlider
 
-
+/**
+ * This object contains all data about the current selected range as:
+ *  - start and stop date,
+ *  - data: screenshots
+ *  - current date : where the cursor is
+ * @type {{start: Date, stop: Date, data: string, currentDate: Date}}
+ */
 var interVal = {start: new Date(), stop: new Date(), data: "", currentDate: new Date()};
+
+/**
+ * Running apps contains all the data from the snapshot table
+ * in particular all the running apps for a date
+ * @type {Array}
+ */
 var runningApps = [];
+
+/**
+ * Contains all data about windows from the windows table.
+ * The goal is to avoid server's requests
+ * @type {Array}
+ */
 var windowsData = [];
 
+/**
+ * D3's time scale object for the small slider
+ */
+var xSmallSlider;
+
+/**
+ * D3's svg brush object for the big slider
+ */
+var bigSliderBrush;
+
+/**
+ * D3's time scale object for the big slider
+ */
+var xBigSlider;
+
+
+
+
+
+
+/* ****************************************
+ * **       Sliders' Initialization      **
+ * **  Getting data from recorded days   **
+ * **************************************** */
 
 
 interVal.stop = new Date;
@@ -18,20 +59,45 @@ t.setMinutes(0);
 t.setSeconds(0);
 interVal.start = t;
 
+ActivityManager.init();
 
-var xSmallSlider;
-var brush;
+$.get("/getAllRecordedDays", function (data) {
+    xBigSlider = initBigSlider(data.allRecordedDays);
+    $.get("/allScreenshotsDateAndTime", function (data) {
+        printMiniItems(data.allRecords);
+        bigSliderBrush = initBrush();
+        xSmallSlider = initializeSmallSlider();
 
-//main time scale
-var x;
+        //Init to last activity
+        var activity_data = ActivityManager.allActivityData;
+        var last_activity_data = activity_data[activity_data.length - 1];
+        var stop = last_activity_data.stop;
+        var start;
+        var i = 6;
+
+
+        while (activity_data.length < i) {
+            i--;
+        }
+
+        start = activity_data[activity_data.length - i].start;
+
+        bigsSlider_manuelBrushMove(start, stop);
+        brushed();
+    })
+});
+
+$.get("/all_windows_list", function (data) {
+    windowsData = data.windows;
+});
 
 $(document).ready(function () {
-    //Context navigation
+    //Init context navigation
     $('#previousContext').click(function () {
         if (typeof($('#previousContext img').attr('src')) !== 'undefined') {
             //Get screenshot's name
             var screenshotName = $('#previousContext img').attr('src').split('/')[3];
-            var date = getJSDateAndTime(screenshotName);
+            var date = util.getJSDateAndTime(screenshotName);
 
             manualMoveSmallSlder(date);
         }
@@ -41,56 +107,10 @@ $(document).ready(function () {
         if (typeof($('#nextContext img').attr('src')) !== 'undefined') {
             //Get screenshot's name
             var screenshotName = $('#nextContext img').attr('src').split('/')[3];
-            var date = getJSDateAndTime(screenshotName);
+            var date = util.getJSDateAndTime(screenshotName);
 
             manualMoveSmallSlder(date);
         }
     });
 
-});
-
-
-function getJSDateAndTime(screenshotName) {
-
-    var splited = screenshotName.split("\.")[0].split("_")[0].split("-");
-    var date = splited[0];
-    var time = splited[1];
-
-
-    var year = date.substring(0, 2);
-    var month = date.substring(2, 4);
-    var day = date.substring(4, 6);
-
-    var hour = time.substring(0, 2);
-    var min = time.substring(2, 4);
-    var sec = time.substring(4, 6);
-    var nanSec = time.substr(9);
-
-    return new Date('20' + year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + ":" + nanSec);
-}
-
-ActivityManager.init();
-
-$.get("/getAllRecordedDays", function (data) {
-    x = initBigSlider(data.allRecordedDays);
-    $.get("/allScreenshotsDateAndTime", function (data) {
-        printMiniItems(data.allRecords);
-        brush = initBrush();
-        xSmallSlider = initializeSmallSlider();
-    })
-});
-
-
-function JSONToDate(jsonD) {
-    dateList = [];
-    jsonD.forEach(function (one) {
-        //Conversion to Date format
-        var d = new Date(one);
-        dateList.push(d);
-    });
-    return dateList;
-}
-
-$.get("/all_windows_list", function (data) {
-    windowsData = data.windows;
 });
