@@ -59,12 +59,13 @@ i#remove {
     float: right;
     font-size: 19px;
     position: absolute;
-    right: 10px;
+    right: 13px;
     top: 20px;
     /* font-size: 19px; */
-    /* height: 25px; */
-    /* width: 25px; */
-    /* color: black; */
+    height: 19px;
+    padding: 0;
+    color: black;
+    width: 24px;
 }
 
 i#remove:hover{
