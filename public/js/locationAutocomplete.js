@@ -5,7 +5,7 @@
 if(typeof google !== 'undefined')
     $("#locName").geocomplete();
 else
-    Materialize.toast("No internet access found. Geocoding is disabeld : you can not add locations.", 6000);
+    Materialize.toast(_t.noInternet, 6000);
 
 var geocoder;
 var map;
@@ -13,7 +13,7 @@ function initialize() {
 
     $("#addLocButton").click(codeAddress);
     if(!google){
-        Materialize.toast("No internet access found. Geocoding is disabeld : you can not add locations.");
+        Materialize.toast(_t.noInternet);
         return;
     }
     geocoder = new google.maps.Geocoder();
@@ -30,14 +30,14 @@ function codeAddress() {
             var long = results[0].geometry.location.lng();
             ajaxAddUnLocation(address, lat, long);
         } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+            alert(_t.errorGeocoding + status);
         }
     });
 }
 
 function ajaxAddUnLocation(address, lat, long) {
     if(typeof google === 'undefined'){
-        Materialize.toast("Geocoding is disabeld : it needs an internet connexion. Please connect you and restart the app.");
+        Materialize.toast(_t.geocodingdisabeld);
         return;
     }
     $.get("/addUnLocation", {"address": address, "lat": lat, "long": long}, function (data) {

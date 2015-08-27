@@ -53,7 +53,7 @@ $( document ).ready(function(){
             });
         }
         else{
-            Materialize.toast('Please select a range', 4000);
+            Materialize.toast(_t.pleaseRange, 4000);
         }
     });
 });
