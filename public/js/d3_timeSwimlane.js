@@ -22,7 +22,7 @@ var timeSwimlane = {
      * @param c {String} representing the colour
      */
     setTimeFilterColor: function(c){
-        timeFilterColor = c;
+        this.timeFilterColor = c;
     },
 
     /**

@@ -11,6 +11,10 @@ var brushSmallSlider;
  * D3's svg brush to allow user to zoom in using the small slider
  */
 var zoomBrush;
+
+/**
+ * Axis of the small slider
+ */
 var xAxisSmallSlider;
 
 /**
