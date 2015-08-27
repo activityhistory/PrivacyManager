@@ -143,7 +143,7 @@ function initializeSmallSlider() {
         .attr("x", width/2+margin.left )
         .attr("y", 0)
         .attr("width", 2)
-        .attr("height", 130)
+        .attr("height", 145)
         .style("fill", "white");
 
 
@@ -244,7 +244,7 @@ function brushedZoom(){
         b = new Date(ext[1]);
     if(b - a < 300000)//5min
     {
-        Materialize.toast(_t.zoomTooMuch, 5000);
+        Materialize.toast("Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?", 5000);
         return;
     }
 
@@ -284,7 +284,7 @@ function goToOneScreenshotNext(direction) {
     currentScreenshot = currentScreenshot[currentScreenshot.length -1];
 
     if (currentScreenshot == "no-image.jpg" || currentScreenshot == "tuto.png") {
-        Materialize.toast(_t.besomewhere,4000);
+        Materialize.toast("You have to be somewhere to go elsewhere ...",4000);
         return;
     }
 
@@ -301,7 +301,7 @@ function goToOneScreenshotNext(direction) {
             ||      (direction == "left" && res -1 < 0)
         )
     {
-        Materialize.toast(_t.invalidScreenshotSlide, 4000);
+        Materialize.toast("Invalid operation : out of limit or unrecognized screenshot", 4000);
         return;
     }
     if(direction == "right")
@@ -332,7 +332,7 @@ function goToOneScreenshot(scsName)
         ||      ( res < 0)
     )
     {
-        Materialize.toast(_t.invalidScreenshotSlide, 4000);
+        Materialize.toast("Invalid operation : out of limit or unrecognized screenshot", 4000);
         return;
     }
     var exactDate = interVal.data[res].date;
@@ -344,7 +344,7 @@ function manualBrushedZoom(start_date, end_date) {
     if (end_date - start_date < 300000)//5min
     {
         if($('#errorZoomZoom').length == 0)
-            Materialize.toast(_t.zoomTooMuch, 5000);
+            Materialize.toast("<div id='errorZoomZoom'>Sorry, you want to zoom too much. Maybe you  &nbsp;<a href='http://www.glassesusa.com/'> need glasses</a>&nbsp;?</div>", 5000);
         return;
     }
 
@@ -364,10 +364,12 @@ function manualBrushedZoom(start_date, end_date) {
 
 function MAJSlider(data) {
     if ((!data[0]) || (!data[1])) {
-        Materialize.toast(_t.noScreenshotInTheRange,4000);
+        Materialize.toast("No screenshot found in the selected range",4000);
         return;
     }
 
+    /* interVal.start = data[0].date;
+     interVal.stop = data[data.length - 1].date;*/
     interVal.data = data;
 
     xSmallSlider.domain([data[0].date, data[data.length - 1].date]);

@@ -64,7 +64,7 @@ var AppsSwimlane = {
                 nump++;
             }
             else {
-                Materialize.toast(_t.noUsageOf1of2 + name + _t.noUsageO21of2, 4000);
+                Materialize.toast("No " + name + " usage found in this range.", 4000);
             }
 
 

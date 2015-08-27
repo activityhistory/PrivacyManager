@@ -22,7 +22,7 @@ var timeSwimlane = {
      * @param c {String} representing the colour
      */
     setTimeFilterColor: function(c){
-        timeFilterColor = c;
+        this.timeFilterColor = c;
     },
 
     /**
@@ -78,7 +78,7 @@ var timeSwimlane = {
         var unSCS = this.getUnauthorizedTimeRanges();
 
         if(unSCS.length == 0) {
-            Materialize.toast(_t.noUnTimeInThisRange, 4000);
+            Materialize.toast("No unauthorized times in this range :)", 4000);
             return;
         }
 

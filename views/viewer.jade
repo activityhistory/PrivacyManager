@@ -4,43 +4,48 @@
 #screenshotsView.row
     div#help_screenshots.card.blue-grey.darken-1.help
         div.card-content.white-text
-            span.card-title !{t.screenshots}
+            span.card-title Screenshots
                 i.material-icons info
-            p !{t.screenshotsHelp}
+            p Here, current screenshot. You can also see a screenshot of the previous and the next app used.
     div.boutons-line.row
-        #remove.btn-floating.waves-effect.waves-light.red.accent-4.tooltipped(data-position="left", data-tooltip="#{t.poubelle}")
+        #remove.btn-floating.waves-effect.waves-light.red.accent-4.tooltipped(data-position="left", data-tooltip="Remove all indicated data")
             i.material-icons delete
 
-        #settings.btn-floating.waves-effect.waves-light.grey.darken-3.tooltipped.modal-trigger(data-position="bottom", data-tooltip="#{t.settings}" data-target="settingsModal")
+        #settings.btn-floating.waves-effect.waves-light.grey.darken-3.tooltipped.modal-trigger(data-position="bottom", data-tooltip="Settings" data-target="settingsModal")
             i.material-icons settings
 
-        #help.btn-floating.waves-effect.waves-light.green.darken-3.tooltipped(data-position="bottom", data-tooltip="#{t.showHelp}")
+        #help.btn-floating.waves-effect.waves-light.green.darken-3.tooltipped(data-position="bottom", data-tooltip="Show help")
             i.material-icons live_help
 
 
     #settingsModal.modal
         div.modal-content
-            h4 !{t.settings}
+            h4 Settings
             div.row
                 div.col.s8.offset-s2
-                    h6 !{t.chooseFolderLocation}
+                    h6="Choose the .selfspy folder location :"
                     #error
                     ul.collapsible(data-collapsible="accordion")
                         li
                            .collapsible-header
                                i.small.material-icons
                                 |info
-                               | !{t.tips}
+                               |Tips
                            .collapsible-body
-                               p !{t.tipsContent}
+                               p
+                                   | The usually location is /Users/YOU/.selfspy <br />
+                                   | To find the .selfspy, folder, you need to activate hidden folders visualisation :<br />
+                                   | In the dialog box press " cmd + shift + . "<br />
+                                   | Then reload your current location.<br />
+                                   | Choose the .selfspy folder, not any subfolder. <br />
                     br
                     .input-field
-                        input#filePath(type="text", placeholder="#{t.enterYourSelfspylocation}")
-                        label(for='filePath') !{t.folderPath}
+                        input#filePath(type="text", placeholder="Please enter you .selfspy folder location")
+                        label(for='filePath') Folder path
                     .input-field
                         input#getFile(type="file", webkitdirectory directory)
                     .right-align
-                        button.btn.waves-effect.waves-light#submitNewPath(type="submit", name="action") !{t.submit}
+                        button.btn.waves-effect.waves-light#submitNewPath(type="submit", name="action") Submit
 
 
         div.modal-footer
@@ -69,7 +74,7 @@
         img.smallSCS(src="")
         div.appName
 
-    a#removeRange.waves-effect.waves-light.btn.red.darken-4 !{t.removeRangeData}
+    a#removeRange.waves-effect.waves-light.btn.red.darken-4 Remove range data
 
 #sliders.row
     div.arrow.col.s1.left <
@@ -81,9 +86,9 @@
 
 
 #slidersLegend
-    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;") !{t.location}
-    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;top: 20px;") !{t.time}
-    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent; top:59px") !{t.apps}
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;") Location
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent;top: 20px;") Time
+    p(style="position:absolute;-webkit-user-select:none;-webkit-touch-callout:none;font-size:10px;background:transparent; top:59px") Apps
 
 script.
     $('#getFile').change(function(){
@@ -98,13 +103,13 @@ script.
         $.get("/setSelfspyFolderLocation", {path:newLoc}, function(data){
             if(data.status == "ko"){
                 $("#error").attr("class", "card-panel red accent-4")
-                        .text("#{t.errorSelfspyFolder}" + data.error.code);
+                        .text("PLease verify your folder location. Error : " + data.error.code);
                 return;
 
             }
             localStorage.setItem("SELFSPY_PATH", newLoc);
             $("#error").attr("class", "card-panel light-green lighten-2")
-                    .text("#{t.successFolderChange}");
+                    .text("New Path successfully added. The app will restart.");
             setTimeout(function () {
                 document.location.href = "http://localhost:2323/";
             }, 4000);
@@ -114,12 +119,12 @@ script.
 
 div#help_smallSlider.card.blue-grey.darken-1.help
     div.card-content.white-text
-        span.card-title !{t.smallSlider}
+        span.card-title Small Slider
             i.material-icons info
-        p !{t.smallSliderHelp}
+        p Here, you can navigate inside the current date range and see the related screenshot and get informations about it.
 
 div#help_bigSlider.card.blue-grey.darken-1.help
     div.card-content.white-text
-        span.card-title !{t.bigSlider}
+        span.card-title Big Slider
             i.material-icons info
-        p !{t.bigSliderHelp}
+        p All recorded days. Just choose a range.

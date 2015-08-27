@@ -14,18 +14,17 @@ var ActivityManager = {
             $.get("/getActivity", function (data) {
                 if(data.result == false)
                 {
-                    console.log(_t);
-                    Materialize.toast(_t.waitActivityCalc, 15000);
+                    Materialize.toast("Please wait during activity calculating. This could take time.", 15000);
                     setTimeout(function(){
-                        Materialize.toast(_t.tryGetActivity, 1000);
+                        Materialize.toast("Tring to get activity ...", 1000);
                         $.get("/getActivity", function (data) {
                             if(data.result == false)
                             {
-                                Materialize.toast(_t.noActivityFound);
+                                Materialize.toast("No activity data found. Please wait a little more and restart the app.");
                                 ko();
                             }
                             else{
-                                Materialize.toast(_t.activityOkRestart, 1000);
+                                Materialize.toast("Activity is now updated. The app will restart soon.", 1000);
                                 setTimeout(function () {
                                     document.location.href = "http://localhost:2323/";
                                 }, 1100);
@@ -37,13 +36,13 @@ var ActivityManager = {
                 else
                 {
                     self.allActivityData = data.result;
-                    self.changeAllDataToDate(_t.errorGetActivity);
+                    self.changeAllDataToDate();
                     ok();
 
                 }
             })
                 .fail(function(){
-                    alert();
+                    alert("Error during getting activity data. Please restart.");
                     ko();
                 });
 
