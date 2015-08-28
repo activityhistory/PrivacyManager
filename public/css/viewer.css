@@ -152,7 +152,7 @@ div#slidersLegend {
 }
 
 
-.mainSVG .background {
+.mainSVG  .slider .background {
     cursor: pointer !important;
 }
 
