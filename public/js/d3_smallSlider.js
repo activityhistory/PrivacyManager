@@ -2,6 +2,12 @@
  * Created by Maxime on 23/07/2015.
  */
 
+
+/**
+ * Small slider manager, here you can find all action related to the small slider
+ */
+
+
 /**
  * D3's svg brush for the small slider
  */

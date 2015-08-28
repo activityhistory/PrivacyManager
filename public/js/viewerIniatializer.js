@@ -2,6 +2,10 @@
  * Created by Maxime on 20/07/2015.
  */
 
+/**
+ * Init viewer by getting data
+ */
+
 
 /**
  * This object contains all data about the current selected range as:

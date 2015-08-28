@@ -1,6 +1,17 @@
 /**
  * Created by maxime on 15/07/15.
  */
+
+/**
+ * Manage the time picker (settings menu)
+ */
+
+
+
+
+/**
+ * Init the time picker
+ */
 $("#slider-range").slider({
     range: true,
     min: 0,
@@ -15,20 +26,34 @@ $("#slider-range").slider({
     change: upadteTetManual()
 });
 
+//first : get the previous value
+ajaxGetRange();
 
+//listen the checkbox change to send the new value
+$('#includingWE').change(
+    function(){
+        ajaxSetRange();
+    });
+
+//Add trigger on it
 $("#slider-range").trigger('change');
 
 
-
-//update the text when the values have been changed manually : that's make no event
-function upadteTetManual()
-{
+/**
+ * Update the text when the values have been changed manually : that's make no event
+ */
+function upadteTetManual() {
     var v = $("#slider-range").slider("values");
     var p = {};
     p.values = v;
     updateRangeText(null, p);
 }
 
+/**
+ * Update the text related to the time picker
+ * @param e : Event
+ * @param ui
+ */
 function updateRangeText(e, ui) {
     var hours1 = Math.floor(ui.values[0] / 60);
     var minutes1 = ui.values[0] - (hours1 * 60);
@@ -82,8 +107,10 @@ function updateRangeText(e, ui) {
     $('.slider-time2').html(' ' + hours2 + ':' + minutes2);
 }
 
-function ajaxGetRange()
-{
+/**
+ * Get allowed time in the DB
+ */
+function ajaxGetRange() {
     $.get("/getAllowedTimes", function(data){
         var times = data.times;
         var fromHour = times.fromHour;
@@ -109,6 +136,9 @@ function ajaxGetRange()
     })
 }
 
+/**
+ * Update the allowed time in the DB
+ */
 function ajaxSetRange() {
     var val = $("#slider-range").slider("values");
     var startTime = miutesSumToNormalTime(val[0]);
@@ -129,6 +159,11 @@ function ajaxSetRange() {
     willBeDeletedSwimlane.checkUnauthorizedTimes();
 }
 
+/**
+ * To convert minutes to normal format
+ * @param minutesSum
+ * @returns {string}
+ */
 function miutesSumToNormalTime (minutesSum) //not the strange 12 hours format
 {
     var h = Math.floor(minutesSum/60);
@@ -136,18 +171,14 @@ function miutesSumToNormalTime (minutesSum) //not the strange 12 hours format
     return h + ":" + m;
 }
 
+/**
+ * Convert time in minutes
+ * @param normalTime
+ * @returns {number}
+ */
 function normalTimeToMinutesSum(normalTime)
 {
     var h = normalTime.split(":")[0];
     var m = normalTime.split(":")[1];
     return (parseInt(h)*60) + parseInt(m);
 }
-
-//first : get the previous value
-ajaxGetRange();
-
-//listen the checkbox change to send the new value
-$('#includingWE').change(
-    function(){
-        ajaxSetRange();
-});

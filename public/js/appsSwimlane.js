@@ -3,7 +3,7 @@
  */
 
 /**
- * Manager of apps swimalnes
+ * Manager of apps swimlanes
  * Keep currentAppsData object, that have all data about apps in the selected range.
  * @type {{currentAppsData: Array, getAndPrintAppSwimlane: Function, printAppsSwimlanes: Function, printOneAppSwimlane: Function, notifyAppsFilterChanged: Function}}
  */

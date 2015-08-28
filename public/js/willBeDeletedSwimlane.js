@@ -2,6 +2,10 @@
  * Created by Maxime on 28/07/2015.
  */
 
+/**
+ * Manage the "will be deleted" swimlane
+ * @type {{privacyParams: {unApps: Array, auTimes: {from: string, to: string, weekEnd: string}, auLocations: Array}, willBeDeletedData: Array, willBeDeletedLocations: Array, willBeDeletedByTime: Array, willBeDeletedColor: *, RAZunApps: Function, RAZAuthorizedLocations: Function, addUnApp: Function, setAuthorizedTimes: Function, addAutorizedLocation: Function, checkLocations: Function, checkDeletedApps: Function, checkUnauthorizedTimes: Function, MAJWillBeDeletedSwimlane: Function, getFilterdApps: Function, putAllOtherSwimlaneToTheTop: Function}}
+ */
 var willBeDeletedSwimlane = {
 
 

@@ -2,6 +2,15 @@
  * Created by Maxime on 30/07/2015.
  */
 
+/**
+ * Manage time's swimlane
+ * Print the unauthorized time on the small slider
+ */
+
+
+/**
+ * Initialization print the related grey separation line
+ */
 $( document).ready(function(){
     //hr
     d3.select("#sliderSVG svg").append("line")
@@ -14,6 +23,10 @@ $( document).ready(function(){
         .attr("class", "timeLine");
 });
 
+/**
+ * Time swimlane manager you can find here all settings about the time swimlane and all related functions
+ * @type {{timeFilterColor: string, setTimeFilterColor: Function, getUnauthorizedTimeRanges: Function, printTimeSwimlane: Function, isInTheRange: Function, notifyTimeFilterChanged: Function, removeTimeFilter: Function}}
+ */
 var timeSwimlane = {
     timeFilterColor : "white",
 

@@ -3,7 +3,9 @@
  */
 
 
-
+/**
+ * Manage all buttons: the remove ones, settings, help
+ */
 $( document ).ready(function(){
     //check the folder path location, if not, go to params
     $.get("/getSelfspyFolderLocation", function(data){

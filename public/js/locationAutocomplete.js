@@ -2,6 +2,10 @@
  * Created by maxime on 16/07/15.
  */
 
+/**
+ * Location settings manager (in the accordion)
+ * @type {{knownLocations: Array, geocoder: null, map: null, initialize: Function, codeAddress: Function, ajaxAddUnauthorizedLocation: Function, populateUnauthorizedLocationsList: Function, ajaxGetUnauthorizedLocations: Function, bindDeleteButtons: Function}}
+ */
 var locationSettings = {
     knownLocations: [],
 
