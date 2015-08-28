@@ -52,7 +52,9 @@
     "noInternet" : "Aucune connexion toruvée : le géocoding est désactivé, vous ne pouvez donc plus ajouter de localisation.",
     "errorGeocoding" : "Le géocoding à échoué. Erreur : ",
     "geocodingdisabeld" : "Le géocoding est désactivé : il a bseoin d'une connexion internet. Connectez-vous puis redémarrez l'application.",
-    "pleaseRange" : "Merci de choisir un interval."
+    "pleaseRange" : "Merci de choisir un intervalle.",
+    "confirmDeleteRange" : "Voulez-vous vraiment supprimer l'intégralité des données comprises dans l'intervalle en cours de visualisation ?",
+    "confirmDeleteFiltered" : "Voulez-vous réellement supprimer toutes les données indiquées, dans l'intervalle en cours de visualisation ?"
   },
   "EN" : {
     "filter_title" : "Visualisation filters",
@@ -107,6 +109,8 @@
     "noInternet" : "No internet access found. Geocoding is disabeld : you can not add locations.",
     "errorGeocoding" : "Geocode was not successful for the following reason: ",
     "geocodingdisabeld" : "Geocoding is disabeld : it needs an internet connexion. Please connect you and restart the app.",
-    "pleaseRange" : "Please select a range"
+    "pleaseRange" : "Please select a range",
+    "confirmDeleteRange" : "Do you really want to delete all the range ?",
+    "confirmDeleteFiltered" : "Do you really want to remove all indicated data ?"
   }
 }

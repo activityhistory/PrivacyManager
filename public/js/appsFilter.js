@@ -12,7 +12,7 @@ var AppsFilter = {
     /**
      * Maximum Number of filtered apps in the same time, depends of the layout
      */
-    MAX_FILTERED_APP_SIZE: 4,
+    MAX_FILTERED_APP_SIZE: 10,
 
     /**
      * List of apps name currentely filtered

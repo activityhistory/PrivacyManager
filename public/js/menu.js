@@ -21,11 +21,8 @@ $( document ).ready(function(){
 
 
    $("#remove").click(function(){
-       //Get the ranges to delete
-       var r = (willBeDeletedData.concat(willBeDeletedByTime).concat(willBeDeletedLocations));
-       $.get('/clean', {ranges:r}, function(data){
-           document.location.href="http://localhost:2323/";
-       })
+       Materialize.toast(_t.confirmDeleteFiltered + '<a class="btn-flat red-text" href="#!" onclick="javascript:deleteIndicated()">YES<a>', 10000);
+
    });
 
     $('#help').click(function () {
@@ -41,17 +38,33 @@ $( document ).ready(function(){
 
     $('.modal-trigger').leanModal();
 
+
     $('#removeRange').click(function(){
-        if(typeof interVal.start !== 'undefined' && typeof interVal.stop !== 'undefined' ){
-            var r = [];
-            var range = {start : interVal.start, stop: interVal.stop};
-            r.push(range);
-            $.get('/clean', {ranges:r, isRangeRemove: true}, function(data){
-                document.location.href="http://localhost:2323/";
-            });
-        }
-        else{
-            Materialize.toast(_t.pleaseRange, 4000);
-        }
+        Materialize.toast(_t.confirmDeleteRange + '<a class="btn-flat red-text" href="#!" onclick="javascript:deleteAllRange()">YES<a>', 10000);
     });
+
+
 });
+
+function deleteIndicated(){
+    //Get the ranges to delete
+    var r = (willBeDeletedData.concat(willBeDeletedByTime).concat(willBeDeletedLocations));
+    $.get('/clean', {ranges:r}, function(data){
+        document.location.href="http://localhost:2323/";
+    })
+}
+
+
+function deleteAllRange(){
+    if(typeof interVal.start !== 'undefined' && typeof interVal.stop !== 'undefined' ){
+        var r = [];
+        var range = {start : interVal.start, stop: interVal.stop};
+        r.push(range);
+        $.get('/clean', {ranges:r, isRangeRemove: true}, function(data){
+            document.location.href="http://localhost:2323/";
+        });
+    }
+    else{
+        Materialize.toast(_t.pleaseRange, 4000);
+    }
+}

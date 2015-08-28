@@ -186,11 +186,11 @@ var willBeDeletedSwimlane = {
             .attr("x2", function (d) {
                 return xSmallSlider(new Date(d.stop));
             })
-            .attr("y1", 40)
-            .attr("y2", 40)
+            .attr("y1", 60)
+            .attr("y2", 60)
             .attr("stroke", this.willBeDeletedColor)
-            .attr("stroke-width", 80)
-            .style("stroke-opacity", 0.15)
+            .attr("stroke-width", 120)
+            .style("stroke-opacity", 0.8)
             .attr("data-tooltip", function (d) {
                 return "Deleted because of " + d.caused_by
             })

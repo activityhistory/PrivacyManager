@@ -20,6 +20,8 @@ var Legend = {
     addLegend: function (_name) {
         if(_name == "Will be deleted")
             var _color = "#d62728";
+        else if(_name == "Activity intensity")
+            var _color = "#2ca02c";
         else
         {
             var _color = 4;
@@ -44,7 +46,7 @@ var Legend = {
         }
         this.legendData.push({name: _name, color: _color});
         this.printLegend();
-
+            console.log(_color);
         return _color;
     },
 
@@ -107,7 +109,7 @@ var Legend = {
             })
             .style("fill-opacity", function (d) {
                 if (d.name == "Will be deleted")
-                    return 0.15;
+                    return 0.80;
                 return 1.0;
             });
         currentY = -5;
