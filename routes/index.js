@@ -756,6 +756,12 @@ exports.setSelfspyFolderPath = function(req, res){
 
 };
 
+
+
+exports.checkActivityCalculatingState = function(req, res){
+    res.send({state : activityDB.state});
+};
+
 /**
  * Remove all data between two dates
  * @param start

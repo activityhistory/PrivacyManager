@@ -10,13 +10,19 @@ var db;
 module.exports = {
 
     xdb : "undefined",
+    state: "not checked",
     
     madeAllActivity: function(xdb){
+
+        this.state = "calculating";
+
         this.xdb = xdb;
+
         var self = this;
         if(!fs.existsSync("public/images/screenshots/"))
         {
             window.console.log("ERROR: Symbolic link to screenshot not exist. Activity calculating is not possible.");
+            this.state = "error";
             return;
         }
 
@@ -24,7 +30,7 @@ module.exports = {
         db = new sqlite3.Database(xdb.get("SELFSPY_PATH")+"/selfspy.sqlite", function(error){
             if(error != null){
                 window.console.log("ERROR: Can not access database. Activity calculating is not possible.");
-
+                this.state = "error";
             }
             else
             {
@@ -69,6 +75,7 @@ module.exports = {
         if(allScreenshots[allScreenshots.length - 1] == xdb.get("lastScreenshotWhenLastActivity"))
         {
             window.console.log("NOTICE: No need to recalculate the activity.");
+            this.state = "done";
             return;
         }
         var lastscs = xdb.get("lastScreenshotWhenLastActivity");
@@ -116,6 +123,7 @@ module.exports = {
                 for(i=0; allScreenshots[i]!= lastscs; i++){
                     if(typeof(allScreenshots[i]) == "undefined"){
                         window.console.log("ERROR: Trying to find a screenshot from another folder. Give up.");
+                        this.state="error";
                         return;
                     }
                 }
@@ -185,6 +193,7 @@ module.exports = {
             else
                 xdb.set("backgroundActivity", trueResult);
             xdb.set("lastScreenshotWhenLastActivity", allScreenshots[allScreenshots.length - 1]);
+            this.state = "done";
         });
 
     }

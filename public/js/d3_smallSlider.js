@@ -168,11 +168,11 @@ function initializeSmallSlider() {
 
     var handle = slider.append("rect")
         .attr("class", "handle")
-        .attr("transform", "translate(0,-100)")
+        .attr("transform", "translate(0,-150)")
         .attr("x", width/2+margin.left )
         .attr("y", 0)
         .attr("width", 2)
-        .attr("height", 145)
+        .attr("height", 200)
         .style("fill", "white");
 
 

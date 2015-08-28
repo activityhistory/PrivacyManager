@@ -46,7 +46,6 @@ var Legend = {
         }
         this.legendData.push({name: _name, color: _color});
         this.printLegend();
-            console.log(_color);
         return _color;
     },
 

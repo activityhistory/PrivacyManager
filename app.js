@@ -89,6 +89,7 @@ http.get(options, function(res) {
 
   app.get('/getSelfspyFolderLocation', routes.getSelfspyFolderPath);
   app.get('/setSelfspyFolderLocation', routes.setSelfspyFolderPath);
+  app.get('/activityCalculerState', routes.checkActivityCalculatingState);
 
 
 
