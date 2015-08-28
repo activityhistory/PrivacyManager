@@ -60,10 +60,18 @@ var ActivityManager = {
                     }
                     //Here all other stuff are already loaded, and get error, so we have to reboot.
                     //this problem could be resolved by usiong promise in all the app.
-                    console.log("Rebboting beacsue of too slow activity getting.");
-                    setTimeout(function () {
-                        document.location.href = "http://localhost:2323/";
-                    }, 1000);
+                    //Only if it is not the first start
+                    $.get("/getSelfspyFolderLocation", function(data) {
+                        if (data.status == "ok") {
+                            console.log("Rebboting beacsue of too slow activity getting.");
+                            setTimeout(function () {
+                                document.location.href = "http://localhost:2323/";
+                            }, 1000);
+
+                        }
+                    });
+
+
                 }
 
 

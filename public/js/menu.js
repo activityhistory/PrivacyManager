@@ -2,7 +2,6 @@
  * Created by Maxime on 19/08/2015.
  */
 
-
 /**
  * Manage all buttons: the remove ones, settings, help
  */
