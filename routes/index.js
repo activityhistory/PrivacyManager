@@ -2,14 +2,16 @@
  * GET home page.
  */
 
+/**
+ * Server side actions
+ */
+
+
 var sqlite3 = require('sqlite3');
 sqlite3.verbose();
+
 var Promise = require('promise');
-//var db = new sqlite3.Database('selfspy.sqlite');
-//var db = new sqlite3.Database(process.env.HOME + '/.selfspy/selfspy.sqlite');
 var db; //will be initialize by the call of "initDBPath"
-//var db = new sqlite3.Database(localStorage.getItem("SELFSPY_PATH"));
-//var db = new sqlite3.Database(localStorage.getItem("SELFSPY_PATH"));
 var fs = require('fs');
 var pathToScreenShots = "public/images/screenshots/";
 var xdb = require('express-db');
@@ -21,14 +23,24 @@ var  path = require('path'),
 var distMinBetweenTwoLocations = 2000; // in meters
 
 
-
-
+/**
+ * Render
+ * Help to manage app language
+ * @param req
+ * @param res
+ */
 exports.index = function (req, res) {
     var data = jsonfile.readFileSync("texts.json");
     res.render('index', {title: 'ActivityHistory PrivacyTool', t : data.EN});
 };
 
 
+/**
+ * Run command
+ * @param cmd
+ * @param args
+ * @param callBack
+ */
 function run_cmd(cmd, args, callBack ) {
     var spawn = require('child_process').spawn;
     var child = spawn(cmd, args);
@@ -43,7 +55,9 @@ function run_cmd(cmd, args, callBack ) {
 exports.initDBPath = initThisAppDatabase;
 
 
-
+/**
+ * Init app database
+ */
 function initThisAppDatabase(){
 
     var p = xdb.get("SELFSPY_PATH");
@@ -56,6 +70,10 @@ function initThisAppDatabase(){
 
     run_cmd("ln", ["-s", "-h", "-F", p+"/screenshots", "public/images/screenshots"], function(resp){window.console.log("NOTICE: Just making the link. Answer : " + resp);});
 }
+
+/**
+ *  initialize unauthorized times if not exists set kind of null data
+ */
 exports.checkInitSqlDb = function(){
     db.get('SELECT * FROM privacytimeinterval', [], function (err, row) {
         if(typeof(row) === 'undefined')
@@ -72,6 +90,11 @@ exports.checkInitSqlDb = function(){
 
 exports.un_apps_list = sendUnAppsList;
 
+/**
+ * Get all unauthorized applications
+ * @param req
+ * @param res
+ */
 function sendUnAppsList(req, res) {
     db.all('SELECT * FROM process WHERE authorized_recording == 0', [], function (err, rows) {
         if (err !== null) {
@@ -87,7 +110,11 @@ function sendUnAppsList(req, res) {
     });
 }
 
-//TODO
+/**
+ * Get all apps data
+ * @param req
+ * @param res
+ */
 exports.all_apps_list = function (req, res) {
     if(db.open == false)
     {
@@ -108,7 +135,11 @@ exports.all_apps_list = function (req, res) {
     });
 };
 
-
+/**
+ * Get all windows data
+ * @param req
+ * @param res
+ */
 exports.all_windows_list = function (req, res) {
     if(db.open == false)
     {
@@ -129,7 +160,11 @@ exports.all_windows_list = function (req, res) {
     });
 };
 
-
+/**
+ * Get all running apps for the current range by requesting snapshot table
+ * @param req
+ * @param res
+ */
 exports.runningApps = function (req, res) {
     if(db.open == false)
     {
@@ -155,18 +190,11 @@ exports.runningApps = function (req, res) {
         });
 };
 
-
-//To sort the app list array
-function compare(_a, _b) {
-    a = _a.name.toLowerCase();
-    b = _b.name.toLowerCase();
-    if (a < b)
-        return -1;
-    if (a > b)
-        return 1;
-    return 0;
-}
-
+/**
+ * Update app status (authorized or not)
+ * @param req
+ * @param res
+ */
 exports.upadteApp = function (req, res) {
     if(db.open == false)
     {
@@ -183,6 +211,11 @@ exports.upadteApp = function (req, res) {
     sendUnAppsList(req, res);
 };
 
+/**
+ * Get allowed times
+ * @param req
+ * @param res
+ */
 exports.get_allowed_times = function (req, res) {
     if(db.open == false)
     {
@@ -199,7 +232,11 @@ exports.get_allowed_times = function (req, res) {
     });
 };
 
-
+/**
+ * Update allowed times
+ * @param req
+ * @param res
+ */
 exports.update_allowed_times = function (req, res) {
     if(db.open == false)
     {
@@ -215,9 +252,14 @@ exports.update_allowed_times = function (req, res) {
     db.run("DELETE FROM privacytimeinterval");
     db.run("INSERT INTO privacytimeinterval (fromHour, toHour, fromMinute, toMinute, weekend) VALUES ( ?,  ?,  ?, ?, ?)", fromHour, toHour, fromMinute, toMinute, WE);
 
-    res.send({ok: true}); //TODO : callback if OK or not
+    res.send({ok: true});
 };
 
+/**
+ * Add unauthorized location in DB
+ * @param req
+ * @param res
+ */
 exports.addUnLocation = function (req, res) {
     if(db.open == false)
     {
@@ -236,6 +278,11 @@ exports.addUnLocation = function (req, res) {
 
 exports.getUnLocations = getUnLocations;
 
+/**
+ * Get unauthorized locations
+ * @param req
+ * @param res
+ */
 function getUnLocations(req, res) {
    if(db.open == false)
    {
@@ -251,6 +298,12 @@ function getUnLocations(req, res) {
         }
     });
 }
+
+/**
+ * Remove location in the DB
+ * @param req
+ * @param res
+ */
 exports.removeLoc = function (req, res) {
     if(db.open == false)
     {
@@ -261,7 +314,11 @@ exports.removeLoc = function (req, res) {
     getUnLocations(req, res);
 };
 
-
+/**
+ * Get all screenshots name
+ * @param req
+ * @param res
+ */
 exports.getAllScreenshotsNames = function (req, res) {
     if(!fs.existsSync(pathToScreenShots)){
         res.send({ko:[]});
@@ -270,7 +327,11 @@ exports.getAllScreenshotsNames = function (req, res) {
     res.send(fs.readdirSync(pathToScreenShots));
 };
 
-
+/**
+ * For all the screenshot, extract date and time
+ * @param req
+ * @param res
+ */
 exports.getAllScreenshotsDateAndTime = function (req, res) {
     if(!fs.existsSync(pathToScreenShots)){
         res.send({allRecords:[]});
@@ -280,7 +341,7 @@ exports.getAllScreenshotsDateAndTime = function (req, res) {
     all.sort();
     var result = [];
     all.forEach(function (one) {
-        if (one != ".DS_Store") { //TODO : reove all files started by .
+        if (one != ".DS_Store") {
             var date = getJSDateAndTime(one);
             result.push(date);
         }
@@ -288,7 +349,11 @@ exports.getAllScreenshotsDateAndTime = function (req, res) {
     res.send({allRecords: result});
 };
 
-
+/**
+ * Get all screenshot in the current range
+ * @param req
+ * @param res
+ */
 exports.getAllScreenshotsRange = function (req, res) {
     if(!fs.existsSync(pathToScreenShots)){
         res.send({start: "undefined", end: "undefined", numberOfDays: 0});
@@ -310,6 +375,11 @@ exports.getAllScreenshotsRange = function (req, res) {
 
 };
 
+/**
+ * Get all recorded days by looking at the screenshots
+ * @param req
+ * @param res
+ */
 exports.getAllRecordedDays = function (req, res) {
     if(!fs.existsSync(pathToScreenShots)){
         res.send({allRecordedDays:[]});
@@ -329,7 +399,11 @@ exports.getAllRecordedDays = function (req, res) {
 
 };
 
-
+/**
+ * Get screenshots list between to date
+ * @param req
+ * @param res
+ */
 exports.getScreenshotsListBetween = function (req, res) {
     var start = new Date(req.query.start);
     var end = new Date(req.query.end);
@@ -350,7 +424,11 @@ exports.getScreenshotsListBetween = function (req, res) {
 
 };
 
-
+/**
+ * Get apps data
+ * @param req
+ * @param res
+ */
 exports.getAppsData = function (req, res) {
     if(db.open == false)
     {
@@ -386,7 +464,6 @@ exports.getAppsData = function (req, res) {
         }
 
 
-        //TODO HERE : the last activity not accept apps activity
         var allActivity = xdb.get("backgroundActivity");
         var currentActivityPosition = 0;
         var trueResult = [];
@@ -407,7 +484,6 @@ exports.getAppsData = function (req, res) {
                 break;
 
 
-            //TODO remove and add minutes
             var activityStart = new Date(allActivity[currentActivityPosition].start);
             var activityStop = new Date(allActivity[currentActivityPosition].stop);
 
@@ -424,22 +500,11 @@ exports.getAppsData = function (req, res) {
         });
 };
 
-//function addEndOfAnActiveAppRange(appList, appName, date){
-//    var i;
-//    var done = false;
-//    for(i = appList.length -1 ; i >= 0; i-- ){
-//        if(appList[i].name == appName && appList[i].stop == "undefined")
-//        {
-//            appList[i].stop = date;
-//            done = true;
-//            break;
-//        }
-//    }
-//    if(done == false)
-//        window.console.log("WARNING : Can't put the end of an active app range : the start of the range for the app "+ appName + " not found, sould stop at " + date );
-//
-//}
-
+/**
+ * Get location for the activities
+ * @param req
+ * @param res
+ */
 exports.getGeoloc = function (req, res) {
     if(db.open == false)
     {
@@ -478,81 +543,6 @@ exports.getGeoloc = function (req, res) {
     db.all("SELECT created_at, lat, lon FROM location " +
         "WHERE created_at between '" + formatJSToSQLITE(start) + "' " +
         "AND '" + formatJSToSQLITE(end) + "'", function (err, rows) {
-
-
-/*
-        if (err) {
-            res.send({ok: false, error: err});
-            return;
-        }
-        var key = {lat: "undefined", lon: "undefined"};
-        var justPreviousTime;
-        var keystart;
-        for (var i = 0; i != rows.length; i++) {
-            var row = rows[i];
-
-
-            if (key.lat == "undefined") { //first iteration case
-                key.lat = row.lat;
-                key.lon = row.lon;
-                keystart = row.created_at;
-                justPreviousTime = row.created_at;
-                continue;
-            }
-
-
-            if(new Date(row.created_at) - new Date(justPreviousTime) > 1200000 ){
-                result.push({from: keystart, to: justPreviousTime, lat: key.lat, lon: key.lon});
-                keystart = row.created_at;
-                key.lat = row.lat;
-                key.lon = row.lon;
-                justPreviousTime = row.created_at;
-                continue;
-
-            }
-
-            if (haversine({latitude: row.lat, longitude: row.lon}, {
-                    latitude: key.lat,
-                    longitude: key.lon
-                }, {unit: 'meter'}) > distMinBetweenTwoLocations) { //New location, push the previous, start watching the new //OR time too much different (10 min)
-                result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
-                keystart = row.created_at;
-                key.lat = row.lat;
-                key.lon = row.lon;
-            }
-            if (i == (rows.length - 1)) //last row
-                result.push({from: keystart, to: row.created_at, lat: key.lat, lon: key.lon});
-
-
-            justPreviousTime = row.created_at;
-
-        }
-
-        //If there is juste one range or less ^^, send it
-        if(result.length <= 1){
-            res.send({ok: true, result: result});
-            return;
-
-        }
-        //fill times holes with "unknow" location
-        var trueResult = [];
-        for(var i = 0 ; i != result.length - 1 ; i ++)
-        {
-            var first = result[i];
-            var second = result [i+1];
-
-            if(i == 0)
-                trueResult.push(first);
-            if(first.to != second.from)
-            {
-                trueResult.push({from: first.to, to: second.from, lat:"unknow", lon:"unknow"})
-            }
-            trueResult.push(second);
-        }
-
-        res.send({ok: true, result: trueResult});
-*/
-
 
 
     for(var i = 0 ; i != rows.length ; i ++)
@@ -637,6 +627,12 @@ exports.getGeoloc = function (req, res) {
 
 };
 
+/**
+ * Get activity for the range
+ * @param start
+ * @param stop
+ * @returns {Array}
+ */
 function getActivityRangeBetween(start, stop){
     var result = [];
     var allActivity = xdb.get('backgroundActivity');
@@ -667,12 +663,22 @@ function getActivityRangeBetween(start, stop){
     return result;
 }
 
+/**
+ * Get all activity
+ * @param req
+ * @param res
+ */
 exports.getActivity = function(req, res){
     activityDB.madeAllActivity(xdb);
     res.send({result:xdb.get("backgroundActivity")});
 };
 
 
+/**
+ * Remove the related data for each range
+ * @param req
+ * @param res
+ */
 exports.cleanAll = function(req, res){
     if(db.open == false)
     {
@@ -711,8 +717,13 @@ exports.cleanAll = function(req, res){
 };
 
 
+/**
+ * Get selfspy folder
+ * @param res
+ * @param res
+ */
 exports.getSelfspyFolderPath = function(res, res){
-    //Au cas ou, on lance une MAJ de l'activité
+    //Update activity data
     activityDB.madeAllActivity(xdb);
     var c = xdb.get("SELFSPY_PATH");
     if(c == false)
@@ -721,6 +732,11 @@ exports.getSelfspyFolderPath = function(res, res){
         res.send({status:"ok", value:c});
 };
 
+/**
+ * Set selfspy folder
+ * @param req
+ * @param res
+ */
 exports.setSelfspyFolderPath = function(req, res){
     var path = req.query.path;
 
@@ -740,7 +756,11 @@ exports.setSelfspyFolderPath = function(req, res){
 
 };
 
-
+/**
+ * Remove all data between two dates
+ * @param start
+ * @param end
+ */
 function removeDataBetween(start, end)
 {
 
@@ -759,7 +779,6 @@ function removeDataBetween(start, end)
     db.run("DELETE  FROM window WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
     db.run("DELETE  FROM windowevent WHERE created_at between '" + formatJSToSQLITE(start) + "' " +  "AND '" + formatJSToSQLITE(end) +"' ;");
 
-    //TODO remove the .DS_Store
     var allscs = fs.readdirSync(pathToScreenShots);
 
 
@@ -796,6 +815,9 @@ function removeDataBetween(start, end)
 
 }
 
+/**
+ * Calculate distance using haversine
+ */
 var haversine = (function () {
 
     // convert to radians
@@ -833,7 +855,14 @@ var haversine = (function () {
 
 })();
 
-
+/**
+ * Check if a value is in the range
+ * @param dateStart
+ * @param dateStop
+ * @param val
+ * @param symp
+ * @returns {boolean}
+ */
 function isInTheRange(dateStart, dateStop, val, symp) {
 
     var start = dateStart.setMinutes(dateStart.getMinutes()-symp);
@@ -848,6 +877,11 @@ function isInTheRange(dateStart, dateStop, val, symp) {
     return false;
 }
 
+/**
+ * Convert JS date to Sqlite date format
+ * @param jsDate
+ * @returns {string}
+ */
 function formatJSToSQLITE(jsDate) {
     return 'Y-m-d h:k:s.p'
         .replace('Y', jsDate.getFullYear())//i'v got 85 years to add the 0 ... YOU, CODER OF 2100, do you still eat pancakes ? The climate still allow me to eat ice cream,  you ? mouhahaha
@@ -859,26 +893,22 @@ function formatJSToSQLITE(jsDate) {
         .replace('p', jsDate.getMilliseconds());
 }
 
-
+/**
+ * Get date from screenshot name
+ * @param screenshotName
+ * @returns {*}
+ */
 function getDateByScreenshotName(screenshotName) {
     var splited = screenshotName.split("_")[0];//.split("-");
-    //var date = splited[0];
-    //var time = splited[1];
-    //
-    //var year = date.substr(0,2);
-    //var month = date.substr(3,5);
-    //var day = date.substr(6,8);
-    //
-    //var hour = time.substr(0,2);
-    //var min = time.substr(3, 5);
-    //var sec = time.substr(6, 8);
-    //var nanSec = time.substring(9);
 
     return splited;
-
-
 }
 
+/**
+ * Get Date object with only the date using screenshot name
+ * @param screenshotName
+ * @returns {Date}
+ */
 function getJSDate(screenshotName) {
 
     var splited = screenshotName.split("_")[0].split("-");
@@ -888,17 +918,15 @@ function getJSDate(screenshotName) {
     var year = date.substring(0, 2);
     var month = date.substring(2, 4);
     var day = date.substring(4, 6);
-    //
-    //var hour = time.substr(0,2);
-    //var min = time.substr(3, 5);
-    //var sec = time.substr(6, 8);
-    //var nanSec = time.substring(9);
+
     return new Date('20' + year + "-" + month + "-" + day);
-
-
 }
 
-
+/**
+ * Get a JS Date object (date and time) using the screenshot name
+ * @param screenshotName
+ * @returns {Date}
+ */
 function getJSDateAndTime(screenshotName) {
     var splited = screenshotName.split("\.")[0].split("_")[0].split("-");
     var date = splited[0];

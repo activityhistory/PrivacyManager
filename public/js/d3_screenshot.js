@@ -2,6 +2,13 @@
  * Created by Maxime on 23/07/2015.
  */
 
+/**
+ * Screenshot's visualization manager
+ * This function looks for the more representative screenshot for the current date and all data about it
+ * and also searches for the best context (app before and after)
+ * @param date
+ * @returns {boolean}
+ */
 function printScreenshot(date) {
 
 

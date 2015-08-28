@@ -2,9 +2,22 @@
  * Created by Maxime on 29/07/2015.
  */
 
-//distance between two places
+/**
+ * Location filter manager (accordion part settings)
+ */
+
+
+/**
+ * Distance between two places
+ * @type {number}
+ */
 var distMinBetweenTwoLocations = 2000; // meters
 
+
+/**
+ * Object that provides location filter functions and data
+ * @type {{locationData: Array, ajaxGetLocations: Function, decorateLocationDataWithLocationNames: Function, initLocationFilter: Function, initAndPrint: Function, removeFilteredAndColorForAllLocations: Function, filterLocations: Function, unBindLocationFilterChange: Function, bindLocationFilterChange: Function, populateLocationFilter: Function}}
+ */
 var LocationFilter = {
 
     /**
@@ -12,6 +25,10 @@ var LocationFilter = {
      */
     locationData: [],
 
+    /**
+     * Get all locations from the DB
+     * @returns {Promise}
+     */
     ajaxGetLocations: function () {
 
         return new Promise(function(ok, ko){

@@ -2,12 +2,22 @@
  * Created by Maxime on 13/08/2015.
  */
 
-
+/**
+ * Object to manage activity
+ * @type {{allActivityData: Array, init: Function, changeAllDataToDate: Function}}
+ */
 var ActivityManager = {
 
+    /**
+     * Array that contains all user activity
+     */
     allActivityData: [],
 
 
+    /**
+     * Init activity data
+     * @returns {Promise}
+     */
     init : function(){
         var self = this;
         return new Promise(function(ok,ko){
@@ -43,7 +53,6 @@ var ActivityManager = {
                 }
             })
                 .fail(function(){
-                    alert();
                     ko();
                 });
 
@@ -51,22 +60,15 @@ var ActivityManager = {
     },
 
 
+    /**
+     * Convert all activity's date to Date JS object
+     */
     changeAllDataToDate : function(){
       for(var i = 0 ; i != this.allActivityData.length ; i++)
       {
           this.allActivityData[i].start = new Date(this.allActivityData[i].start);
           this.allActivityData[i].stop = new Date(this.allActivityData[i].stop);
       }
-    },
-
-
-    isOnActivity : function(date){
-        var d = new Date(date);
-        for(var i = 0 ; i!= this.allActivityData.length; i++){
-           if(d >= this.allActivityData[i].start && d <= this.allActivityData[i].stop )
-            return true;
-        }
-        return false;
     }
 };
 

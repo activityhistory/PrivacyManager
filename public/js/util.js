@@ -2,6 +2,10 @@
  * Created by Maxime on 24/08/2015.
  */
 
+/**
+ * Different help functions
+ * @type {{putGroupOnTheTop: Function, getJSDateAndTime: Function, JSONToDate: Function}}
+ */
 
 var util = {
     /**

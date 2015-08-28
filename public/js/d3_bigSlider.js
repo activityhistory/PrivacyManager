@@ -3,7 +3,15 @@
  */
 
 
+/**
+ * Big slider manager
+ */
 
+
+/**
+ * Here you can easily modify size/marge proprieties of the big slider
+ * @type {{top: number, right: number, bottom: number, left: number}}
+ */
 var margin = {top: 10, right: 10, bottom: 20, left: 20},
     width = 800 - margin.right - margin.left,
     height = 75 - margin.top - margin.bottom,

@@ -92,7 +92,7 @@ var Legend = {
 
         var legendSVG = d3.select("#legend").append('svg')
             .attr("width", '100%')
-            .attr("height", '200%'); //bigger than the div to allow scroll
+            .attr("height", '100%'); //bigger than the div to allow scroll
         var circles = legendSVG.selectAll("circle")
             .data(toAdd)
             .enter()

@@ -51,6 +51,7 @@ http.get(options, function(res) {
 
   //intialize the path of the .selfspy/selfspy.sqlite db
   routes.initDBPath();
+
   //intialize the presence of unauthorized times if not exist
   routes.checkInitSqlDb();
 
