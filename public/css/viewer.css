@@ -200,3 +200,7 @@ a#removeRange {
     bottom: 0;
     right: 0;
 }
+
+svg.mainSVG{
+    height:100%;
+}

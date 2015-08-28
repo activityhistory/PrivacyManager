@@ -60,13 +60,13 @@ function initializeSmallSlider() {
 
     var svg = d3.select("#sliderSVG svg")
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + 100 + ")");
+        .attr("transform", "translate(" + margin.left + "," + 140 + ")"); //axis of the small slider
 
     xAxisSmallSlider = d3.svg.axis()
         .scale(xSmallSlider)
         .innerTickSize(4);//espace entre le légende de l'axis et celui-ci
 
-    svg.append("g")
+    svg.append("g")//?????
         .attr("class", "x axis")
         .attr("transform", "translate(0, 30)")
         .call(xAxisSmallSlider)
@@ -84,11 +84,11 @@ function initializeSmallSlider() {
 
 
     //hr
-    d3.select("#sliderSVG svg").append("line")
+    d3.select("#sliderSVG svg").append("line") //line between small slider activity and apps
         .attr("x1", margin.left - 30)
         .attr("x2", width+margin.left +30)
-        .attr("y1", 95)
-        .attr("y2", 95)
+        .attr("y1", 135)
+        .attr("y2", 135)
         .attr("stroke-width", 2)
         .attr("stroke", "grey");
 
@@ -251,8 +251,8 @@ function initializeSmallSlider() {
         .x(xSmallSlider)
         .on("brushend", brushedZoom);
 
-    d3.select("#sliderSVG svg").append("g")
-        .attr('transform', 'translate(' + margin.left + ', 95)')
+    d3.select("#sliderSVG svg").append("g") //ZOOM brush of the small slider
+        .attr('transform', 'translate(' + margin.left + ', 135)')
         .attr("class", "zoomBrush")
         .selectAll("rect")
         .attr("y", 0)
@@ -305,7 +305,7 @@ function majZoomBrush(){
     d3.select("#sliderSVG svg .zoomBrush").remove();
 
     d3.select("#sliderSVG svg").append("g")
-        .attr('transform', 'translate(' + margin.left + ', 95)')
+        .attr('transform', 'translate(' + margin.left + ', 135)')
         .attr("class", "zoomBrush")
         .call(zoomBrush)
         .selectAll("rect")
@@ -414,6 +414,7 @@ function MAJSlider(data) {
 
 /**
  * Get data to update interVal object
+ * Then, update slider
  * @param dateStart
  * @param dateStop
  */
@@ -444,7 +445,7 @@ function ajaxMAJRunningAppsList(dateStart, dateStop) {
 }
 
 /**
- * Print green circle
+ * Print green circles
  */
 function printScreenShotSwimlane() {
 
@@ -456,7 +457,7 @@ function printScreenShotSwimlane() {
 
 
     var mini = d3.select("#sliderSVG svg").append('g')
-        .attr('transform', 'translate(' + margin.left + ', 100)')
+        .attr('transform', 'translate(' + margin.left + ', 140)')
         .attr('width', width)
         .attr('height', 40)
         .attr('class', 'screenshotSwimlane');
